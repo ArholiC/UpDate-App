@@ -13,61 +13,61 @@
             height: 100vh; overflow: hidden; position: relative;
         }
 
-        /* ARKA PLAN */
+        /* ARKA PLAN NEBULA */
         body::before {
             content: ""; position: absolute; width: 600px; height: 600px;
-            border-radius: 50%; background: linear-gradient(45deg, #6a11cb, #2575fc);
+            border-radius: 50%; background: linear-gradient(45deg, #ff416c, #ff4b2b);
             filter: blur(120px); opacity: 0.1; z-index: -1;
         }
 
         .container { 
             width: 750px; height: 85vh; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(35px); 
             border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.1); position: relative;
-            display: flex; flex-direction: column; padding: 50px; box-sizing: border-box;
+            display: flex; flex-direction: column; padding: 40px; box-sizing: border-box;
         }
 
-        .header-area { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+        .header-area { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         .title { font-size: 38px; font-weight: 800; background: linear-gradient(to right, #ff416c, #ff4b2b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
         .match-badge { background: rgba(255, 75, 75, 0.2); color: #ff4b4b; padding: 8px 20px; border-radius: 50px; font-weight: 600; font-size: 14px; }
 
-        .chat-list { flex: 1; overflow-y: auto; padding-right: 15px; margin-bottom: 60px; }
+        .chat-list { flex: 1; overflow-y: auto; padding-right: 15px; margin-bottom: 40px; }
         .chat-list::-webkit-scrollbar { width: 6px; }
         .chat-list::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
 
         .chat-item { 
-            display: flex; align-items: center; gap: 20px; padding: 25px; 
-            background: rgba(255, 255, 255, 0.03); border-radius: 35px; 
-            text-decoration: none; color: white; margin-bottom: 20px;
+            display: flex; align-items: center; gap: 20px; padding: 20px; 
+            background: rgba(255, 255, 255, 0.03); border-radius: 30px; 
+            text-decoration: none; color: white; margin-bottom: 15px;
             border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .chat-item:hover { 
-            transform: scale(1.02) translateY(-5px); 
-            background: rgba(255, 255, 255, 0.07); 
+            transform: scale(1.02); 
+            background: rgba(255, 255, 255, 0.08); 
             border-color: #ff4b4b; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
         }
 
-        .avatar-wrapper { position: relative; }
-        .avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid #ff4b4b; box-shadow: 0 5px 15px rgba(255, 75, 75, 0.2); }
-        .status-dot { position: absolute; bottom: 5px; right: 5px; width: 15px; height: 15px; background: #4caf50; border: 3px solid #1c1c2e; border-radius: 50%; }
+        .avatar-wrapper { position: relative; flex-shrink: 0; }
+        .avatar { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid #ff4b4b; }
+        .status-dot { position: absolute; bottom: 3px; right: 3px; width: 14px; height: 14px; background: #4caf50; border: 2px solid #16142b; border-radius: 50%; }
 
-        .chat-info { flex: 1; }
-        .name-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
-        .name { font-weight: 700; font-size: 20px; letter-spacing: -0.5px; }
-        .time { font-size: 12px; color: #666; }
-        .preview { font-size: 14px; color: #aaa; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 350px; }
+        .chat-info { flex: 1; overflow: hidden; }
+        .name-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px; }
+        .name { font-weight: 700; font-size: 19px; letter-spacing: -0.5px; }
+        .time { font-size: 11px; color: #666; }
+        .preview { font-size: 13px; color: #aaa; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
         /* NAVBAR */
         .navbar { 
             position: absolute; bottom: 0; left: 0; width: 100%; 
-            background: rgba(22, 20, 43, 0.8); display: flex; justify-content: space-around; 
-            padding: 20px 0; border-top: 1px solid rgba(255, 255, 255, 0.1); 
+            background: rgba(22, 20, 43, 0.9); display: flex; justify-content: space-around; 
+            padding: 15px 0; border-top: 1px solid rgba(255, 255, 255, 0.1); 
             border-radius: 0 0 50px 50px; backdrop-filter: blur(15px);
         }
-        .nav-link { color: #555; text-decoration: none; font-size: 13px; font-weight: 600; text-align: center; transition: 0.3s; }
+        .nav-link { color: #555; text-decoration: none; font-size: 12px; font-weight: 600; text-align: center; }
         .nav-link.active { color: #ff4b4b; }
-        .nav-icon { display: block; font-size: 26px; margin-bottom: 5px; }
+        .nav-icon { display: block; font-size: 24px; margin-bottom: 3px; }
     </style>
 </head>
 <body>
@@ -78,7 +78,7 @@
     </div>
 
     <div class="chat-list" id="chatList">
-        <div style="text-align:center; color:#444; margin-top:100px;">Yükleniyor...</div>
+        <div style="text-align:center; color:#444; margin-top:100px;">Eşleşmeler aranıyor...</div>
     </div>
 
     <nav class="navbar">
@@ -100,20 +100,26 @@
             document.getElementById('matchBadge').innerText = `${veriler.length} Eşleşme`;
             
             const listContainer = document.getElementById('chatList');
-            if(veriler.length === 0) {
+            if(!veriler || veriler.length === 0) {
                 listContainer.innerHTML = `
                     <div style="text-align:center; margin-top:80px;">
                         <div style="font-size:50px; margin-bottom:20px;">🏜️</div>
-                        <p style="color:#666; font-size:18px;">Henüz kimseyle eşleşmedin.<br>Keşfet'e dönüp şansını dene!</p>
-                        <a href="index.html" style="color:#ff4b4b; text-decoration:none; font-weight:700;">Hemen Keşfet →</a>
+                        <p style="color:#666; font-size:16px;">Henüz yeni bir eşleşme yok.<br>Kaydırmaya devam et!</p>
+                        <a href="index.html" style="color:#ff4b4b; text-decoration:none; font-weight:700;">Keşfet'e Dön →</a>
                     </div>`;
                 return;
             }
 
-            listContainer.innerHTML = veriler.map(kisi => `
+            listContainer.innerHTML = veriler.map(kisi => {
+                // FOTOĞRAF FİX: Eğer resim yoksa ui-avatars kullan
+                const pic = kisi.profile_pic 
+                    ? 'http://localhost:5000' + kisi.profile_pic 
+                    : `https://ui-avatars.com/api/?name=${encodeURIComponent(kisi.full_name)}&background=random&color=fff&size=128`;
+
+                return `
                 <a href="chat.html?id=${kisi.id}" class="chat-item">
                     <div class="avatar-wrapper">
-                        <img src="${kisi.profile_pic ? 'http://localhost:5000'+kisi.profile_pic : 'https://via.placeholder.com/80'}" class="avatar">
+                        <img src="${pic}" class="avatar" onerror="this.src='https://via.placeholder.com/80'">
                         <div class="status-dot"></div>
                     </div>
                     <div class="chat-info">
@@ -121,18 +127,20 @@
                             <div class="name">${kisi.full_name}</div>
                             <div class="time">Şimdi</div>
                         </div>
-                        <div class="preview">${kisi.bio || 'Sohbete başlamak için harika bir gün! ✨'}</div>
+                        <div class="preview">${kisi.bio ? kisi.bio.substring(0, 45) + '...' : 'Harika bir eşleşme! İlk mesajı sen at. ✨'}</div>
                     </div>
                 </a>
-            `).join('');
+                `;
+            }).join('');
         } catch (err) {
             console.error("Liste yükleme hatası:", err);
+            document.getElementById('chatList').innerHTML = '<p style="text-align:center; color:red;">Sunucuya bağlanılamadı!</p>';
         }
     }
 
     listeyiYukle();
-    // Her 10 saniyede bir yeni eşleşme var mı diye kontrol et
-    setInterval(listeyiYukle, 10000);
+    // 10 saniyede bir güncelleme iyi ama çok yormasın dersen 15-20 yapabilirsin
+    setInterval(listeyiYukle, 15000);
 </script>
 </body>
 </html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>UpDate - Sohbet</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        body { font-family: 'Poppins', sans-serif; background: #0b0914; color: white; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        
+        .container { width: 450px; height: 90vh; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(40px); border-radius: 35px; border: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; overflow: hidden; }
+        
+        /* HEADER */
+        .chat-header { padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.02); }
+        .user-trigger { display: flex; align-items: center; gap: 12px; cursor: pointer; flex: 1; transition: 0.3s; }
+        .user-trigger:hover { opacity: 0.8; transform: translateX(5px); }
+        
+        /* MESAJ ALANI */
+        .chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+        .chat-messages::-webkit-scrollbar { width: 5px; }
+        .chat-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
+        .msg { padding: 10px 15px; border-radius: 18px; max-width: 75%; font-size: 14px; line-height: 1.4; display: flex; flex-direction: column; min-width: 80px; }
+        .msg.me { align-self: flex-end; background: linear-gradient(45deg, #ff416c, #ff4b2b); color: white; border-bottom-right-radius: 4px; }
+        .msg.other { align-self: flex-start; background: rgba(255,255,255,0.1); border-bottom-left-radius: 4px; }
+        
+        .msg-time { font-size: 10px; opacity: 0.7; margin-top: 4px; text-align: right; }
+
+        /* INPUT ALANI */
+        .chat-input { padding: 20px; display: flex; gap: 10px; background: rgba(0,0,0,0.2); }
+        input { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 14px; border-radius: 25px; color: white; outline: none; font-size: 14px; }
+        button { background: #ff416c; border: none; padding: 0 22px; border-radius: 25px; color: white; cursor: pointer; font-weight: 700; transition: 0.3s; }
+        button:hover { background: #ff4b2b; transform: scale(1.05); }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="chat-header">
+        <a href="messages.html" style="color: white; text-decoration: none; font-size: 22px;">←</a>
+        <div class="user-trigger" onclick="window.location.href=`other_profile.html?id=${otherId}`">
+            <img id="otherPic" src="" style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid #ff416c;">
+            <span id="otherName" style="font-weight: 700; font-size: 17px;">Yükleniyor...</span>
+        </div>
+    </div>
+
+    <div class="chat-messages" id="chatBox"></div>
+    
+    <div class="chat-input">
+        <input type="text" id="msgInp" placeholder="Bir mesaj yaz..." onkeypress="if(event.key==='Enter') sendMsg()">
+        <button onclick="sendMsg()">Gönder</button>
+    </div>
+</div>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const otherId = urlParams.get('id');
+    const myId = localStorage.getItem('loggedInUserId');
+
+    if(!otherId || !myId) window.location.href = 'index.html';
+
+    async function loadInfo() {
+        try {
+            const res = await fetch(`http://localhost:5000/api/users/${otherId}`);
+            const user = await res.json();
+            document.getElementById('otherName').innerText = user.full_name;
+            const pic = user.profile_pic 
+                ? 'http://localhost:5000' + user.profile_pic 
+                : `https://ui-avatars.com/api/?name=${encodeURIComponent(user.full_name)}&background=random&color=fff`;
+            document.getElementById('otherPic').src = pic;
+        } catch (err) { console.error("Hata: Bilgiler çekilemedi."); }
+    }
+
+    async function loadMsgs() {
+        try {
+            const res = await fetch(`http://localhost:5000/api/messages/${myId}/${otherId}`);
+            const msgs = await res.json();
+            if (!Array.isArray(msgs)) return;
+
+            const box = document.getElementById('chatBox');
+            const newContent = msgs.map(m => {
+                const date = new Date(m.created_at);
+                const timeStr = date.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+                return `
+                    <div class="msg ${m.sender_id == myId ? 'me' : 'other'}">
+                        <span>${m.message}</span>
+                        <span class="msg-time">${timeStr}</span>
+                    </div>
+                `;
+            }).join('');
+
+            if (box.innerHTML !== newContent) {
+                box.innerHTML = newContent;
+                box.scrollTop = box.scrollHeight;
+            }
+        } catch (err) { console.error("Hata: Mesajlar yüklenemedi."); }
+    }
+
+    async function sendMsg() {
+        const inp = document.getElementById('msgInp');
+        const msg = inp.value.trim();
+        if(!msg) return;
+
+        try {
+            const res = await fetch('http://localhost:5000/api/messages', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ sender_id: myId, receiver_id: otherId, message: msg })
+            });
+            if(res.ok) {
+                inp.value = '';
+                loadMsgs();
+            }
+        } catch (err) { alert("Mesaj gitmedi kanka!"); }
+    }
+
+    loadInfo();
+    loadMsgs();
+    setInterval(loadMsgs, 2000); // 2 saniyede bir otomatik yenile
+</script>
+</body>
+</html>

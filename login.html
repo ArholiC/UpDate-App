@@ -31,11 +31,17 @@
         .logo { font-size: 42px; font-weight: 800; margin-bottom: 30px; background: linear-gradient(to right, #ff416c, #ff4b2b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
         input, select { 
-            width: 100%; padding: 16px; margin: 10px 0; background: rgba(255, 255, 255, 0.05); 
+            width: 100%; padding: 16px; margin: 10px 0; background: rgba(255, 255, 255, 0.08); 
             border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; color: white; outline: none; font-family: inherit;
+            box-sizing: border-box;
         }
 
-        /* TEST SORULARI STİLİ */
+        /* CİNSİYET SEÇİMİ DÜZELTME */
+        select option {
+            background: #1a1a2e; /* Seçeneklerin arka planı karanlık */
+            color: white;
+        }
+
         .question-card { display: none; text-align: left; animation: fadeIn 0.5s; }
         .question-card.active { display: block; }
         .q-title { font-size: 20px; font-weight: 700; margin-bottom: 20px; color: #ff4b4b; }
@@ -71,7 +77,7 @@
         <input type="email" id="rEmail" placeholder="E-posta">
         <input type="password" id="rPass" placeholder="Şifre">
         <select id="rGender">
-            <option value="">Cinsiyet</option>
+            <option value="" disabled selected>Cinsiyet Seçiniz</option>
             <option value="kadin">Kadın</option>
             <option value="erkek">Erkek</option>
         </select>
@@ -80,8 +86,7 @@
     </div>
 
     <div id="regStep2" style="display: none;">
-        <div id="testArea">
-            </div>
+        <div id="testArea"></div>
         <button class="main-btn" id="finishBtn" style="display:none;" onclick="completeRegister()">Hesabımı Oluştur 🚀</button>
     </div>
 </div>
@@ -109,7 +114,27 @@
 
     function toTest() {
         const n = document.getElementById('rName').value;
-        if(!n) { alert("Bilgileri doldur kanka!"); return; }
+        const e = document.getElementById('rEmail').value;
+        const p = document.getElementById('rPass').value;
+        const g = document.getElementById('rGender').value;
+        const b = document.getElementById('rBirth').value;
+
+        if(!n || !e || !p || !g || !b) { 
+            alert("Lütfen tüm alanları doldur kanka!"); 
+            return; 
+        }
+
+        // --- 18 YAŞ KONTROLÜ ---
+        const birthDate = new Date(b);
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) { age--; }
+
+        if (age < 18) {
+            alert("Üzgünüz, UpDate'e katılmak için 18 yaşından büyük olmalısın! 🔞");
+            return;
+        }
         
         document.getElementById('regStep1').style.display = 'none';
         document.getElementById('regStep2').style.display = 'block';
@@ -148,7 +173,7 @@
             password: document.getElementById('rPass').value,
             gender: document.getElementById('rGender').value,
             birth_date: document.getElementById('rBirth').value,
-            interests: Object.values(answers).join(', ') // Cevapları hobi gibi kaydet
+            interests: Object.values(answers).join(', ')
         };
 
         const res = await fetch('http://localhost:5000/api/register', {
@@ -172,8 +197,12 @@
             body: JSON.stringify({ email, password })
         });
         const d = await res.json();
-        if (d.success) { localStorage.setItem('loggedInUserId', d.user.id); window.location.href = 'index.html'; }
-        else { alert("Hata!"); }
+        if (d.success) { 
+            localStorage.setItem('loggedInUserId', d.user.id); 
+            window.location.href = 'index.html'; 
+        } else { 
+            alert("Giriş başarısız, bilgilerini kontrol et kanka!"); 
+        }
     }
 </script>
 </body>
