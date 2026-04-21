@@ -3,32 +3,205 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UpDate - Algoritmik Eşleşme</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 h-screen flex flex-col items-center justify-center">
+    <title>UpDate - Keşfet</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
 
-    <nav class="fixed top-0 w-full bg-white shadow-md p-4 flex justify-between items-center">
-        <h1 class="text-2xl font-bold text-rose-500">UpDate</h1>
-        <div class="space-x-4">
-            <button class="text-gray-600">Profil</button>
-            <button class="text-gray-600 font-bold text-rose-500">Eşleşmeler</button>
-        </div>
-    </nav>
+        body { 
+            font-family: 'Poppins', sans-serif; background: #0b0914; color: white; 
+            margin: 0; display: flex; justify-content: center; align-items: center; 
+            height: 100vh; overflow: hidden; position: relative;
+        }
 
-    <div class="relative w-80 h-[500px] bg-white rounded-2xl shadow-2xl overflow-hidden border-4 border-white mt-16">
-        <img src="https://via.placeholder.com/400x600" alt="Profil" class="w-full h-full object-cover">
+        /* NEBULA ARKA PLAN */
+        body::before {
+            content: ""; position: absolute; width: 600px; height: 600px;
+            border-radius: 50%; background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            filter: blur(150px); opacity: 0.15; z-index: -1; animation: float 15s infinite alternate;
+        }
+        @keyframes float { 100% { transform: translate(50px, 50px) scale(1.05); } }
+
+        .container { 
+            width: 750px; height: 85vh; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(40px); 
+            border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.1); position: relative;
+            display: flex; flex-direction: column; align-items: center; padding: 30px; box-sizing: border-box;
+        }
+
+        /* TOP BAR */
+        .top-bar { 
+            width: 100%; display: flex; justify-content: space-between; 
+            align-items: center; padding: 0 15px; margin-bottom: 5px; z-index: 100;
+        }
+        .logo { font-weight: 800; font-size: 34px; background: linear-gradient(to right, #ff416c, #ff4b2b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -2px; }
         
-        <div class="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black to-transparent text-white">
-            <h2 class="text-2xl font-bold">Muhammed, 21</h2>
-            <p class="text-sm opacity-80">Yazılım, Resim, Gaming</p>
-        </div>
+        /* KARANLIK SELECT STİLİ */
+        select { 
+            background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.1); 
+            color: white; padding: 10px 20px; border-radius: 50px; outline: none; cursor: pointer;
+            appearance: none; -webkit-appearance: none; font-weight: 600; font-family: inherit;
+        }
+        select option { background: #1c1c2e; color: white; }
+
+        /* KEŞFET ALANI */
+        .discovery-area {
+            flex: 1; width: 100%; display: flex; align-items: center; justify-content: center; gap: 40px; position: relative;
+            padding-bottom: 60px;
+        }
+
+        /* KART TASARIMI */
+        .card-wrapper { 
+            position: relative; width: 340px; height: 460px; perspective: 1000px; 
+            margin-top: -30px;
+        }
+
+        .card { 
+            position: absolute; width: 100%; height: 100%; 
+            background: #000; border-radius: 40px; overflow: hidden; 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6); 
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.4s; 
+            border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center;
+        }
+
+        .card-bg-blur { position: absolute; width: 100%; height: 100%; object-fit: cover; filter: blur(20px) brightness(0.4); opacity: 0.7; z-index: 1; }
+        .card-img-main { position: relative; z-index: 2; max-width: 100%; max-height: 100%; object-fit: contain; }
+        
+        /* BİLGİ KUTUSU */
+        .card-info { 
+            position: absolute; bottom: 0; left: 0; right: 0; padding: 25px 20px; 
+            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 70%, transparent 100%);
+            z-index: 10; text-align: left;
+        }
+        .card-info h3 { margin: 0; font-size: 24px; font-weight: 800; color: #fff; }
+        .card-tag { display: inline-block; background: rgba(255, 65, 108, 0.25); color: #ff416c; padding: 4px 12px; border-radius: 50px; font-size: 11px; font-weight: 700; margin: 8px 0; text-transform: uppercase; }
+        .card-bio { margin: 0; font-size: 13px; color: #ddd; line-height: 1.4; opacity: 0.9; }
+
+        /* YAN BUTONLAR */
+        .side-btn {
+            width: 65px; height: 65px; border-radius: 50%; border: none; cursor: pointer; 
+            font-size: 28px; transition: 0.3s; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4); z-index: 50;
+        }
+        .btn-dislike { background: rgba(255,255,255,0.05); color: #ff4b4b; border: 1px solid rgba(255,75,75,0.2); }
+        .btn-like { background: linear-gradient(45deg, #ff416c, #ff4b2b); color: white; }
+        .side-btn:hover { transform: scale(1.1); filter: brightness(1.1); }
+
+        /* NAVBAR */
+        .navbar { 
+            position: absolute; bottom: 0; width: 100%; background: rgba(22, 20, 43, 0.9); 
+            display: flex; justify-content: space-around; padding: 18px 0; 
+            border-top: 1px solid rgba(255,255,255,0.1); border-radius: 0 0 50px 50px; backdrop-filter: blur(20px);
+        }
+        .nav-link { color: #555; text-decoration: none; font-size: 12px; font-weight: 600; text-align: center; transition: 0.3s; }
+        .nav-link.active { color: #ff4b4b; }
+        .nav-icon { display: block; font-size: 26px; margin-bottom: 4px; }
+
+        /* SWIPE ANİMASYONLARI */
+        .swipe-right { transform: translate(150%, -15%) rotate(30deg) !important; opacity: 0; }
+        .swipe-left { transform: translate(-150%, -15%) rotate(-30deg) !important; opacity: 0; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="top-bar">
+        <div class="logo">UpDate</div>
+        <select id="genderFilter" onchange="kartlariYukle()">
+            <option value="all">Herkes</option>
+            <option value="kadin">Kadınlar</option>
+            <option value="erkek">Erkekler</option>
+        </select>
     </div>
 
-    <div class="flex space-x-8 mt-8">
-    <button id="dislikeBtn" class="bg-white p-4 rounded-full shadow-lg hover:scale-110 transition text-red-500 text-2xl">✖</button>
-    <button id="likeBtn" class="bg-white p-4 rounded-full shadow-lg hover:scale-110 transition text-green-500 text-2xl">❤</button>
+    <div class="discovery-area">
+        <button class="side-btn btn-dislike" onclick="swipe('left')">✖</button>
+        <div class="card-wrapper" id="cardContainer">
+            </div>
+        <button class="side-btn btn-like" onclick="swipe('right')">❤</button>
+    </div>
+
+    <nav class="navbar">
+        <a href="index.html" class="nav-link active"><span class="nav-icon">🔥</span>Keşfet</a>
+        <a href="messages.html" class="nav-link"><span class="nav-icon">💬</span>Mesajlar</a>
+        <a href="profile.html" class="nav-link"><span class="nav-icon">👤</span>Profil</a>
+    </nav>
 </div>
 
+<script>
+    const benimID = localStorage.getItem('loggedInUserId');
+    if(!benimID) window.location.href = 'login.html';
+    let aktifKartlar = [];
+
+    async function kartlariYukle() {
+        try {
+            const filter = document.getElementById('genderFilter').value;
+            // Backend artık "görülmüş" kişileri filtreleyip gönderiyor
+            const res = await fetch(`http://localhost:5000/api/discover/${benimID}`);
+            let veriler = await res.json();
+            
+            if(filter !== 'all') {
+                veriler = veriler.filter(u => u.gender === filter);
+            }
+
+            aktifKartlar = veriler;
+            const container = document.getElementById('cardContainer');
+            
+            if(veriler.length === 0) {
+                container.innerHTML = '<div style="color: #666; font-size:18px; margin-top:100px; text-align:center;">Hepsini bitirdin! 😎<br><span style="font-size:12px;">Yeni üyeler gelince haber veririz.</span></div>';
+                return;
+            }
+
+            container.innerHTML = veriler.map((u, i) => {
+                const pic = u.profile_pic 
+                    ? 'http://localhost:5000' + u.profile_pic 
+                    : `https://ui-avatars.com/api/?name=${encodeURIComponent(u.full_name)}&background=random&color=fff&size=400`;
+                
+                return `
+                <div class="card" style="z-index: ${veriler.length - i}" id="card-${u.id}">
+                    <img src="${pic}" class="card-bg-blur">
+                    <img src="${pic}" class="card-img-main">
+                    <div class="card-info">
+                        <h3>${u.full_name}</h3>
+                        <div class="card-tag">✨ ${u.zodiac || 'Gizemli'}</div>
+                        <p class="card-bio">${u.bio ? (u.bio.length > 55 ? u.bio.substring(0, 55) + '...' : u.bio) : 'Merhaba! Tanışalım mı?'}</p>
+                    </div>
+                </div>`;
+            }).join('');
+        } catch (err) { console.error("Hata:", err); }
+    }
+
+    async function swipe(yon) {
+        if(aktifKartlar.length === 0) return;
+        const kisi = aktifKartlar[0];
+        const kartElement = document.getElementById(`card-${kisi.id}`);
+        if(!kartElement) return;
+
+        kartElement.classList.add(yon === 'right' ? 'swipe-right' : 'swipe-left');
+
+        // Backend'e beğeniyi/reddi gönder
+        await fetch('http://localhost:5000/api/like', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                liker_id: benimID,
+                liked_id: kisi.id,
+                is_like: yon === 'right'
+            })
+        });
+
+        // Kartı ekrandan ve diziden sil
+        setTimeout(() => {
+            aktifKartlar.shift();
+            if(kartElement) kartElement.remove();
+            
+            // Eğer kart bittiyse yeniden yüklemeyi dene (Yeni birileri gelmiş olabilir)
+            if(aktifKartlar.length === 0) {
+                kartlariYukle();
+            }
+        }, 500);
+    }
+
+    // Başlangıçta kartları yükle
+    kartlariYukle();
+</script>
 </body>
 </html>

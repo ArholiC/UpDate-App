@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>UpDate - Eşleşmeler</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        body { font-family: 'Poppins', sans-serif; background: #0b0914; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .container { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.1); padding: 40px; border-radius: 40px; width: 500px; text-align: center; }
+        .eslesme-listesi { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+        .eslesme-karti { 
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px; padding: 20px; transition: 0.3s; cursor: pointer; text-decoration: none; color: white;
+        }
+        .eslesme-karti:hover { transform: translateY(-5px); border-color: #ff4b4b; background: rgba(255,255,255,0.08); }
+        .avatar { width: 80px; height: 80px; border-radius: 50%; border: 3px solid #ff4b4b; object-fit: cover; }
+        .btn-don { display: block; margin-top: 30px; padding: 15px; background: rgba(255,255,255,0.05); color: white; text-decoration: none; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2 style="color:#ff4b4b; font-size:32px;">Eşleşmelerin</h2>
+    <div class="eslesme-listesi" id="eslesmeListesi"></div>
+    <a href="index.html" class="btn-don">← Keşfet'e Geri Dön</a>
+</div>
+<script>
+    const benimID = localStorage.getItem('loggedInUserId');
+    async function eslesmeleriGetir() {
+        const cevap = await fetch(`http://localhost:5000/api/matches/${benimID}`);
+        const veriler = await cevap.json();
+        const liste = document.getElementById('eslesmeListesi');
+        liste.innerHTML = veriler.map(kisi => `
+            <a href="chat.html?id=${kisi.id}" class="eslesme-karti">
+                <img src="${kisi.profile_pic ? 'http://localhost:5000'+kisi.profile_pic : 'https://via.placeholder.com/80'}" class="avatar">
+                <div style="font-weight:700; margin-top:10px;">${kisi.full_name}</div>
+                <div style="font-size:12px; color:#888;">💬 Mesaj Gönder</div>
+            </a>
+        `).join('');
+    }
+    eslesmeleriGetir();
+</script>
+</body>
+</html>
