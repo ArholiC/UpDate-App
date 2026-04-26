@@ -13,7 +13,7 @@
             height: 100vh; overflow: hidden; position: relative;
         }
 
-        /* NEBULA ARKA PLAN */
+        /* NEBULA ARKA PLAN - SENİN ÖZEL TASARIMIN */
         body::before {
             content: ""; position: absolute; width: 600px; height: 600px;
             border-radius: 50%; background: linear-gradient(45deg, #ff416c, #ff4b2b);
@@ -34,7 +34,6 @@
         }
         .logo { font-weight: 800; font-size: 34px; background: linear-gradient(to right, #ff416c, #ff4b2b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -2px; }
         
-        /* KARANLIK SELECT STİLİ */
         select { 
             background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.1); 
             color: white; padding: 10px 20px; border-radius: 50px; outline: none; cursor: pointer;
@@ -48,7 +47,7 @@
             padding-bottom: 60px;
         }
 
-        /* KART TASARIMI */
+        /* KARANLIK KART TASARIMI */
         .card-wrapper { 
             position: relative; width: 340px; height: 460px; perspective: 1000px; 
             margin-top: -30px;
@@ -115,7 +114,7 @@
     <div class="discovery-area">
         <button class="side-btn btn-dislike" onclick="swipe('left')">✖</button>
         <div class="card-wrapper" id="cardContainer">
-            </div>
+             </div>
         <button class="side-btn btn-like" onclick="swipe('right')">❤</button>
     </div>
 
@@ -127,15 +126,28 @@
 </div>
 
 <script>
+    // KULLANICI KONTROLÜ
     const benimID = localStorage.getItem('loggedInUserId');
-    if(!benimID) window.location.href = 'login.html';
+    if(!benimID) {
+        window.location.href = 'login.html';
+    }
+
     let aktifKartlar = [];
 
     async function kartlariYukle() {
         try {
             const filter = document.getElementById('genderFilter').value;
-            // Backend artık "görülmüş" kişileri filtreleyip gönderiyor
+            const container = document.getElementById('cardContainer');
+            
+            // 404 FIX: URL Parametresi ve Tam Adres
             const res = await fetch(`http://localhost:5000/api/discover/${benimID}`);
+            
+            if(!res.ok) {
+                console.error("Sunucu Hatası:", res.status);
+                container.innerHTML = '<div style="color:red">Sunucuya bağlanılamadı!</div>';
+                return;
+            }
+
             let veriler = await res.json();
             
             if(filter !== 'all') {
@@ -143,7 +155,6 @@
             }
 
             aktifKartlar = veriler;
-            const container = document.getElementById('cardContainer');
             
             if(veriler.length === 0) {
                 container.innerHTML = '<div style="color: #666; font-size:18px; margin-top:100px; text-align:center;">Hepsini bitirdin! 😎<br><span style="font-size:12px;">Yeni üyeler gelince haber veririz.</span></div>';
@@ -166,41 +177,43 @@
                     </div>
                 </div>`;
             }).join('');
-        } catch (err) { console.error("Hata:", err); }
+
+        } catch (err) { 
+            console.error("Hata:", err);
+            document.getElementById('cardContainer').innerHTML = '<div style="color:red">Bağlantı Hatası!</div>';
+        }
     }
 
     async function swipe(yon) {
         if(aktifKartlar.length === 0) return;
+        
         const kisi = aktifKartlar[0];
         const kartElement = document.getElementById(`card-${kisi.id}`);
         if(!kartElement) return;
 
         kartElement.classList.add(yon === 'right' ? 'swipe-right' : 'swipe-left');
 
-        // Backend'e beğeniyi/reddi gönder
-        await fetch('http://localhost:5000/api/like', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                liker_id: benimID,
-                liked_id: kisi.id,
-                is_like: yon === 'right'
-            })
-        });
+        // Backend'e beğeniyi gönder
+        try {
+            await fetch('http://localhost:5000/api/like', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    liker_id: benimID,
+                    liked_id: kisi.id,
+                    is_like: yon === 'right'
+                })
+            });
+        } catch (e) { console.error("Beğeni gönderilemedi"); }
 
-        // Kartı ekrandan ve diziden sil
         setTimeout(() => {
             aktifKartlar.shift();
-            if(kartElement) kartElement.remove();
-            
-            // Eğer kart bittiyse yeniden yüklemeyi dene (Yeni birileri gelmiş olabilir)
-            if(aktifKartlar.length === 0) {
-                kartlariYukle();
-            }
+            kartElement.remove();
+            if(aktifKartlar.length === 0) kartlariYukle();
         }, 500);
     }
 
-    // Başlangıçta kartları yükle
+    // İlk yükleme
     kartlariYukle();
 </script>
 </body>

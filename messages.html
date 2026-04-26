@@ -94,7 +94,14 @@
 
     async function listeyiYukle() {
         try {
+            // FIX: /api/matches/${benimID} şeklinde senin ID'ni de gönderiyoruz
             const res = await fetch(`http://localhost:5000/api/matches/${benimID}`);
+            
+            if(!res.ok) {
+                document.getElementById('chatList').innerHTML = '<p style="text-align:center; color:#666;">Sunucu cevabı alınamadı.</p>';
+                return;
+            }
+
             const veriler = await res.json();
             
             document.getElementById('matchBadge').innerText = `${veriler.length} Eşleşme`;
@@ -111,7 +118,6 @@
             }
 
             listContainer.innerHTML = veriler.map(kisi => {
-                // FOTOĞRAF FİX: Eğer resim yoksa ui-avatars kullan
                 const pic = kisi.profile_pic 
                     ? 'http://localhost:5000' + kisi.profile_pic 
                     : `https://ui-avatars.com/api/?name=${encodeURIComponent(kisi.full_name)}&background=random&color=fff&size=128`;
@@ -127,7 +133,7 @@
                             <div class="name">${kisi.full_name}</div>
                             <div class="time">Şimdi</div>
                         </div>
-                        <div class="preview">${kisi.bio ? kisi.bio.substring(0, 45) + '...' : 'Harika bir eşleşme! İlk mesajı sen at. ✨'}</div>
+                        <div class="preview">${kisi.bio ? (kisi.bio.length > 45 ? kisi.bio.substring(0, 45) + '...' : kisi.bio) : 'Harika bir eşleşme! İlk mesajı sen at. ✨'}</div>
                     </div>
                 </a>
                 `;
@@ -138,8 +144,10 @@
         }
     }
 
+    // İlk yükleme
     listeyiYukle();
-    // 10 saniyede bir güncelleme iyi ama çok yormasın dersen 15-20 yapabilirsin
+    
+    // 15 saniyede bir güncelle
     setInterval(listeyiYukle, 15000);
 </script>
 </body>

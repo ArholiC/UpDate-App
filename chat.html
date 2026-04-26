@@ -59,7 +59,10 @@
 
     async function loadInfo() {
         try {
+            // FIX: Bilgileri çekerken tam adres kullanımı
             const res = await fetch(`http://localhost:5000/api/users/${otherId}`);
+            if(!res.ok) throw new Error("Kullanıcı bulunamadı");
+            
             const user = await res.json();
             document.getElementById('otherName').innerText = user.full_name;
             const pic = user.profile_pic 
@@ -71,6 +74,7 @@
 
     async function loadMsgs() {
         try {
+            // FIX: Mesajları çekerken tam adres kullanımı
             const res = await fetch(`http://localhost:5000/api/messages/${myId}/${otherId}`);
             const msgs = await res.json();
             if (!Array.isArray(msgs)) return;
@@ -87,6 +91,7 @@
                 `;
             }).join('');
 
+            // Eğer içerik değiştiyse güncelle ve aşağı kaydır
             if (box.innerHTML !== newContent) {
                 box.innerHTML = newContent;
                 box.scrollTop = box.scrollHeight;
@@ -100,10 +105,15 @@
         if(!msg) return;
 
         try {
+            // FIX: Mesaj gönderirken tam adres kullanımı
             const res = await fetch('http://localhost:5000/api/messages', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ sender_id: myId, receiver_id: otherId, message: msg })
+                body: JSON.stringify({ 
+                    sender_id: parseInt(myId), 
+                    receiver_id: parseInt(otherId), 
+                    message: msg 
+                })
             });
             if(res.ok) {
                 inp.value = '';
@@ -112,9 +122,12 @@
         } catch (err) { alert("Mesaj gitmedi kanka!"); }
     }
 
+    // İlk yüklemeler
     loadInfo();
     loadMsgs();
-    setInterval(loadMsgs, 2000); // 2 saniyede bir otomatik yenile
+    
+    // Sunumda akıcılık için 2 saniyede bir otomatik yenile (Polling)
+    setInterval(loadMsgs, 2000); 
 </script>
 </body>
 </html>

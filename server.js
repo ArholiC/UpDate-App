@@ -25,17 +25,16 @@ const pool = new Pool({
     user: 'postgres',
     host: 'localhost',
     database: 'update_db',
-    password: 'root', // pgAdmin şifren 'root' değilse burayı hemen düzelt kanka!
+    password: 'root', // Şifren farklıysa burayı düzelt kanka!
     port: 5432,
 });
 
-// Veritabanı Bağlantı Testi (Kritik)
+// Veritabanı Bağlantı Testi
 pool.query('SELECT NOW()', (err, res) => {
     if (err) {
         console.error("❌ HATA: PostgreSQL bağlantısı kurulamadı!");
-        console.error("Detay:", err.message);
     } else {
-        console.log("✅ PostgreSQL bağlantısı başarılı! Zaman:", res.rows[0].now);
+        console.log("✅ PostgreSQL bağlantısı başarılı! Sistem sunuma hazır.");
     }
 });
 
@@ -49,17 +48,17 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ 
     storage,
-    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB Limit
+    limits: { fileSize: 5 * 1024 * 1024 }, 
     fileFilter: (req, file, cb) => {
         const filetypes = /jpeg|jpg|png|webp/;
         const mimetype = filetypes.test(file.mimetype);
         if (mimetype) return cb(null, true);
-        cb(new Error("Sadece resim yüklenebilir kanka!"));
+        cb(new Error("Sadece resim yüklenebilir!"));
     }
 });
 
 // ==========================================
-// 1. KULLANICI İŞLEMLERİ (Giriş, Kayıt, Profil)
+// 1. KULLANICI İŞLEMLERİ
 // ==========================================
 
 app.post('/api/register', async (req, res) => {
@@ -97,34 +96,26 @@ app.get('/api/users/:id', async (req, res) => {
     } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-app.put('/api/users/:id', async (req, res) => {
-    const { bio, interests, profile_pic } = req.body;
-    try {
-        await pool.query("UPDATE users SET bio = $1, interests = $2, profile_pic = $3 WHERE id = $4", [bio, interests, profile_pic, req.params.id]);
-        res.json({ success: true });
-    } catch (err) { res.status(500).json({ error: err.message }); }
-});
-
 // ==========================================
-// 2. KEŞFET & SWIPE (MATCHMAKING)
+// 2. KEŞFET & AKILLI EŞLEŞTİRME (404 FIX)
 // ==========================================
 
 app.get('/api/discover/:userId', async (req, res) => {
     const myId = parseInt(req.params.userId);
     try {
-        // 1. Hobilerimi al
+        // 1. Kendi hobilerini al
         const meResult = await pool.query("SELECT interests FROM users WHERE id = $1", [myId]);
         const myInterests = meResult.rows[0]?.interests ? meResult.rows[0].interests.split(', ') : [];
 
-        // 2. Görülenleri al
+        // 2. Zaten etkileşim kurduğun kişileri al (Görülenleri filtrele)
         const seenResult = await pool.query("SELECT liked_id FROM likes WHERE liker_id = $1", [myId]);
         const seenIds = seenResult.rows.map(r => r.liked_id);
-        seenIds.push(myId);
+        seenIds.push(myId); // Kendini de ekle
 
-        // 3. Filtrele & Getir
+        // 3. Kalan kullanıcıları getir
         const others = await pool.query("SELECT * FROM users WHERE id <> ALL($1)", [seenIds]);
         
-        // 4. Akıllı Sıralama (Hobi benzerliği)
+        // 4. İlgi alanı benzerliğine göre akıllı sıralama yap
         const sorted = others.rows.sort((a, b) => {
             const countA = a.interests ? a.interests.split(', ').filter(i => myInterests.includes(i)).length : 0;
             const countB = b.interests ? b.interests.split(', ').filter(i => myInterests.includes(i)).length : 0;
@@ -132,24 +123,22 @@ app.get('/api/discover/:userId', async (req, res) => {
         });
 
         res.json(sorted);
-    } catch (err) { res.status(500).json({ error: err.message }); }
+    } catch (err) { 
+        console.error("Discover Error:", err.message);
+        res.status(500).json([]); 
+    }
 });
 
 app.post('/api/like', async (req, res) => {
     const { liker_id, liked_id, is_like } = req.body;
     try {
         await pool.query("INSERT INTO likes (liker_id, liked_id, is_like) VALUES ($1, $2, $3)", [liker_id, liked_id, is_like ? 1 : 0]);
-        let match = false;
-        if (is_like) {
-            const check = await pool.query("SELECT * FROM likes WHERE liker_id = $1 AND liked_id = $2 AND is_like = 1", [liked_id, liker_id]);
-            if (check.rows.length > 0) match = true;
-        }
-        res.json({ success: true, match });
+        res.json({ success: true });
     } catch (err) { res.status(500).json({ success: false }); }
 });
 
 // ==========================================
-// 3. MESAJLAŞMA SİSTEMİ (404-FIX)
+// 3. MESAJLAŞMA SİSTEMİ
 // ==========================================
 
 app.post('/api/messages', async (req, res) => {
@@ -172,19 +161,6 @@ app.get('/api/messages/:myId/:otherId', async (req, res) => {
     } catch (err) { res.status(500).json([]); }
 });
 
-app.get('/api/matches/:userId', async (req, res) => {
-    const myId = req.params.userId;
-    try {
-        const query = `SELECT u.id, u.full_name, u.profile_pic, u.bio FROM users u
-                       JOIN likes l1 ON u.id = l1.liked_id
-                       JOIN likes l2 ON u.id = l2.liker_id
-                       WHERE l1.liker_id = $1 AND l1.is_like = 1
-                       AND l2.liked_id = $1 AND l2.is_like = 1`;
-        const result = await pool.query(query, [myId]);
-        res.json(result.rows);
-    } catch (err) { res.status(500).json([]); }
-});
-
 // ==========================================
 // 4. RESİM YÜKLEME
 // ==========================================
@@ -193,6 +169,48 @@ app.post('/api/upload', upload.single('profil_resmi'), (req, res) => {
     if (!req.file) return res.status(400).json({ success: false });
     res.json({ success: true, url: `/public/uploads/${req.file.filename}` });
 });
+// SERVER.JS İÇİNE BU BLOK ŞART!
+app.get('/api/users', async (req, res) => {
+    try {
+        const result = await pool.query("SELECT * FROM users ORDER BY id DESC");
+        res.json(result.rows);
+    } catch (err) {
+        console.error("Hata:", err.message);
+        res.status(500).json({ error: "Veritabanı hatası!" });
+    }
+});
 
+// Ayriyeten Keşfet için bu da lazım:
+app.get('/api/discover/:userId', async (req, res) => {
+    const myId = req.params.userId;
+    try {
+        // Kendin dışındakileri getirir
+        const result = await pool.query("SELECT * FROM users WHERE id != $1 ORDER BY id DESC", [myId]);
+        res.json(result.rows);
+    } catch (err) {
+        res.status(500).json([]);
+    }
+});// ==========================================
+// 5. EŞLEŞMELERİ GETİR (messages.html için)
+// ==========================================
+app.get('/api/matches/:userId', async (req, res) => {
+    const myId = parseInt(req.params.userId);
+    try {
+        // SQL: Karşılıklı beğeni (is_like = 1) olanları getirir
+        const query = `
+            SELECT u.id, u.full_name, u.profile_pic, u.bio 
+            FROM users u
+            JOIN likes l1 ON u.id = l1.liked_id
+            JOIN likes l2 ON u.id = l2.liker_id
+            WHERE l1.liker_id = $1 AND l1.is_like = 1
+            AND l2.liked_id = $1 AND l2.is_like = 1`;
+
+        const result = await pool.query(query, [myId]);
+        res.json(result.rows);
+    } catch (err) {
+        console.error("Match çekme hatası:", err.message);
+        res.status(500).json([]);
+    }
+});
 const PORT = 5000;
-app.listen(PORT, () => console.log(`🚀 UpDate Server Arşa Çıktı: ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 UpDate Server Arşa Çıktı: http://localhost:${PORT}`));
