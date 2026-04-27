@@ -13,7 +13,6 @@
             min-height: 100vh; margin: 0; padding: 20px; overflow-x: hidden; position: relative;
         }
 
-        /* DİĞER SAYFALARLA AYNI NEBULA EFEKTİ */
         body::before {
             content: ""; position: absolute; width: 500px; height: 500px;
             border-radius: 50%; background: linear-gradient(45deg, #ff416c, #ff4b2b);
@@ -37,27 +36,26 @@
         h2 { font-size: 32px; font-weight: 800; margin-bottom: 5px; }
         .yas-burc { color: #888; font-size: 16px; margin-bottom: 20px; }
         
-        /* UYUM YÜZDESİ DAİRESİ */
         .uyum-kutusu { margin: 25px 0; }
         .uyum-yuzdesi {
-            font-size: 48px; font-weight: 800; color: #76c87b;
-            text-shadow: 0 0 20px rgba(118, 200, 123, 0.4);
+            font-size: 48px; font-weight: 800; color: #00ff88;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
         }
         .uyum-etiket { font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 1px; }
 
-        .biyo { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 20px; font-size: 14px; line-height: 1.6; color: #ccc; margin-bottom: 25px; }
+        .biyo { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 20px; font-size: 14px; line-height: 1.6; color: #ccc; margin-bottom: 25px; min-height: 50px; }
 
-        .hobi-etiketi { text-align: left; font-size: 12px; color: #888; margin-bottom: 10px; font-weight: 600; }
+        .hobi-etiketi { text-align: left; font-size: 12px; color: #ff4b4b; margin-bottom: 10px; font-weight: 600; text-transform: uppercase; }
         .hobi-kapsayici { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-        .hobi { background: rgba(255,255,255,0.08); padding: 8px 15px; border-radius: 50px; font-size: 12px; }
+        .hobi { background: rgba(255,255,255,0.08); padding: 8px 15px; border-radius: 50px; font-size: 12px; border: 1px solid rgba(255,255,255,0.1); }
+        .hobi.ortak { background: rgba(0, 255, 136, 0.1); border-color: #00ff88; color: #00ff88; }
 
         .btn-don { 
             display: block; margin-top: 30px; padding: 15px; 
-            background: rgba(255,255,255,0.05); color: white; text-decoration: none;
+            background: linear-gradient(45deg, #ff416c, #ff4b2b); color: white; text-decoration: none;
             border-radius: 20px; font-weight: 700; transition: 0.3s;
-            border: 1px solid rgba(255,255,255,0.1);
         }
-        .btn-don:hover { background: #ff4b4b; border-color: #ff4b4b; }
+        .btn-don:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(255, 65, 108, 0.3); }
     </style>
 </head>
 <body>
@@ -68,14 +66,14 @@
     <div class="yas-burc" id="userYasBurc">...</div>
 
     <div class="uyum-kutusu">
-        <div class="uyum-etiket">Hobilerinize Göre Uyumunuz</div>
+        <div class="uyum-etiket">Algoritma Uyumu</div>
         <div class="uyum-yuzdesi" id="uyumYuzdesi">%0</div>
     </div>
 
     <div class="biyo" id="userBio">...</div>
 
-    <div class="hobi-etiketi">Ortak İlgi Alanları</div>
-    <div class="hobi-kapsayici" id="ortakHobiler"></div>
+    <div class="hobi-etiketi">İlgi Alanları</div>
+    <div class="hobi-kapsayici" id="userHobbies"></div>
 
     <a href="index.html" class="btn-don">← Geri Dön</a>
 </div>
@@ -87,40 +85,53 @@
 
     async function detaylariGetir() {
         try {
-            // 1. Hedef Kullanıcıyı Getir
-            const res1 = await fetch(`http://localhost:5000/api/users/${hedefID}`);
+            // 1. Verileri Çek
+            const [res1, res2] = await Promise.all([
+                fetch(`http://localhost:5000/api/users/${hedefID}`),
+                fetch(`http://localhost:5000/api/users/${benimID}`)
+            ]);
+            
             const hedefUser = await res1.json();
-
-            // 2. Kendi Bilgilerimi Getir (Uyum hesaplamak için)
-            const res2 = await fetch(`http://localhost:5000/api/users/${benimID}`);
             const ben = await res2.json();
 
-            // Verileri Bas
+            // 2. Temel Bilgileri Yaz
             document.getElementById('userName').innerText = hedefUser.full_name;
-            document.getElementById('userFoto').src = hedefUser.profile_pic ? `http://localhost:5000${hedefUser.profile_pic}` : 'https://via.placeholder.com/150?text=👤';
-            document.getElementById('userBio').innerText = hedefUser.bio || "Biyografi yok.";
+            document.getElementById('userFoto').src = hedefUser.profile_pic 
+                ? `http://localhost:5000${hedefUser.profile_pic}` 
+                : `https://ui-avatars.com/api/?name=${encodeURIComponent(hedefUser.full_name)}&background=random&color=fff&size=200`;
+            document.getElementById('userBio').innerText = hedefUser.bio || "Henüz bir biyografi eklenmemiş.";
 
-            let yas = new Date().getFullYear() - new Date(hedefUser.birth_date).getFullYear();
-            document.getElementById('userYasBurc').innerText = `${yas} Yaşında • ${hedefUser.zodiac}`;
-
-            // UYUM HESAPLAMA (HOBİLER ÜZERİNDEN)
-            const hedefHobiler = hedefUser.interests || [];
-            const benimHobiler = ben.interests || [];
-            
-            const ortak = hedefHobiler.filter(h => benimHobiler.includes(h));
-            const ortakHobiDiv = document.getElementById('ortakHobiler');
-            
-            if(ortak.length > 0) {
-                ortakHobiDiv.innerHTML = ortak.map(h => `<div class="hobi">${h}</div>`).join('');
-            } else {
-                ortakHobiDiv.innerHTML = '<div style="font-size:12px; color:#555">Ortak hobi bulunamadı.</div>';
+            if(hedefUser.birth_date) {
+                let yas = new Date().getFullYear() - new Date(hedefUser.birth_date).getFullYear();
+                document.getElementById('userYasBurc').innerText = `${yas} Yaşında • ${hedefUser.zodiac || 'Burç Belirtilmemiş'}`;
             }
 
-            // Yüzde Hesapla (Basit mantık: Her ortak hobi %20, max %100)
-            let yuzde = Math.min(ortak.length * 25, 100);
-            if (yuzde === 0) yuzde = Math.floor(Math.random() * 20) + 10; // Hiç yoksa bile şans verelim :)
+            // 3. UYUM HESAPLAMA (BACKEND ALGORİTMASI İLE AYNI)
+            const hedefHobiler = hedefUser.interests ? hedefUser.interests.split(',').map(h => h.trim()) : [];
+            const benimHobiler = ben.interests ? ben.interests.split(',').map(h => h.trim()) : [];
             
-            document.getElementById('uyumYuzdesi').innerText = `%${yuzde}`;
+            // Ortak hobileri bul
+            const ortak = hedefHobiler.filter(h => benimHobiler.includes(h));
+            
+            // Yüzde Hesapla (Jaccard Benzerliği)
+            let matchRate = 0;
+            if (benimHobiler.length > 0 || hedefHobiler.length > 0) {
+                const birlesim = new Set([...benimHobiler, ...hedefHobiler]);
+                matchRate = Math.round((ortak.length / birlesim.size) * 100);
+            }
+            
+            document.getElementById('uyumYuzdesi').innerText = `%${matchRate}`;
+
+            // 4. Hobileri Listele (Ortak olanları yeşil yak)
+            const hobiKapsayici = document.getElementById('userHobbies');
+            if(hedefHobiler.length > 0) {
+                hobiKapsayici.innerHTML = hedefHobiler.map(h => {
+                    const isOrtak = benimHobiler.includes(h) ? 'ortak' : '';
+                    return `<div class="hobi ${isOrtak}">${h}</div>`;
+                }).join('');
+            } else {
+                hobiKapsayici.innerHTML = '<div style="font-size:12px; color:#555">İlgi alanı belirtilmemiş.</div>';
+            }
 
         } catch (error) {
             console.error("Hata:", error);

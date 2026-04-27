@@ -27,7 +27,6 @@
             transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); text-align: center;
         }
         .container.wide { width: 650px; }
-
         .logo { font-size: 42px; font-weight: 800; margin-bottom: 30px; background: linear-gradient(to right, #ff416c, #ff4b2b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
         input, select { 
@@ -35,12 +34,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; color: white; outline: none; font-family: inherit;
             box-sizing: border-box;
         }
-
-        /* CİNSİYET SEÇİMİ DÜZELTME */
-        select option {
-            background: #1a1a2e; /* Seçeneklerin arka planı karanlık */
-            color: white;
-        }
+        select option { background: #1a1a2e; color: white; }
 
         .question-card { display: none; text-align: left; animation: fadeIn 0.5s; }
         .question-card.active { display: block; }
@@ -50,11 +44,18 @@
             background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); 
             padding: 15px; border-radius: 20px; color: white; cursor: pointer; transition: 0.3s; font-weight: 600;
         }
-        .opt-btn.selected { background: rgba(255, 65, 108, 0.2); border-color: #ff416c; color: #ff416c; }
+        .opt-btn:hover { background: rgba(255, 65, 108, 0.1); }
 
         button.main-btn { 
             width: 100%; padding: 18px; background: linear-gradient(45deg, #ff416c, #ff4b2b);
             color: white; border: none; border-radius: 20px; cursor: pointer; font-size: 17px; font-weight: 700; margin-top: 25px;
+        }
+
+        /* HOBİ ALANI STİLİ */
+        #hobiSecimAlani {
+            display: none; /* Başlangıçta gizli */
+            margin-top:20px; background: rgba(255,255,255,0.03); 
+            padding: 25px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1);
         }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -87,6 +88,26 @@
 
     <div id="regStep2" style="display: none;">
         <div id="testArea"></div>
+
+        <div id="hobiSecimAlani">
+            <h4 style="margin: 0 0 15px 0; color:#ff416c; font-size:16px;">🎯 Seni Diğerleriyle Eşleştirelim</h4>
+            <p style="font-size:12px; color:#aaa; margin-bottom:15px;">En az 3 ilgi alanı seçerek uyum algoritmasını çalıştır kanka!</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: left;">
+                <label style="font-size:13px;"><input type="checkbox" name="hobi" value="Yazılım"/> 💻 Yazılım</label>
+                <label style="font-size:13px;"><input type="checkbox" name="hobi" value="Müzik"/> 🎸 Müzik</label>
+                <label style="font-size:13px;"><input type="checkbox" name="hobi" value="Oyun"/> 🎮 Gaming</label>
+                <label style="font-size:13px;"><input type="checkbox" name="hobi" value="Spor"/> 🏋️ Fitness</label>
+                <label style="font-size:13px;"><input type="checkbox" name="hobi" value="Sinema"/> 🎬 Sinema</label>
+                <label style="font-size:13px;"><input type="checkbox" name="hobi" value="Seyahat"/> ✈️ Seyahat</label>
+                <label style="font-size:13px;"><input type="checkbox" name="hobi" value="Kitap"/> 📚 Kitap</label>
+                <label style="font-size:13px;"><input type="checkbox" name="hobi" value="Dans"/> 💃 Dans</label>
+                <label style="font-size:13px;"><input type="checkbox" name="hobi" value="Yemek"/> 🍳 Gastronomi</label>
+                <label style="font-size:13px;"><input type="checkbox" name="hobi" value="Fotoğraf"/> 📸 Fotoğraf</label>
+                <label style="font-size:13px;"><input type="checkbox" name="hobi" value="Kamp"/> 🏕️ Kamp</label>
+                <label style="font-size:13px;"><input type="checkbox" name="hobi" value="Yoga"/> 🧘 Yoga</label>
+            </div>
+        </div>
+
         <button class="main-btn" id="finishBtn" style="display:none;" onclick="completeRegister()">Hesabımı Oluştur 🚀</button>
     </div>
 </div>
@@ -124,18 +145,6 @@
             return; 
         }
 
-        // --- 18 YAŞ KONTROLÜ ---
-        const birthDate = new Date(b);
-        const today = new Date();
-        let age = today.getFullYear() - birthDate.getFullYear();
-        const m = today.getMonth() - birthDate.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) { age--; }
-
-        if (age < 18) {
-            alert("Üzgünüz, UpDate'e katılmak için 18 yaşından büyük olmalısın! 🔞");
-            return;
-        }
-        
         document.getElementById('regStep1').style.display = 'none';
         document.getElementById('regStep2').style.display = 'block';
         document.getElementById('mainBox').classList.add('wide');
@@ -161,30 +170,48 @@
             currentQ++;
             setTimeout(showQuestion, 300);
         } else {
-            document.getElementById('testArea').innerHTML = `<div class="q-title">Harika! Algoritmamız seni tanıdı. 🔥</div>`;
-            document.getElementById('finishBtn').style.display = 'block';
+            // TEST BİTTİ
+            document.getElementById('testArea').innerHTML = `<div class="q-title">Harika! Son olarak ilgi alanlarını seç. 🔥</div>`;
+            document.getElementById('hobiSecimAlani').style.display = 'block'; // Hobileri göster
+            document.getElementById('finishBtn').style.display = 'block'; // Kayıt butonunu göster
         }
     }
 
     async function completeRegister() {
+        // Checkbox'lardan hobileri topla
+        const seciliHobiler = Array.from(document.querySelectorAll('input[name="hobi"]:checked'))
+                                   .map(el => el.value);
+
+        if(seciliHobiler.length < 3) {
+            alert("Lütfen en az 3 ilgi alanı seç kanka! % uyum hesaplayabilmemiz için lazım.");
+            return;
+        }
+
         const data = {
             full_name: document.getElementById('rName').value,
             email: document.getElementById('rEmail').value,
             password: document.getElementById('rPass').value,
             gender: document.getElementById('rGender').value,
             birth_date: document.getElementById('rBirth').value,
-            interests: Object.values(answers).join(', ')
+            // Test cevapları + Seçilen hobileri birleştiriyoruz
+            interests: seciliHobiler.join(', ')
         };
 
-        const res = await fetch('http://localhost:5000/api/register', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(data)
-        });
+        try {
+            const res = await fetch('http://localhost:5000/api/register', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
 
-        if(res.ok) {
-            alert("Hesabın oluşturuldu! Şimdi eşleşme zamanı.");
-            location.reload();
+            if(res.ok) {
+                alert("Hesabın oluşturuldu! Şimdi eşleşme zamanı.");
+                location.reload();
+            } else {
+                alert("Kayıt sırasında bir hata oluştu.");
+            }
+        } catch (err) {
+            alert("Sunucuya bağlanılamadı!");
         }
     }
 

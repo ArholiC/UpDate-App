@@ -167,16 +167,24 @@
                     : `https://ui-avatars.com/api/?name=${encodeURIComponent(u.full_name)}&background=random&color=fff&size=400`;
                 
                 return `
+
                 <div class="card" style="z-index: ${veriler.length - i}" id="card-${u.id}">
-                    <img src="${pic}" class="card-bg-blur">
-                    <img src="${pic}" class="card-img-main">
-                    <div class="card-info">
-                        <h3>${u.full_name}</h3>
-                        <div class="card-tag">✨ ${u.zodiac || 'Gizemli'}</div>
-                        <p class="card-bio">${u.bio ? (u.bio.length > 55 ? u.bio.substring(0, 55) + '...' : u.bio) : 'Merhaba! Tanışalım mı?'}</p>
-                    </div>
-                </div>`;
-            }).join('');
+        
+        <div style="position:absolute; top:20px; left:20px; background:rgba(255, 65, 108, 0.9); padding:6px 14px; border-radius:50px; z-index:100; font-size:12px; font-weight:800; color:white; box-shadow: 0 4px 15px rgba(255, 65, 108, 0.4); border: 1px solid rgba(255,255,255,0.2);">
+            🔥 %${u.match_rate || 0} UYUM
+        </div>
+
+        <img src="${pic}" class="card-bg-blur">
+        <img src="${pic}" class="card-img-main">
+        <div class="card-info">
+            <h3>${u.full_name}</h3>
+            <div class="card-tag">✨ ${u.zodiac || 'Gizemli'}</div>
+            <p class="card-bio" style="font-size:11px; color:#ccc;">
+                ${u.interests ? '<b>İlgi Alanları:</b> ' + u.interests : 'Sohbet etmek için bekliyor...'}
+            </p>
+        </div>
+    </div>`;
+}).join('');
 
         } catch (err) { 
             console.error("Hata:", err);
