@@ -172,7 +172,15 @@ app.post('/api/like', async (req, res) => {
     try {
         await pool.query("INSERT INTO likes (liker_id, liked_id, is_like) VALUES ($1, $2, $3)", 
                          [liker_id, liked_id, is_like ? 1 : 0]);
-        res.json({ success: true });
+        
+        let isMatch = false;
+        if (is_like) {
+            const check = await pool.query("SELECT * FROM likes WHERE liker_id = $1 AND liked_id = $2 AND is_like = 1", [liked_id, liker_id]);
+            if (check.rows.length > 0) {
+                isMatch = true;
+            }
+        }
+        res.json({ success: true, isMatch });
     } catch (err) { 
         res.status(500).json({ success: false }); 
     }

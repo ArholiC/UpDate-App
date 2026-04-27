@@ -140,7 +140,7 @@
             const container = document.getElementById('cardContainer');
             
             // 404 FIX: URL Parametresi ve Tam Adres
-            const res = await fetch(`http://localhost:5000/api/discover/${benimID}`);
+            const res = await fetch(`http://localhost:5005/api/discover/${benimID}`);
             
             if(!res.ok) {
                 console.error("Sunucu Hatası:", res.status);
@@ -163,7 +163,7 @@
 
             container.innerHTML = veriler.map((u, i) => {
                 const pic = u.profile_pic 
-                    ? 'http://localhost:5000' + u.profile_pic 
+                    ? 'http://localhost:5005' + u.profile_pic 
                     : `https://ui-avatars.com/api/?name=${encodeURIComponent(u.full_name)}&background=random&color=fff&size=400`;
                 
                 return `
@@ -177,7 +177,10 @@
         <img src="${pic}" class="card-bg-blur">
         <img src="${pic}" class="card-img-main">
         <div class="card-info">
-            <h3>${u.full_name}</h3>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h3>${u.full_name}</h3>
+                <a href="other_profile.html?id=${u.id}" style="color: white; font-size: 13px; text-decoration: none; font-weight: bold; background: linear-gradient(45deg, #ff416c, #ff4b2b); padding: 6px 12px; border-radius: 15px; cursor: pointer; z-index: 1000; position: relative; pointer-events: auto;">Profili Gör</a>
+            </div>
             <div class="card-tag">✨ ${u.zodiac || 'Gizemli'}</div>
             <p class="card-bio" style="font-size:11px; color:#ccc;">
                 ${u.interests ? '<b>İlgi Alanları:</b> ' + u.interests : 'Sohbet etmek için bekliyor...'}
@@ -195,7 +198,7 @@
     async function swipe(yon) {
         if(aktifKartlar.length === 0) return;
         
-        const kisi = aktifKartlar[0];
+        const kisi = aktifKartlar.shift(); // Diziden hemen çıkar ki arka arkaya hızlıca basılabilsin
         const kartElement = document.getElementById(`card-${kisi.id}`);
         if(!kartElement) return;
 
@@ -203,7 +206,7 @@
 
         // Backend'e beğeniyi gönder
         try {
-            await fetch('http://localhost:5000/api/like', {
+            const likeRes = await fetch('http://localhost:5005/api/like', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
@@ -212,17 +215,35 @@
                     is_like: yon === 'right'
                 })
             });
+            const likeData = await likeRes.json();
+            if(likeData.isMatch) {
+                document.getElementById('matchText').innerHTML = `<b>${kisi.full_name}</b> de seni beğendi!`;
+                document.getElementById('matchOverlay').style.display = 'flex';
+                document.getElementById('matchOverlayBtn').onclick = () => { window.location.href = `chat.html?id=${kisi.id}`; };
+            }
         } catch (e) { console.error("Beğeni gönderilemedi"); }
 
         setTimeout(() => {
-            aktifKartlar.shift();
             kartElement.remove();
-            if(aktifKartlar.length === 0) kartlariYukle();
-        }, 500);
+            if(aktifKartlar.length === 0 && document.querySelectorAll('.card').length === 0) {
+                document.getElementById('cardContainer').innerHTML = '<div style="color: #666; font-size:18px; margin-top:100px; text-align:center;">Hepsini bitirdin! 😎<br><span style="font-size:12px;">Yeni üyeler gelince haber veririz.</span></div>';
+            }
+        }, 400);
     }
 
     // İlk yükleme
     kartlariYukle();
 </script>
+
+<!-- EŞLEŞME EKRANI -->
+<div id="matchOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:9999; flex-direction:column; align-items:center; justify-content:center; text-align:center;">
+    <h1 style="font-size: 60px; font-weight: 900; background: linear-gradient(45deg, #ff416c, #ff4b2b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; animation: float 3s infinite alternate;">🔥 EŞLEŞTİNİZ! 🔥</h1>
+    <p style="font-size: 18px; color: #ddd; margin-bottom: 40px;" id="matchText">O da seni beğendi!</p>
+    <div style="display:flex; gap: 15px;">
+        <button id="matchOverlayBtn" style="background: linear-gradient(45deg, #ff416c, #ff4b2b); color: white; border: none; padding: 15px 40px; border-radius: 30px; font-size: 16px; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 10px 30px rgba(255, 65, 108, 0.4);">Mesaj At</button>
+        <button onclick="document.getElementById('matchOverlay').style.display='none'" style="background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.3); padding: 15px 30px; border-radius: 30px; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.3s;">Kapat</button>
+    </div>
+</div>
+
 </body>
 </html>

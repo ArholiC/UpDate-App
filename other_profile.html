@@ -39,8 +39,6 @@
     </div>
 
     <div class="interest-tags" id="pInterests"></div>
-
-    <a href="#" id="pChatLink" class="chat-btn">Mesaj Gönder</a>
 </div>
 
 <script>
@@ -49,16 +47,15 @@
 
     async function profilDetayGetir() {
         try {
-            const res = await fetch(`http://localhost:5000/api/users/${userId}`);
+            const res = await fetch(`http://localhost:5005/api/users/${userId}`);
             const user = await res.json();
 
             document.getElementById('pName').innerText = user.full_name;
             document.getElementById('pBio').innerText = user.bio || "Sessizliği seviyor galiba...";
             document.getElementById('pZodiac').innerText = user.zodiac || "Burç Bilgisi Yok";
-            document.getElementById('pChatLink').href = `/chat.html?id=${user.id}`;
             
             const pic = user.profile_pic 
-                ? 'http://localhost:5000' + user.profile_pic 
+                ? 'http://localhost:5005' + user.profile_pic 
                 : `https://ui-avatars.com/api/?name=${encodeURIComponent(user.full_name)}&background=random&color=fff&size=200`;
             document.getElementById('pPic').src = pic;
 

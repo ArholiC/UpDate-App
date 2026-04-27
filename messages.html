@@ -95,7 +95,7 @@
     async function listeyiYukle() {
         try {
             // FIX: /api/matches/${benimID} şeklinde senin ID'ni de gönderiyoruz
-            const res = await fetch(`http://localhost:5000/api/matches/${benimID}`);
+            const res = await fetch(`http://localhost:5005/api/matches/${benimID}`);
             
             if(!res.ok) {
                 document.getElementById('chatList').innerHTML = '<p style="text-align:center; color:#666;">Sunucu cevabı alınamadı.</p>';
@@ -119,7 +119,7 @@
 
             listContainer.innerHTML = veriler.map(kisi => {
                 const pic = kisi.profile_pic 
-                    ? 'http://localhost:5000' + kisi.profile_pic 
+                    ? 'http://localhost:5005' + kisi.profile_pic 
                     : `https://ui-avatars.com/api/?name=${encodeURIComponent(kisi.full_name)}&background=random&color=fff&size=128`;
 
                 return `

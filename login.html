@@ -116,16 +116,16 @@
     let currentQ = 0;
     let answers = {};
     const questions = [
-        { id: "music", q: "Hangi müzik tarzı seni anlatır?", opts: ["Rock", "Pop", "Rap", "Klasik"] },
-        { id: "food", q: "İlk buluşmada ne yerdiniz?", opts: ["Pizza/Burger", "Sushi", "Kebap", "Ev Yemekleri"] },
-        { id: "movie", q: "Film tercihin hangisi?", opts: ["Korku", "Bilim Kurgu", "Romantik", "Komedi"] },
-        { id: "hobby", q: "Hafta sonu planın?", opts: ["Kamp/Doğa", "Gaming", "Parti", "Kitap/Huzur"] },
-        { id: "travel", q: "Hayalindeki tatil?", opts: ["Avrupa Turu", "Maldivler", "Kuzey Işıkları", "Kapadokya"] },
-        { id: "pet", q: "Hangi hayvanla daha iyi anlaşırsın?", opts: ["Kedi", "Köpek", "Kuş", "Beslemem"] },
-        { id: "drink", q: "En sevdiğin içecek?", opts: ["Kahve", "Çay", "Kokteyl", "Su/Soda"] },
-        { id: "style", q: "Giyim tarzın?", opts: ["Spor", "Klasik", "Bohem", "Sokak Stili"] },
-        { id: "sport", q: "Sporla aran nasıl?", opts: ["Fanatiğim", "Arada yaparım", "Sadece izlerim", "Hiç alakam yok"] },
-        { id: "power", q: "Hangi süper güce sahip olmak isterdin?", opts: ["Uçmak", "Görünmezlik", "Zihin Okuma", "Zamanı Durdurma"] }
+        { id: "q1", q: "İdeal bir ilk buluşma sence nasıl olmalı?", opts: ["Sakin bir kahve içmek", "Doğada yürüyüş yapmak", "Eğlenceli bir aktivite", "Şık bir akşam yemeği"] },
+        { id: "q2", q: "Bir ilişkide senin için en önemli şey nedir?", opts: ["Güven ve sadakat", "Birlikte çok eğlenebilmek", "Ortak ilgi alanları", "Tutku ve heyecan"] },
+        { id: "q3", q: "Boş bir hafta sonunu nasıl değerlendirirsin?", opts: ["Evde dizi/film izleyerek", "Arkadaşlarla dışarı çıkarak", "Yeni yerler keşfederek", "Hobilerime vakit ayırarak"] },
+        { id: "q4", q: "Karşı tarafta seni ilk bakışta en çok ne etkiler?", opts: ["Zekası ve esprileri", "Gülüşü ve bakışları", "Özgüveni ve duruşu", "Samimiyeti ve nezaketi"] },
+        { id: "q5", q: "Stresli bir günün ardından nasıl rahatlarsın?", opts: ["Müzik veya film ile", "Spor/Yürüyüş yaparak", "Sevdiğim biriyle konuşarak", "Sessizce yalnız kalarak"] },
+        { id: "q6", q: "Hayata bakış açını hangisi daha iyi özetler?", opts: ["Anı yaşamak, akışına bırakmak", "Planlı ve hedefe odaklı olmak", "Sürekli yeni şeyler öğrenmek", "Huzurlu ve dengeli yaşamak"] },
+        { id: "q7", q: "Biriyle tartışırken genellikle nasıl davranırsın?", opts: ["Sakin kalıp dinlemeye çalışırım", "Hemen çözüm üretmek isterim", "Kendi düşüncemi hararetle savunurum", "Biraz uzaklaşıp düşünmeye ihtiyacım olur"] },
+        { id: "q8", q: "Sence aşkın en güzel hali hangisidir?", opts: ["En iyi arkadaşınla sevgili olmak", "Her an beraber olup her şeyi paylaşmak", "Birbirini özgür bırakarak büyümek", "Sürprizler ve romantizmle dolu olması"] },
+        { id: "q9", q: "Para harcama alışkanlığın nasıldır?", opts: ["Deneyimlere (Seyahat vb.) harcarım", "Gelecek için birikim yaparım", "Teknoloji ve hobilere harcarım", "Sevdiklerime ve yemeğe harcarım"] },
+        { id: "q10", q: "Birini gerçekten tanıdığını ne zaman anlarsın?", opts: ["Birlikte tatile çıktığımızda", "Zor bir gününde yanında olduğumda", "Beraber çok gülebildiğimizde", "Derin konularda konuşabildiğimizde"] }
     ];
 
     function toRegister() {
@@ -198,7 +198,7 @@
         };
 
         try {
-            const res = await fetch('http://localhost:5000/api/register', {
+            const res = await fetch('http://localhost:5005/api/register', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(data)
@@ -218,7 +218,7 @@
     async function login() {
         const email = document.getElementById('lEmail').value;
         const password = document.getElementById('lPass').value;
-        const res = await fetch('http://localhost:5000/api/login', {
+        const res = await fetch('http://localhost:5005/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
@@ -233,4 +233,4 @@
     }
 </script>
 </body>
-</html>
+</html> 

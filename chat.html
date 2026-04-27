@@ -60,13 +60,13 @@
     async function loadInfo() {
         try {
             // FIX: Bilgileri çekerken tam adres kullanımı
-            const res = await fetch(`http://localhost:5000/api/users/${otherId}`);
+            const res = await fetch(`http://localhost:5005/api/users/${otherId}`);
             if(!res.ok) throw new Error("Kullanıcı bulunamadı");
             
             const user = await res.json();
             document.getElementById('otherName').innerText = user.full_name;
             const pic = user.profile_pic 
-                ? 'http://localhost:5000' + user.profile_pic 
+                ? 'http://localhost:5005' + user.profile_pic 
                 : `https://ui-avatars.com/api/?name=${encodeURIComponent(user.full_name)}&background=random&color=fff`;
             document.getElementById('otherPic').src = pic;
         } catch (err) { console.error("Hata: Bilgiler çekilemedi."); }
@@ -75,7 +75,7 @@
     async function loadMsgs() {
         try {
             // FIX: Mesajları çekerken tam adres kullanımı
-            const res = await fetch(`http://localhost:5000/api/messages/${myId}/${otherId}`);
+            const res = await fetch(`http://localhost:5005/api/messages/${myId}/${otherId}`);
             const msgs = await res.json();
             if (!Array.isArray(msgs)) return;
 
@@ -106,7 +106,7 @@
 
         try {
             // FIX: Mesaj gönderirken tam adres kullanımı
-            const res = await fetch('http://localhost:5000/api/messages', {
+            const res = await fetch('http://localhost:5005/api/messages', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ 
