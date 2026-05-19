@@ -127,7 +127,7 @@
 
 <script>
     // KULLANICI KONTROLÜ
-    const benimID = localStorage.getItem('loggedInUserId');
+    const benimID = parseInt(localStorage.getItem('loggedInUserId'));
     if(!benimID) {
         window.location.href = 'login.html';
     }
@@ -140,7 +140,7 @@
             const container = document.getElementById('cardContainer');
             
             // 404 FIX: URL Parametresi ve Tam Adres
-            const res = await fetch(`http://localhost:5005/api/discover/${benimID}`);
+            const res = await fetch(`http://localhost:5000/api/discover/${benimID}`);
             
             if(!res.ok) {
                 console.error("Sunucu Hatası:", res.status);
@@ -163,7 +163,7 @@
 
             container.innerHTML = veriler.map((u, i) => {
                 const pic = u.profile_pic 
-                    ? 'http://localhost:5005' + u.profile_pic 
+                    ? 'http://localhost:5000' + u.profile_pic 
                     : `https://ui-avatars.com/api/?name=${encodeURIComponent(u.full_name)}&background=random&color=fff&size=400`;
                 
                 return `
@@ -206,7 +206,7 @@
 
         // Backend'e beğeniyi gönder
         try {
-            const likeRes = await fetch('http://localhost:5005/api/like', {
+            const likeRes = await fetch('http://localhost:5000/api/like', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({

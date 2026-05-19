@@ -124,7 +124,7 @@
     }
 
     async function loadData() {
-        const res = await fetch(`http://localhost:5005/api/users/${bID}`);
+        const res = await fetch(`http://localhost:5000/api/users/${bID}`);
         const u = await res.json();
         document.getElementById('userName').innerText = u.full_name;
         document.getElementById('userEmail').innerText = u.email;
@@ -136,7 +136,7 @@
         
         if(u.profile_pic) {
             const img = document.getElementById('previewImg');
-            img.src = `http://localhost:5005${u.profile_pic}`;
+            img.src = `http://localhost:5000${u.profile_pic}`;
             img.style.display = 'block';
             document.getElementById('placeholder').style.display = 'none';
             document.getElementById('finalPicPath').value = u.profile_pic;
@@ -146,17 +146,17 @@
     async function handleImage(input) {
         if(!input.files[0]) return;
         const fd = new FormData(); fd.append("profil_resmi", input.files[0]);
-        const res = await fetch('http://localhost:5005/api/upload', { method: 'POST', body: fd });
+        const res = await fetch('http://localhost:5000/api/upload', { method: 'POST', body: fd });
         const d = await res.json();
         if(d.success) {
             document.getElementById('finalPicPath').value = d.url;
-            document.getElementById('previewImg').src = `http://localhost:5005${d.url}`;
+            document.getElementById('previewImg').src = `http://localhost:5000${d.url}`;
             document.getElementById('previewImg').style.display = 'block';
             document.getElementById('placeholder').style.display = 'none';
             
             // Anında veritabanına kaydet
             const hobs = Array.from(document.querySelectorAll('.hobi-box:checked')).map(b => b.value);
-            await fetch(`http://localhost:5005/api/users/${bID}`, {
+            await fetch(`http://localhost:5000/api/users/${bID}`, {
                 method: 'PUT',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ 
@@ -172,7 +172,7 @@
         const hobs = Array.from(document.querySelectorAll('.hobi-box:checked')).map(b => b.value);
         if(hobs.length < 3) return alert("Kanka en az 3 hobi seçmen lazım!");
 
-        const res = await fetch(`http://localhost:5005/api/users/${bID}`, {
+        const res = await fetch(`http://localhost:5000/api/users/${bID}`, {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ 
@@ -186,7 +186,7 @@
 
     async function deleteProfile() {
         if(confirm("Hesabını kalıcı olarak silmek istediğine emin misin? Bu işlem geri alınamaz! 😢")) {
-            const res = await fetch(`http://localhost:5005/api/users/${bID}`, { method: 'DELETE' });
+            const res = await fetch(`http://localhost:5000/api/users/${bID}`, { method: 'DELETE' });
             if(res.ok) {
                 alert("Hesabın başarıyla silindi. Seni özleyeceğiz! 👋");
                 localStorage.clear();

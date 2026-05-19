@@ -47,7 +47,7 @@
 
     async function profilDetayGetir() {
         try {
-            const res = await fetch(`http://localhost:5005/api/users/${userId}`);
+            const res = await fetch(`http://localhost:5000/api/users/${userId}`);
             const user = await res.json();
 
             document.getElementById('pName').innerText = user.full_name;
@@ -55,7 +55,7 @@
             document.getElementById('pZodiac').innerText = user.zodiac || "Burç Bilgisi Yok";
             
             const pic = user.profile_pic 
-                ? 'http://localhost:5005' + user.profile_pic 
+                ? 'http://localhost:5000' + user.profile_pic 
                 : `https://ui-avatars.com/api/?name=${encodeURIComponent(user.full_name)}&background=random&color=fff&size=200`;
             document.getElementById('pPic').src = pic;
 

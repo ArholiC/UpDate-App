@@ -1,0 +1,383 @@
+-- Merging decision tree log ---
+manifest
+ADDED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml:2:1-31:12
+INJECTED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml:2:1-31:12
+INJECTED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml:2:1-31:12
+INJECTED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml:2:1-31:12
+MERGED from [androidx.navigation:navigation-common:2.7.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\f7e903c49faafd5f68ac38460b895c7d\transformed\navigation-common-2.7.7\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.navigation:navigation-runtime:2.7.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\b2a3423fbdc9a47f6a8bace7d2f3c964\transformed\navigation-runtime-2.7.7\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.navigation:navigation-common-ktx:2.7.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\557b84ca3f5923834ffc54e3cf676ff9\transformed\navigation-common-ktx-2.7.7\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.navigation:navigation-runtime-ktx:2.7.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\d600c0016a667f5ddad3bf84954ef53d\transformed\navigation-runtime-ktx-2.7.7\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.navigation:navigation-compose:2.7.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\f3f34f26106152a9a4d630c454d13116\transformed\navigation-compose-2.7.7\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.material3:material3-android:1.3.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\52090795ae0ea9839f7f34a9dc540293\transformed\material3-release\AndroidManifest.xml:17:1-22:12
+MERGED from [io.coil-kt:coil-compose:2.6.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\22ba88d540889a50835f27088ff255cc\transformed\coil-compose-2.6.0\AndroidManifest.xml:2:1-7:12
+MERGED from [io.coil-kt:coil-compose-base:2.6.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\1d60d64b1dfca8157a0a28ba805f75f5\transformed\coil-compose-base-2.6.0\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.material:material-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\2e9ffa151fe22c6fef2c743fca54f928\transformed\material-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.animation:animation-core-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\c19ac513967b0c7c796f1d81441f088a\transformed\animation-core-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.material:material-ripple-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\c0eb0eed5896f49d2dfaa27d1e76ea49\transformed\material-ripple-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.animation:animation-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\73528a2bd8c30c82f78181f1947c2895\transformed\animation-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.foundation:foundation-layout-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\106f6f172a4ff1d3d2cb69b0850395fb\transformed\foundation-layout-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.foundation:foundation-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\33b15f825e482823fa048bcc7a469ba1\transformed\foundation-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-tooling-data-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\db44b8e8774aff5d9744410433190880\transformed\ui-tooling-data-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-unit-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\0cea840179e1eeda43e2e9c5f64cba95\transformed\ui-unit-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-geometry-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\fa8f773ad0ceed3d009d2c7ed2c70e05\transformed\ui-geometry-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-util-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\c3fef7adabfded38930a6c0289f16b6b\transformed\ui-util-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-text-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\f9bbd5f1df2058ed437f2e8fc91485d1\transformed\ui-text-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-tooling-preview-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6a4a1bf6cbf24a8d9e85bcc3a35ad03d\transformed\ui-tooling-preview-release\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.compose.ui:ui-graphics-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6005dd2f5160b076813870d409b6bfb3\transformed\ui-graphics-release\AndroidManifest.xml:2:1-7:12
+MERGED from [com.google.accompanist:accompanist-drawablepainter:0.32.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\ed285e8050f1469a547962c8e6571e76\transformed\accompanist-drawablepainter-0.32.0\AndroidManifest.xml:17:1-23:12
+MERGED from [io.coil-kt:coil:2.6.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\654949faefb9b48c0131b24835aa7143\transformed\coil-2.6.0\AndroidManifest.xml:2:1-7:12
+MERGED from [io.coil-kt:coil-base:2.6.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\056711d0050b108ce12688eaa5fd7a24\transformed\coil-base-2.6.0\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\91370d25615f39067ea86e95842e768d\transformed\savedstate-ktx-1.2.1\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.savedstate:savedstate:1.2.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\de056d54c91ef188e272c379664a981f\transformed\savedstate-1.2.1\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.emoji2:emoji2:1.3.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\4113ad5a315f8de94ce8a36addb321ae\transformed\emoji2-1.3.0\AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\ed163ceb18bb27be13b21f1f59999b43\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\22657b1a705e27287d72067a7cfb956a\transformed\lifecycle-livedata-core-2.8.7\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\833c8de67da85f4a159179a3045a923c\transformed\lifecycle-viewmodel-savedstate-2.8.7\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-android:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\2dd78a5696107b517e59ebeb7e418583\transformed\lifecycle-viewmodel-release\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-runtime-compose-android:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\376e8a59bdab9b520b979e3be42b5202\transformed\lifecycle-runtime-compose-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-runtime-android:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\e9a347f5220b1078ed16483e2ea6109b\transformed\lifecycle-runtime-release\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\eb5d32fe4fccc8365fd81fb6f91b964a\transformed\lifecycle-viewmodel-ktx-2.8.7\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx-android:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\c7dde56fb57df8e0977a2f904ff57e11\transformed\lifecycle-runtime-ktx-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-compose-android:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\cbe7781925818fa4c0d2d3427cf28b1e\transformed\lifecycle-viewmodel-compose-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.material:material-icons-extended-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\f87dcfde810674198cb984356198d286\transformed\material-icons-extended-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.material:material-icons-core-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\778fe23476f0c2febb509e9bdffd2bcc\transformed\material-icons-core-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\1884ea3264ee26cf1c21941a31a38d01\transformed\ui-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-test-manifest:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\3876aba60ccda30efbb52adc3ddafb75\transformed\ui-test-manifest-1.7.5\AndroidManifest.xml:17:1-28:12
+MERGED from [androidx.compose.ui:ui-tooling-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\3e56ad8bad252f3341cd8f6029f86caa\transformed\ui-tooling-release\AndroidManifest.xml:17:1-28:12
+MERGED from [androidx.activity:activity-compose:1.9.3] C:\Users\yunus\.gradle\caches\8.11.1\transforms\674f263dfa3a5f2b8e5ad1ba0d06957d\transformed\activity-compose-1.9.3\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.activity:activity-ktx:1.9.3] C:\Users\yunus\.gradle\caches\8.11.1\transforms\f0c61ce8b5814d611f93efaf0011059a\transformed\activity-ktx-1.9.3\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.activity:activity:1.9.3] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6911c0a5a6cc937ed23ced24f83e6b90\transformed\activity-1.9.3\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.autofill:autofill:1.0.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\dc591328639d0081c2af0782faebc9a5\transformed\autofill-1.0.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.graphics:graphics-path:1.0.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6593f8b8560e7faba5774e32e5b3105c\transformed\graphics-path-1.0.1\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\8d3878095607e4ba33c3acbcbca4c3d7\transformed\appcompat-resources-1.6.1\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\a3bb221b3f4dfbe751b8149c3df6e45a\transformed\vectordrawable-animated-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\3390fb748b235fcd1f9aaf487d7c1517\transformed\vectordrawable-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.core:core:1.13.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6961d9dbad1110000ec36b067b10342e\transformed\core-1.13.1\AndroidManifest.xml:17:1-30:12
+MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\a8c6970e560e5fb0d5b960b5ea48dc80\transformed\customview-poolingcontainer-1.0.0\AndroidManifest.xml:17:1-23:12
+MERGED from [androidx.core:core-ktx:1.13.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\ef3b6794c51489296a3fff06fd47da69\transformed\core-ktx-1.13.1\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.datastore:datastore-preferences:1.0.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\0853a0c82b4a0ec0b3ad2f7583e0c48a\transformed\datastore-preferences-1.0.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.datastore:datastore:1.0.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\b845e84948ee1aff477446463edc61b9\transformed\datastore-1.0.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.compose.runtime:runtime-saveable-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\099a13907b2164e3876af4afaf87c755\transformed\runtime-saveable-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.runtime:runtime-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\2e4624cafd68d1ef8915f5926aab3260\transformed\runtime-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.annotation:annotation-experimental:1.4.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\89a9def663e88e344755df096a6423be\transformed\annotation-experimental-1.4.1\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\14bb3db03d746592ee3f2cc123b8b066\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\9edae6391d6e1d925eade66a915df832\transformed\interpolator-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6cb9b21e295a3f5fe9c382cacf5f0cf9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:17:1-55:12
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\4f0dc4df8188d47e87f739301be96890\transformed\startup-runtime-1.1.1\AndroidManifest.xml:17:1-33:12
+MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\564dbebf35bf4ac1bfbd65e4264be38d\transformed\tracing-1.0.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.exifinterface:exifinterface:1.3.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\174967a4c7f81da90a3ecb10e7f855a6\transformed\exifinterface-1.3.7\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.arch.core:core-runtime:2.2.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\c9f896b9f30278020541f14603558a99\transformed\core-runtime-2.2.0\AndroidManifest.xml:17:1-22:12
+	package
+		INJECTED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml
+	android:versionName
+		INJECTED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml
+	android:versionCode
+		INJECTED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml:2:11-69
+uses-permission#android.permission.INTERNET
+ADDED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml:5:5-67
+	android:name
+		ADDED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml:5:22-64
+uses-permission#android.permission.READ_EXTERNAL_STORAGE
+ADDED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml:6:5-80
+	android:name
+		ADDED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml:6:22-77
+uses-permission#android.permission.READ_MEDIA_IMAGES
+ADDED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml:7:5-76
+	android:name
+		ADDED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml:7:22-73
+application
+ADDED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml:9:5-29:19
+INJECTED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml:9:5-29:19
+MERGED from [androidx.emoji2:emoji2:1.3.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\4113ad5a315f8de94ce8a36addb321ae\transformed\emoji2-1.3.0\AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.emoji2:emoji2:1.3.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\4113ad5a315f8de94ce8a36addb321ae\transformed\emoji2-1.3.0\AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\ed163ceb18bb27be13b21f1f59999b43\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\ed163ceb18bb27be13b21f1f59999b43\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.compose.ui:ui-test-manifest:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\3876aba60ccda30efbb52adc3ddafb75\transformed\ui-test-manifest-1.7.5\AndroidManifest.xml:22:5-26:19
+MERGED from [androidx.compose.ui:ui-test-manifest:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\3876aba60ccda30efbb52adc3ddafb75\transformed\ui-test-manifest-1.7.5\AndroidManifest.xml:22:5-26:19
+MERGED from [androidx.compose.ui:ui-tooling-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\3e56ad8bad252f3341cd8f6029f86caa\transformed\ui-tooling-release\AndroidManifest.xml:22:5-26:19
+MERGED from [androidx.compose.ui:ui-tooling-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\3e56ad8bad252f3341cd8f6029f86caa\transformed\ui-tooling-release\AndroidManifest.xml:22:5-26:19
+MERGED from [androidx.core:core:1.13.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6961d9dbad1110000ec36b067b10342e\transformed\core-1.13.1\AndroidManifest.xml:28:5-89
+MERGED from [androidx.core:core:1.13.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6961d9dbad1110000ec36b067b10342e\transformed\core-1.13.1\AndroidManifest.xml:28:5-89
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\14bb3db03d746592ee3f2cc123b8b066\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\14bb3db03d746592ee3f2cc123b8b066\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6cb9b21e295a3f5fe9c382cacf5f0cf9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6cb9b21e295a3f5fe9c382cacf5f0cf9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\4f0dc4df8188d47e87f739301be96890\transformed\startup-runtime-1.1.1\AndroidManifest.xml:25:5-31:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\4f0dc4df8188d47e87f739301be96890\transformed\startup-runtime-1.1.1\AndroidManifest.xml:25:5-31:19
+	android:extractNativeLibs
+		INJECTED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml
+	android:appComponentFactory
+		ADDED from [androidx.core:core:1.13.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6961d9dbad1110000ec36b067b10342e\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
+	android:supportsRtl
+		ADDED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml:14:9-35
+	android:label
+		ADDED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml:12:9-41
+	android:roundIcon
+		ADDED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml:13:9-54
+	android:icon
+		ADDED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml:11:9-43
+	android:allowBackup
+		ADDED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml:10:9-35
+	android:theme
+		ADDED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml:15:9-44
+	android:usesCleartextTraffic
+		ADDED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml:16:9-44
+activity#com.update.app.MainActivity
+ADDED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml:20:9-28:20
+	android:exported
+		ADDED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml:22:13-36
+	android:theme
+		ADDED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml:23:13-48
+	android:name
+		ADDED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml:21:13-41
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml:24:13-27:29
+action#android.intent.action.MAIN
+ADDED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml:25:17-69
+	android:name
+		ADDED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml:25:25-66
+category#android.intent.category.LAUNCHER
+ADDED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml:26:17-77
+	android:name
+		ADDED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml:26:27-74
+uses-sdk
+INJECTED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml
+INJECTED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml
+MERGED from [androidx.navigation:navigation-common:2.7.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\f7e903c49faafd5f68ac38460b895c7d\transformed\navigation-common-2.7.7\AndroidManifest.xml:20:5-44
+MERGED from [androidx.navigation:navigation-common:2.7.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\f7e903c49faafd5f68ac38460b895c7d\transformed\navigation-common-2.7.7\AndroidManifest.xml:20:5-44
+MERGED from [androidx.navigation:navigation-runtime:2.7.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\b2a3423fbdc9a47f6a8bace7d2f3c964\transformed\navigation-runtime-2.7.7\AndroidManifest.xml:20:5-44
+MERGED from [androidx.navigation:navigation-runtime:2.7.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\b2a3423fbdc9a47f6a8bace7d2f3c964\transformed\navigation-runtime-2.7.7\AndroidManifest.xml:20:5-44
+MERGED from [androidx.navigation:navigation-common-ktx:2.7.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\557b84ca3f5923834ffc54e3cf676ff9\transformed\navigation-common-ktx-2.7.7\AndroidManifest.xml:5:5-44
+MERGED from [androidx.navigation:navigation-common-ktx:2.7.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\557b84ca3f5923834ffc54e3cf676ff9\transformed\navigation-common-ktx-2.7.7\AndroidManifest.xml:5:5-44
+MERGED from [androidx.navigation:navigation-runtime-ktx:2.7.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\d600c0016a667f5ddad3bf84954ef53d\transformed\navigation-runtime-ktx-2.7.7\AndroidManifest.xml:5:5-44
+MERGED from [androidx.navigation:navigation-runtime-ktx:2.7.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\d600c0016a667f5ddad3bf84954ef53d\transformed\navigation-runtime-ktx-2.7.7\AndroidManifest.xml:5:5-44
+MERGED from [androidx.navigation:navigation-compose:2.7.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\f3f34f26106152a9a4d630c454d13116\transformed\navigation-compose-2.7.7\AndroidManifest.xml:5:5-44
+MERGED from [androidx.navigation:navigation-compose:2.7.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\f3f34f26106152a9a4d630c454d13116\transformed\navigation-compose-2.7.7\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material3:material3-android:1.3.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\52090795ae0ea9839f7f34a9dc540293\transformed\material3-release\AndroidManifest.xml:20:5-44
+MERGED from [androidx.compose.material3:material3-android:1.3.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\52090795ae0ea9839f7f34a9dc540293\transformed\material3-release\AndroidManifest.xml:20:5-44
+MERGED from [io.coil-kt:coil-compose:2.6.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\22ba88d540889a50835f27088ff255cc\transformed\coil-compose-2.6.0\AndroidManifest.xml:5:5-44
+MERGED from [io.coil-kt:coil-compose:2.6.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\22ba88d540889a50835f27088ff255cc\transformed\coil-compose-2.6.0\AndroidManifest.xml:5:5-44
+MERGED from [io.coil-kt:coil-compose-base:2.6.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\1d60d64b1dfca8157a0a28ba805f75f5\transformed\coil-compose-base-2.6.0\AndroidManifest.xml:5:5-44
+MERGED from [io.coil-kt:coil-compose-base:2.6.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\1d60d64b1dfca8157a0a28ba805f75f5\transformed\coil-compose-base-2.6.0\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\2e9ffa151fe22c6fef2c743fca54f928\transformed\material-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\2e9ffa151fe22c6fef2c743fca54f928\transformed\material-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.animation:animation-core-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\c19ac513967b0c7c796f1d81441f088a\transformed\animation-core-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.animation:animation-core-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\c19ac513967b0c7c796f1d81441f088a\transformed\animation-core-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-ripple-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\c0eb0eed5896f49d2dfaa27d1e76ea49\transformed\material-ripple-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-ripple-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\c0eb0eed5896f49d2dfaa27d1e76ea49\transformed\material-ripple-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.animation:animation-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\73528a2bd8c30c82f78181f1947c2895\transformed\animation-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.animation:animation-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\73528a2bd8c30c82f78181f1947c2895\transformed\animation-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.foundation:foundation-layout-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\106f6f172a4ff1d3d2cb69b0850395fb\transformed\foundation-layout-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.foundation:foundation-layout-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\106f6f172a4ff1d3d2cb69b0850395fb\transformed\foundation-layout-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.foundation:foundation-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\33b15f825e482823fa048bcc7a469ba1\transformed\foundation-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.foundation:foundation-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\33b15f825e482823fa048bcc7a469ba1\transformed\foundation-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-tooling-data-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\db44b8e8774aff5d9744410433190880\transformed\ui-tooling-data-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-tooling-data-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\db44b8e8774aff5d9744410433190880\transformed\ui-tooling-data-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-unit-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\0cea840179e1eeda43e2e9c5f64cba95\transformed\ui-unit-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-unit-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\0cea840179e1eeda43e2e9c5f64cba95\transformed\ui-unit-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-geometry-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\fa8f773ad0ceed3d009d2c7ed2c70e05\transformed\ui-geometry-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-geometry-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\fa8f773ad0ceed3d009d2c7ed2c70e05\transformed\ui-geometry-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-util-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\c3fef7adabfded38930a6c0289f16b6b\transformed\ui-util-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-util-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\c3fef7adabfded38930a6c0289f16b6b\transformed\ui-util-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-text-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\f9bbd5f1df2058ed437f2e8fc91485d1\transformed\ui-text-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-text-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\f9bbd5f1df2058ed437f2e8fc91485d1\transformed\ui-text-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-tooling-preview-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6a4a1bf6cbf24a8d9e85bcc3a35ad03d\transformed\ui-tooling-preview-release\AndroidManifest.xml:20:5-44
+MERGED from [androidx.compose.ui:ui-tooling-preview-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6a4a1bf6cbf24a8d9e85bcc3a35ad03d\transformed\ui-tooling-preview-release\AndroidManifest.xml:20:5-44
+MERGED from [androidx.compose.ui:ui-graphics-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6005dd2f5160b076813870d409b6bfb3\transformed\ui-graphics-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-graphics-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6005dd2f5160b076813870d409b6bfb3\transformed\ui-graphics-release\AndroidManifest.xml:5:5-44
+MERGED from [com.google.accompanist:accompanist-drawablepainter:0.32.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\ed285e8050f1469a547962c8e6571e76\transformed\accompanist-drawablepainter-0.32.0\AndroidManifest.xml:21:5-44
+MERGED from [com.google.accompanist:accompanist-drawablepainter:0.32.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\ed285e8050f1469a547962c8e6571e76\transformed\accompanist-drawablepainter-0.32.0\AndroidManifest.xml:21:5-44
+MERGED from [io.coil-kt:coil:2.6.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\654949faefb9b48c0131b24835aa7143\transformed\coil-2.6.0\AndroidManifest.xml:5:5-44
+MERGED from [io.coil-kt:coil:2.6.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\654949faefb9b48c0131b24835aa7143\transformed\coil-2.6.0\AndroidManifest.xml:5:5-44
+MERGED from [io.coil-kt:coil-base:2.6.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\056711d0050b108ce12688eaa5fd7a24\transformed\coil-base-2.6.0\AndroidManifest.xml:5:5-44
+MERGED from [io.coil-kt:coil-base:2.6.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\056711d0050b108ce12688eaa5fd7a24\transformed\coil-base-2.6.0\AndroidManifest.xml:5:5-44
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\91370d25615f39067ea86e95842e768d\transformed\savedstate-ktx-1.2.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\91370d25615f39067ea86e95842e768d\transformed\savedstate-ktx-1.2.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate:1.2.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\de056d54c91ef188e272c379664a981f\transformed\savedstate-1.2.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate:1.2.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\de056d54c91ef188e272c379664a981f\transformed\savedstate-1.2.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.emoji2:emoji2:1.3.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\4113ad5a315f8de94ce8a36addb321ae\transformed\emoji2-1.3.0\AndroidManifest.xml:21:5-44
+MERGED from [androidx.emoji2:emoji2:1.3.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\4113ad5a315f8de94ce8a36addb321ae\transformed\emoji2-1.3.0\AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\ed163ceb18bb27be13b21f1f59999b43\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\ed163ceb18bb27be13b21f1f59999b43\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\22657b1a705e27287d72067a7cfb956a\transformed\lifecycle-livedata-core-2.8.7\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\22657b1a705e27287d72067a7cfb956a\transformed\lifecycle-livedata-core-2.8.7\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\833c8de67da85f4a159179a3045a923c\transformed\lifecycle-viewmodel-savedstate-2.8.7\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\833c8de67da85f4a159179a3045a923c\transformed\lifecycle-viewmodel-savedstate-2.8.7\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-android:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\2dd78a5696107b517e59ebeb7e418583\transformed\lifecycle-viewmodel-release\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-android:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\2dd78a5696107b517e59ebeb7e418583\transformed\lifecycle-viewmodel-release\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-compose-android:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\376e8a59bdab9b520b979e3be42b5202\transformed\lifecycle-runtime-compose-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-compose-android:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\376e8a59bdab9b520b979e3be42b5202\transformed\lifecycle-runtime-compose-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-android:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\e9a347f5220b1078ed16483e2ea6109b\transformed\lifecycle-runtime-release\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-android:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\e9a347f5220b1078ed16483e2ea6109b\transformed\lifecycle-runtime-release\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\eb5d32fe4fccc8365fd81fb6f91b964a\transformed\lifecycle-viewmodel-ktx-2.8.7\AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\eb5d32fe4fccc8365fd81fb6f91b964a\transformed\lifecycle-viewmodel-ktx-2.8.7\AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx-android:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\c7dde56fb57df8e0977a2f904ff57e11\transformed\lifecycle-runtime-ktx-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx-android:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\c7dde56fb57df8e0977a2f904ff57e11\transformed\lifecycle-runtime-ktx-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-compose-android:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\cbe7781925818fa4c0d2d3427cf28b1e\transformed\lifecycle-viewmodel-compose-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-compose-android:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\cbe7781925818fa4c0d2d3427cf28b1e\transformed\lifecycle-viewmodel-compose-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-icons-extended-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\f87dcfde810674198cb984356198d286\transformed\material-icons-extended-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-icons-extended-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\f87dcfde810674198cb984356198d286\transformed\material-icons-extended-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-icons-core-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\778fe23476f0c2febb509e9bdffd2bcc\transformed\material-icons-core-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-icons-core-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\778fe23476f0c2febb509e9bdffd2bcc\transformed\material-icons-core-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\1884ea3264ee26cf1c21941a31a38d01\transformed\ui-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\1884ea3264ee26cf1c21941a31a38d01\transformed\ui-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-test-manifest:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\3876aba60ccda30efbb52adc3ddafb75\transformed\ui-test-manifest-1.7.5\AndroidManifest.xml:20:5-44
+MERGED from [androidx.compose.ui:ui-test-manifest:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\3876aba60ccda30efbb52adc3ddafb75\transformed\ui-test-manifest-1.7.5\AndroidManifest.xml:20:5-44
+MERGED from [androidx.compose.ui:ui-tooling-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\3e56ad8bad252f3341cd8f6029f86caa\transformed\ui-tooling-release\AndroidManifest.xml:20:5-44
+MERGED from [androidx.compose.ui:ui-tooling-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\3e56ad8bad252f3341cd8f6029f86caa\transformed\ui-tooling-release\AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity-compose:1.9.3] C:\Users\yunus\.gradle\caches\8.11.1\transforms\674f263dfa3a5f2b8e5ad1ba0d06957d\transformed\activity-compose-1.9.3\AndroidManifest.xml:5:5-44
+MERGED from [androidx.activity:activity-compose:1.9.3] C:\Users\yunus\.gradle\caches\8.11.1\transforms\674f263dfa3a5f2b8e5ad1ba0d06957d\transformed\activity-compose-1.9.3\AndroidManifest.xml:5:5-44
+MERGED from [androidx.activity:activity-ktx:1.9.3] C:\Users\yunus\.gradle\caches\8.11.1\transforms\f0c61ce8b5814d611f93efaf0011059a\transformed\activity-ktx-1.9.3\AndroidManifest.xml:5:5-44
+MERGED from [androidx.activity:activity-ktx:1.9.3] C:\Users\yunus\.gradle\caches\8.11.1\transforms\f0c61ce8b5814d611f93efaf0011059a\transformed\activity-ktx-1.9.3\AndroidManifest.xml:5:5-44
+MERGED from [androidx.activity:activity:1.9.3] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6911c0a5a6cc937ed23ced24f83e6b90\transformed\activity-1.9.3\AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity:1.9.3] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6911c0a5a6cc937ed23ced24f83e6b90\transformed\activity-1.9.3\AndroidManifest.xml:20:5-44
+MERGED from [androidx.autofill:autofill:1.0.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\dc591328639d0081c2af0782faebc9a5\transformed\autofill-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.autofill:autofill:1.0.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\dc591328639d0081c2af0782faebc9a5\transformed\autofill-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.graphics:graphics-path:1.0.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6593f8b8560e7faba5774e32e5b3105c\transformed\graphics-path-1.0.1\AndroidManifest.xml:5:5-44
+MERGED from [androidx.graphics:graphics-path:1.0.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6593f8b8560e7faba5774e32e5b3105c\transformed\graphics-path-1.0.1\AndroidManifest.xml:5:5-44
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\8d3878095607e4ba33c3acbcbca4c3d7\transformed\appcompat-resources-1.6.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\8d3878095607e4ba33c3acbcbca4c3d7\transformed\appcompat-resources-1.6.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\a3bb221b3f4dfbe751b8149c3df6e45a\transformed\vectordrawable-animated-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\a3bb221b3f4dfbe751b8149c3df6e45a\transformed\vectordrawable-animated-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\3390fb748b235fcd1f9aaf487d7c1517\transformed\vectordrawable-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\3390fb748b235fcd1f9aaf487d7c1517\transformed\vectordrawable-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core:1.13.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6961d9dbad1110000ec36b067b10342e\transformed\core-1.13.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.13.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6961d9dbad1110000ec36b067b10342e\transformed\core-1.13.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\a8c6970e560e5fb0d5b960b5ea48dc80\transformed\customview-poolingcontainer-1.0.0\AndroidManifest.xml:20:5-21:38
+MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\a8c6970e560e5fb0d5b960b5ea48dc80\transformed\customview-poolingcontainer-1.0.0\AndroidManifest.xml:20:5-21:38
+MERGED from [androidx.core:core-ktx:1.13.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\ef3b6794c51489296a3fff06fd47da69\transformed\core-ktx-1.13.1\AndroidManifest.xml:5:5-44
+MERGED from [androidx.core:core-ktx:1.13.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\ef3b6794c51489296a3fff06fd47da69\transformed\core-ktx-1.13.1\AndroidManifest.xml:5:5-44
+MERGED from [androidx.datastore:datastore-preferences:1.0.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\0853a0c82b4a0ec0b3ad2f7583e0c48a\transformed\datastore-preferences-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.datastore:datastore-preferences:1.0.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\0853a0c82b4a0ec0b3ad2f7583e0c48a\transformed\datastore-preferences-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.datastore:datastore:1.0.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\b845e84948ee1aff477446463edc61b9\transformed\datastore-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.datastore:datastore:1.0.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\b845e84948ee1aff477446463edc61b9\transformed\datastore-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.compose.runtime:runtime-saveable-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\099a13907b2164e3876af4afaf87c755\transformed\runtime-saveable-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.runtime:runtime-saveable-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\099a13907b2164e3876af4afaf87c755\transformed\runtime-saveable-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.runtime:runtime-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\2e4624cafd68d1ef8915f5926aab3260\transformed\runtime-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.runtime:runtime-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\2e4624cafd68d1ef8915f5926aab3260\transformed\runtime-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.4.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\89a9def663e88e344755df096a6423be\transformed\annotation-experimental-1.4.1\AndroidManifest.xml:5:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.4.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\89a9def663e88e344755df096a6423be\transformed\annotation-experimental-1.4.1\AndroidManifest.xml:5:5-44
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\14bb3db03d746592ee3f2cc123b8b066\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\14bb3db03d746592ee3f2cc123b8b066\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\9edae6391d6e1d925eade66a915df832\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\9edae6391d6e1d925eade66a915df832\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6cb9b21e295a3f5fe9c382cacf5f0cf9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:21:5-44
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6cb9b21e295a3f5fe9c382cacf5f0cf9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:21:5-44
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\4f0dc4df8188d47e87f739301be96890\transformed\startup-runtime-1.1.1\AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\4f0dc4df8188d47e87f739301be96890\transformed\startup-runtime-1.1.1\AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\564dbebf35bf4ac1bfbd65e4264be38d\transformed\tracing-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\564dbebf35bf4ac1bfbd65e4264be38d\transformed\tracing-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.exifinterface:exifinterface:1.3.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\174967a4c7f81da90a3ecb10e7f855a6\transformed\exifinterface-1.3.7\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.exifinterface:exifinterface:1.3.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\174967a4c7f81da90a3ecb10e7f855a6\transformed\exifinterface-1.3.7\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.2.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\c9f896b9f30278020541f14603558a99\transformed\core-runtime-2.2.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.2.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\c9f896b9f30278020541f14603558a99\transformed\core-runtime-2.2.0\AndroidManifest.xml:20:5-44
+	android:targetSdkVersion
+		INJECTED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from C:\Users\yunus\Documents\GitHub\UpDate-App\UpdateMobile\app\src\main\AndroidManifest.xml
+provider#androidx.startup.InitializationProvider
+ADDED from [androidx.emoji2:emoji2:1.3.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\4113ad5a315f8de94ce8a36addb321ae\transformed\emoji2-1.3.0\AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\ed163ceb18bb27be13b21f1f59999b43\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\ed163ceb18bb27be13b21f1f59999b43\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6cb9b21e295a3f5fe9c382cacf5f0cf9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6cb9b21e295a3f5fe9c382cacf5f0cf9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\4f0dc4df8188d47e87f739301be96890\transformed\startup-runtime-1.1.1\AndroidManifest.xml:26:9-30:34
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\4f0dc4df8188d47e87f739301be96890\transformed\startup-runtime-1.1.1\AndroidManifest.xml:26:9-30:34
+	tools:node
+		ADDED from [androidx.emoji2:emoji2:1.3.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\4113ad5a315f8de94ce8a36addb321ae\transformed\emoji2-1.3.0\AndroidManifest.xml:28:13-31
+	android:authorities
+		ADDED from [androidx.emoji2:emoji2:1.3.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\4113ad5a315f8de94ce8a36addb321ae\transformed\emoji2-1.3.0\AndroidManifest.xml:26:13-68
+	android:exported
+		ADDED from [androidx.emoji2:emoji2:1.3.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\4113ad5a315f8de94ce8a36addb321ae\transformed\emoji2-1.3.0\AndroidManifest.xml:27:13-37
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.3.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\4113ad5a315f8de94ce8a36addb321ae\transformed\emoji2-1.3.0\AndroidManifest.xml:25:13-67
+meta-data#androidx.emoji2.text.EmojiCompatInitializer
+ADDED from [androidx.emoji2:emoji2:1.3.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\4113ad5a315f8de94ce8a36addb321ae\transformed\emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.emoji2:emoji2:1.3.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\4113ad5a315f8de94ce8a36addb321ae\transformed\emoji2-1.3.0\AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.3.0] C:\Users\yunus\.gradle\caches\8.11.1\transforms\4113ad5a315f8de94ce8a36addb321ae\transformed\emoji2-1.3.0\AndroidManifest.xml:30:17-75
+meta-data#androidx.lifecycle.ProcessLifecycleInitializer
+ADDED from [androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\ed163ceb18bb27be13b21f1f59999b43\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\ed163ceb18bb27be13b21f1f59999b43\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\yunus\.gradle\caches\8.11.1\transforms\ed163ceb18bb27be13b21f1f59999b43\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:30:17-78
+activity#androidx.activity.ComponentActivity
+ADDED from [androidx.compose.ui:ui-test-manifest:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\3876aba60ccda30efbb52adc3ddafb75\transformed\ui-test-manifest-1.7.5\AndroidManifest.xml:23:9-25:39
+	android:exported
+		ADDED from [androidx.compose.ui:ui-test-manifest:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\3876aba60ccda30efbb52adc3ddafb75\transformed\ui-test-manifest-1.7.5\AndroidManifest.xml:25:13-36
+	android:name
+		ADDED from [androidx.compose.ui:ui-test-manifest:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\3876aba60ccda30efbb52adc3ddafb75\transformed\ui-test-manifest-1.7.5\AndroidManifest.xml:24:13-63
+activity#androidx.compose.ui.tooling.PreviewActivity
+ADDED from [androidx.compose.ui:ui-tooling-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\3e56ad8bad252f3341cd8f6029f86caa\transformed\ui-tooling-release\AndroidManifest.xml:23:9-25:39
+	android:exported
+		ADDED from [androidx.compose.ui:ui-tooling-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\3e56ad8bad252f3341cd8f6029f86caa\transformed\ui-tooling-release\AndroidManifest.xml:25:13-36
+	android:name
+		ADDED from [androidx.compose.ui:ui-tooling-android:1.7.5] C:\Users\yunus\.gradle\caches\8.11.1\transforms\3e56ad8bad252f3341cd8f6029f86caa\transformed\ui-tooling-release\AndroidManifest.xml:24:13-71
+permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.13.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6961d9dbad1110000ec36b067b10342e\transformed\core-1.13.1\AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.13.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6961d9dbad1110000ec36b067b10342e\transformed\core-1.13.1\AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.13.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6961d9dbad1110000ec36b067b10342e\transformed\core-1.13.1\AndroidManifest.xml:23:9-81
+permission#com.update.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.13.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6961d9dbad1110000ec36b067b10342e\transformed\core-1.13.1\AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.13.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6961d9dbad1110000ec36b067b10342e\transformed\core-1.13.1\AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.13.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6961d9dbad1110000ec36b067b10342e\transformed\core-1.13.1\AndroidManifest.xml:23:9-81
+uses-permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.13.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6961d9dbad1110000ec36b067b10342e\transformed\core-1.13.1\AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.13.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6961d9dbad1110000ec36b067b10342e\transformed\core-1.13.1\AndroidManifest.xml:26:22-94
+uses-permission#com.update.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.13.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6961d9dbad1110000ec36b067b10342e\transformed\core-1.13.1\AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.13.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6961d9dbad1110000ec36b067b10342e\transformed\core-1.13.1\AndroidManifest.xml:26:22-94
+meta-data#androidx.profileinstaller.ProfileInstallerInitializer
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6cb9b21e295a3f5fe9c382cacf5f0cf9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6cb9b21e295a3f5fe9c382cacf5f0cf9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6cb9b21e295a3f5fe9c382cacf5f0cf9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:30:17-85
+receiver#androidx.profileinstaller.ProfileInstallReceiver
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6cb9b21e295a3f5fe9c382cacf5f0cf9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:34:9-52:20
+	android:enabled
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6cb9b21e295a3f5fe9c382cacf5f0cf9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:37:13-35
+	android:exported
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6cb9b21e295a3f5fe9c382cacf5f0cf9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:38:13-36
+	android:permission
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6cb9b21e295a3f5fe9c382cacf5f0cf9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:39:13-57
+	android:directBootAware
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6cb9b21e295a3f5fe9c382cacf5f0cf9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:36:13-44
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6cb9b21e295a3f5fe9c382cacf5f0cf9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:35:13-76
+intent-filter#action:name:androidx.profileinstaller.action.INSTALL_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6cb9b21e295a3f5fe9c382cacf5f0cf9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:40:13-42:29
+action#androidx.profileinstaller.action.INSTALL_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6cb9b21e295a3f5fe9c382cacf5f0cf9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:41:17-91
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6cb9b21e295a3f5fe9c382cacf5f0cf9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:41:25-88
+intent-filter#action:name:androidx.profileinstaller.action.SKIP_FILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6cb9b21e295a3f5fe9c382cacf5f0cf9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:43:13-45:29
+action#androidx.profileinstaller.action.SKIP_FILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6cb9b21e295a3f5fe9c382cacf5f0cf9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:44:17-85
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6cb9b21e295a3f5fe9c382cacf5f0cf9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:44:25-82
+intent-filter#action:name:androidx.profileinstaller.action.SAVE_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6cb9b21e295a3f5fe9c382cacf5f0cf9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:46:13-48:29
+action#androidx.profileinstaller.action.SAVE_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6cb9b21e295a3f5fe9c382cacf5f0cf9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:47:17-88
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6cb9b21e295a3f5fe9c382cacf5f0cf9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:47:25-85
+intent-filter#action:name:androidx.profileinstaller.action.BENCHMARK_OPERATION
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6cb9b21e295a3f5fe9c382cacf5f0cf9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:49:13-51:29
+action#androidx.profileinstaller.action.BENCHMARK_OPERATION
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6cb9b21e295a3f5fe9c382cacf5f0cf9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:50:17-95
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\yunus\.gradle\caches\8.11.1\transforms\6cb9b21e295a3f5fe9c382cacf5f0cf9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:50:25-92

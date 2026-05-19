@@ -198,7 +198,7 @@
         };
 
         try {
-            const res = await fetch('http://localhost:5005/api/register', {
+            const res = await fetch('http://localhost:5000/api/register', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(data)
@@ -218,7 +218,7 @@
     async function login() {
         const email = document.getElementById('lEmail').value;
         const password = document.getElementById('lPass').value;
-        const res = await fetch('http://localhost:5005/api/login', {
+        const res = await fetch('http://localhost:5000/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
