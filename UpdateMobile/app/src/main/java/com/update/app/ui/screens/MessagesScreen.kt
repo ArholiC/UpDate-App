@@ -1,4 +1,4 @@
-package com.update.app.ui.screens
+﻿package com.update.app.ui.screens
 
 import android.Manifest
 import android.content.Context
@@ -217,7 +217,7 @@ fun ChatScreen(
     // Socket.IO
     DisposableEffect(myId) {
         try {
-            val s = IO.socket("http://10.0.2.2:5000", IO.Options.builder().setReconnection(true).build())
+            val s = IO.socket("http://10.0.2.2:5005", IO.Options.builder().setReconnection(true).build())
             s.on(Socket.EVENT_CONNECT) { s.emit("join", myId) }
             s.on("user_typing") { args ->
                 val obj = args[0] as? JSONObject
@@ -540,7 +540,7 @@ suspend fun uploadAudioFile(file: File, token: String): String? {
         val client = OkHttpClient()
         val multipartBody = MultipartBody.Builder().setType(MultipartBody.FORM).addPart(part).build()
         val request = Request.Builder()
-            .url("http://10.0.2.2:5000/api/upload-audio")
+            .url("http://10.0.2.2:5005/api/upload-audio")
             .addHeader("Authorization", "Bearer $token")
             .post(multipartBody)
             .build()
@@ -566,7 +566,7 @@ suspend fun uploadMsgImageFromUri(context: android.content.Context, uri: Uri, to
         val multipartBody = MultipartBody.Builder().setType(MultipartBody.FORM)
             .addPart(part).build()
         val request = Request.Builder()
-            .url("http://10.0.2.2:5000/api/upload-message-image")
+            .url("http://10.0.2.2:5005/api/upload-message-image")
             .addHeader("Authorization", "Bearer $token")
             .post(multipartBody)
             .build()

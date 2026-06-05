@@ -224,7 +224,7 @@
     const benimID = localStorage.getItem('loggedInUserId');
     if (!benimID) window.location.href = 'login.html';
 
-    const BASE = 'http://localhost:5000';
+    const BASE = 'http://localhost:5005';
     let allChats = [];
 
     async function getConvInfo(kisiId) {

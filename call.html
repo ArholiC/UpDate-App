@@ -179,13 +179,13 @@ if (callType === 'video') {
 // Avatar yükle
 (async () => {
     try {
-        const r = await fetch(`http://localhost:5000/api/users/${otherId}`, { headers: { Authorization: `Bearer ${token}` } });
+        const r = await fetch(`http://localhost:5005/api/users/${otherId}`, { headers: { Authorization: `Bearer ${token}` } });
         const u = await r.json();
         const el = document.getElementById('avatarEl');
         if (u.profile_pic) {
             const img = document.createElement('img');
             img.className = 'avatar-img';
-            img.src = `http://localhost:5000${u.profile_pic}`;
+            img.src = `http://localhost:5005${u.profile_pic}`;
             el.replaceWith(img);
         } else {
             el.innerText = (u.full_name || calleeName)[0]?.toUpperCase() || '?';
@@ -196,7 +196,7 @@ if (callType === 'video') {
 // ══════════════════════════════════════════════════════════
 //  SOCKET.IO
 // ══════════════════════════════════════════════════════════
-const socket = io('http://localhost:5000', { reconnection: true });
+const socket = io('http://localhost:5005', { reconnection: true });
 
 socket.on('connect', () => {
     socket.emit('join', myId);
@@ -294,11 +294,42 @@ async function startCallerFlow() {
         console.log('[CallScreen] call_offer gönderildi (gerçek SDP)');
 
     } catch(e) {
-        console.warn('[CallScreen] medya hatası, sinyal-only devam:', e.message);
-        // İzin verilmedi veya cihaz yok → yine de ara (ses olmaz)
-        const myName = localStorage.getItem('loggedInUserName') || 'Kullanıcı';
-        socket.emit('call_offer', { fromId: myId, toId: otherId, callType, callerName: myName, offer: {} });
-        showStatus('Bağlanıyor... (mikrofon yok)');
+        console.warn('[CallScreen] medya hatası:', e.message);
+
+        // Mikrofon olmasa bile gerçek WebRTC offer oluştur (sessiz)
+        try {
+            pc = new RTCPeerConnection(ICE_SERVERS);
+            pc.ontrack = onRemoteTrack;
+            pc.onicecandidate = ev => {
+                if (ev.candidate) socket.emit('ice_candidate', { fromId: myId, toId: otherId, candidate: ev.candidate.toJSON() });
+            };
+            pc.onconnectionstatechange = () => {
+                if (pc.connectionState === 'connected') onConnected();
+            };
+
+            // Sessiz AudioContext stream'i (SDP için gerekli)
+            try {
+                const silentCtx = new AudioContext();
+                const dest = silentCtx.createMediaStreamDestination();
+                pc.addTrack(dest.stream.getAudioTracks()[0], dest.stream);
+            } catch(_) {}
+
+            const offer = await pc.createOffer({ offerToReceiveAudio: true, offerToReceiveVideo: callType === 'video' });
+            await pc.setLocalDescription(offer);
+
+            const myName = localStorage.getItem('loggedInUserName') || 'Kullanıcı';
+            socket.emit('call_offer', {
+                fromId: myId, toId: otherId, callType, callerName: myName,
+                offer: { type: offer.type, sdp: offer.sdp }
+            });
+            showStatus('Bağlanıyor... (mikrofon izni ver!)');
+            console.log('[CallScreen] Sessiz offer gönderildi — mikrofon izni vermeden ses olmaz');
+
+        } catch(e2) {
+            const myName = localStorage.getItem('loggedInUserName') || 'Kullanıcı';
+            socket.emit('call_offer', { fromId: myId, toId: otherId, callType, callerName: myName, offer: {} });
+            showStatus('Bağlanıyor...');
+        }
     }
 
     // 90 sn timeout

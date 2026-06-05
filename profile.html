@@ -456,7 +456,7 @@
 
     async function loadData() {
         try {
-            const res = await fetch(`http://localhost:5000/api/users/${bID}`);
+            const res = await fetch(`http://localhost:5005/api/users/${bID}`);
             userData = await res.json();
 
             document.getElementById('userName').innerText = userData.full_name;
@@ -485,7 +485,7 @@
             // Profil resmi
             const avatarArea = document.getElementById('avatarArea');
             if (userData.profile_pic) {
-                avatarArea.innerHTML = `<img src="http://localhost:5000${userData.profile_pic}" class="avatar-img" onerror="this.parentElement.innerHTML='<div class=\\'avatar-placeholder\\'>${userData.full_name[0]?.toUpperCase()}</div>'">`;
+                avatarArea.innerHTML = `<img src="http://localhost:5005${userData.profile_pic}" class="avatar-img" onerror="this.parentElement.innerHTML='<div class=\\'avatar-placeholder\\'>${userData.full_name[0]?.toUpperCase()}</div>'">`;
                 document.getElementById('finalPicPath').value = userData.profile_pic;
             } else {
                 avatarArea.innerHTML = `<div class="avatar-placeholder">${userData.full_name[0]?.toUpperCase() || '?'}</div>`;
@@ -497,7 +497,7 @@
             document.getElementById('completionFill').style.width = `${pct}%`;
 
             // Eşleşme sayısı
-            const matchRes = await fetch(`http://localhost:5000/api/matches/${bID}`);
+            const matchRes = await fetch(`http://localhost:5005/api/matches/${bID}`);
             const matches = await matchRes.json();
             document.getElementById('matchCount').innerText = Array.isArray(matches) ? matches.length : '—';
 
@@ -550,7 +550,7 @@
         const body = { bio, interests: [...selectedInterests].join(', ') };
         if (picPath) body.profile_pic = picPath;
         try {
-            await fetch(`http://localhost:5000/api/users/${bID}`, {
+            await fetch(`http://localhost:5005/api/users/${bID}`, {
                 method: 'PUT', headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(body)
             });
@@ -588,7 +588,7 @@
         const body = { bio, interests: [...selectedInterests].join(', ') };
         if (picPath) body.profile_pic = picPath;
         try {
-            await fetch(`http://localhost:5000/api/users/${bID}`, {
+            await fetch(`http://localhost:5005/api/users/${bID}`, {
                 method: 'PUT', headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(body)
             });
@@ -607,13 +607,13 @@
         if (!input.files[0]) return;
         const fd = new FormData(); fd.append("profil_resmi", input.files[0]);
         try {
-            const res = await fetch('http://localhost:5000/api/upload', {
+            const res = await fetch('http://localhost:5005/api/upload', {
                 method: 'POST', headers: { 'Authorization': 'Bearer ' + token }, body: fd
             });
             const d = await res.json();
             if (d.success) {
                 document.getElementById('finalPicPath').value = d.url;
-                document.getElementById('avatarArea').innerHTML = `<img src="http://localhost:5000${d.url}?t=${Date.now()}" class="avatar-img">`;
+                document.getElementById('avatarArea').innerHTML = `<img src="http://localhost:5005${d.url}?t=${Date.now()}" class="avatar-img">`;
                 showToast('✅ Fotoğraf güncellendi!');
                 if (userData) {
                     userData.profile_pic = d.url;
@@ -630,7 +630,7 @@
     function closeDeleteModal() { document.getElementById('deleteModal').classList.remove('open'); }
     async function deleteProfile() {
         try {
-            const res = await fetch(`http://localhost:5000/api/users/${bID}`, { method: 'DELETE' });
+            const res = await fetch(`http://localhost:5005/api/users/${bID}`, { method: 'DELETE' });
             if (res.ok) { localStorage.clear(); location.href = 'login.html'; }
             else { showToast('Silme işlemi başarısız!', 'red'); closeDeleteModal(); }
         } catch(e) { showToast('Hata oluştu!', 'red'); }

@@ -1,4 +1,4 @@
-package com.update.app.ui.screens
+﻿package com.update.app.ui.screens
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
@@ -50,7 +50,7 @@ fun MainScreen(
         val coroutineScope = MainScope()
         if (userId > 0) {
             try {
-                val s = IO.socket("http://10.0.2.2:5000", IO.Options.builder().setReconnection(true).build())
+                val s = IO.socket("http://10.0.2.2:5005", IO.Options.builder().setReconnection(true).build())
                 s.on(Socket.EVENT_CONNECT) {
                     s.emit("join", userId)
                     android.util.Log.d("GlobalSocket", "Global socket joined user_$userId")

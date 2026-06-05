@@ -242,7 +242,7 @@
     // ── Socket.IO ──
     let incomingCallerId = null, incomingCallType = 'audio';
     let incomingCallerOffer = null; // WebRTC SDP offer (gerçek ses için)
-    const socket = io('http://localhost:5000');
+    const socket = io('http://localhost:5005');
     socket.emit('join', parseInt(myId));
 
     let typingTimeout, isTyping = false;
@@ -294,11 +294,11 @@
 
     async function fetchUserAvatar(uid, containerId, name, size) {
         try {
-            const res = await fetch(`http://localhost:5000/api/users/${uid}`);
+            const res = await fetch(`http://localhost:5005/api/users/${uid}`);
             const user = await res.json();
             const el = document.getElementById(containerId);
             if (user.profile_pic) {
-                el.innerHTML = `<img src="http://localhost:5000${user.profile_pic}" style="width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;border:3px solid #ff416c;box-shadow:0 0 20px rgba(255,65,108,0.3)">`;
+                el.innerHTML = `<img src="http://localhost:5005${user.profile_pic}" style="width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;border:3px solid #ff416c;box-shadow:0 0 20px rgba(255,65,108,0.3)">`;
             } else {
                 el.innerHTML = `<div style="width:${size}px;height:${size}px;border-radius:50%;background:rgba(255,65,108,0.2);border:3px solid #ff416c;display:flex;align-items:center;justify-content:center;font-size:${size/2.2}px;font-weight:900;color:#ff416c;">${(name||'?')[0].toUpperCase()}</div>`;
             }
@@ -328,17 +328,17 @@
     // ── Kullanıcı bilgisi ──
     async function loadInfo() {
         try {
-            const res = await fetch(`http://localhost:5000/api/users/${otherId}`);
+            const res = await fetch(`http://localhost:5005/api/users/${otherId}`);
             const user = await res.json();
             document.getElementById('otherName').innerText = user.full_name;
-            const pic = user.profile_pic ? 'http://localhost:5000' + user.profile_pic
+            const pic = user.profile_pic ? 'http://localhost:5005' + user.profile_pic
                 : `https://ui-avatars.com/api/?name=${encodeURIComponent(user.full_name)}&background=ff416c&color=fff`;
             document.getElementById('otherPic').src = pic;
         } catch(e) {}
     }
 
     async function markAsRead() {
-        try { await fetch(`http://localhost:5000/api/messages/read/${myId}/${otherId}`, { method: 'PUT' }); } catch(e) {}
+        try { await fetch(`http://localhost:5005/api/messages/read/${myId}/${otherId}`, { method: 'PUT' }); } catch(e) {}
     }
 
     function scrollBottom() {
@@ -349,7 +349,7 @@
     // ── Mesajları yükle ──
     async function loadMsgs() {
         try {
-            const res = await fetch(`http://localhost:5000/api/messages/${myId}/${otherId}`);
+            const res = await fetch(`http://localhost:5005/api/messages/${myId}/${otherId}`);
             const msgs = await res.json();
             if (!Array.isArray(msgs)) return;
 
@@ -369,7 +369,7 @@
 
                 if (m.audio_url) {
                     // Ses mesajı — tam URL'yi oluştur
-                    const rawUrl = m.audio_url.startsWith('http') ? m.audio_url : `http://localhost:5000${m.audio_url}`;
+                    const rawUrl = m.audio_url.startsWith('http') ? m.audio_url : `http://localhost:5005${m.audio_url}`;
                     const barHeights = [6, 12, 8, 16, 10, 14, 7, 11];
                     const bars = barHeights.map(h => `<div class="audio-bar" style="height:${h}px"></div>`).join('');
                     content = `
@@ -380,7 +380,7 @@
                         </div>`;
                 } else if (m.image_url) {
                     // Resim mesajı
-                    const imgUrl = m.image_url.startsWith('http') ? m.image_url : `http://localhost:5000${m.image_url}`;
+                    const imgUrl = m.image_url.startsWith('http') ? m.image_url : `http://localhost:5005${m.image_url}`;
                     content = `<img src="${imgUrl}" class="msg-img" onclick="openFullscreen('${imgUrl}')" loading="lazy">`;
                 } else {
                     // Metin
@@ -413,12 +413,12 @@
         const file = input.files[0]; if (!file) return;
         const fd = new FormData(); fd.append('image', file);
         try {
-            const res = await fetch('http://localhost:5000/api/upload-message-image', {
+            const res = await fetch('http://localhost:5005/api/upload-message-image', {
                 method: 'POST', headers: { 'Authorization': `Bearer ${token}` }, body: fd
             });
             const data = await res.json();
             if (data.success) {
-                await fetch('http://localhost:5000/api/messages', {
+                await fetch('http://localhost:5005/api/messages', {
                     method: 'POST', headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ sender_id: parseInt(myId), receiver_id: parseInt(otherId), message: '', image_url: data.url })
                 });
@@ -482,12 +482,12 @@
         const fd = new FormData();
         fd.append('audio', blob, `voice-${Date.now()}.${ext}`);
         try {
-            const res = await fetch('http://localhost:5000/api/upload-audio', {
+            const res = await fetch('http://localhost:5005/api/upload-audio', {
                 method: 'POST', headers: { 'Authorization': `Bearer ${token}` }, body: fd
             });
             const data = await res.json();
             if (data.success) {
-                await fetch('http://localhost:5000/api/messages', {
+                await fetch('http://localhost:5005/api/messages', {
                     method: 'POST', headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ sender_id: parseInt(myId), receiver_id: parseInt(otherId), message: '', audio_url: data.url })
                 });
@@ -504,7 +504,7 @@
         socket.emit('stop_typing', { fromId: parseInt(myId), toId: parseInt(otherId) });
         inp.value = '';
         try {
-            await fetch('http://localhost:5000/api/messages', {
+            await fetch('http://localhost:5005/api/messages', {
                 method: 'POST', headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ sender_id: parseInt(myId), receiver_id: parseInt(otherId), message: msg })
             });

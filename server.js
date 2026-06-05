@@ -21,8 +21,14 @@ const uploadDir = path.join(__dirname, 'public/uploads/');
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 
 app.use(cors({ origin: '*', methods: ['GET','POST','PUT','DELETE','OPTIONS'] }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '20mb' }));
+app.use(express.urlencoded({ extended: true, limit: '20mb' }));
+
+// UTF-8 charset header - Sadece API rotaları için
+app.use('/api', (req, res, next) => {
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    next();
+});
 
 // Ses/video dosyaları için CORS ve Range (streaming) desteği
 app.use('/public', (req, res, next) => {
@@ -90,11 +96,34 @@ const upload = multer({
 });
 
 // ==========================================
+// YARDIMCI: BURÇ HESAPLAMA
+// ==========================================
+
+function calcZodiac(birthDate) {
+    if (!birthDate) return null;
+    const d = new Date(birthDate);
+    const month = d.getMonth() + 1;
+    const day = d.getDate();
+    if ((month === 3 && day >= 21) || (month === 4 && day <= 19)) return 'Koç';
+    if ((month === 4 && day >= 20) || (month === 5 && day <= 20)) return 'Boğa';
+    if ((month === 5 && day >= 21) || (month === 6 && day <= 20)) return 'İkizler';
+    if ((month === 6 && day >= 21) || (month === 7 && day <= 22)) return 'Yengeç';
+    if ((month === 7 && day >= 23) || (month === 8 && day <= 22)) return 'Aslan';
+    if ((month === 8 && day >= 23) || (month === 9 && day <= 22)) return 'Başak';
+    if ((month === 9 && day >= 23) || (month === 10 && day <= 22)) return 'Terazi';
+    if ((month === 10 && day >= 23) || (month === 11 && day <= 21)) return 'Akrep';
+    if ((month === 11 && day >= 22) || (month === 12 && day <= 21)) return 'Yay';
+    if ((month === 12 && day >= 22) || (month === 1 && day <= 19)) return 'Oğlak';
+    if ((month === 1 && day >= 20) || (month === 2 && day <= 18)) return 'Kova';
+    return 'Balık';
+}
+
+// ==========================================
 // AUTH
 // ==========================================
 
 app.post('/api/register', async (req, res) => {
-    const { full_name, email, password, gender, birth_date, zodiac, interests, bio, answers } = req.body;
+    const { full_name, email, password, gender, birth_date, interests, bio, answers } = req.body;
     try {
         const check = await pool.query("SELECT id FROM users WHERE email = $1", [email]);
         if (check.rows.length > 0)
@@ -102,6 +131,8 @@ app.post('/api/register', async (req, res) => {
 
         const hashed = await bcrypt.hash(password, 10);
         const answersStr = answers ? (typeof answers === 'object' ? JSON.stringify(answers) : answers) : null;
+        // Doğum tarihinden otomatik burç hesapla
+        const zodiac = calcZodiac(birth_date);
         const result = await pool.query(
             `INSERT INTO users (full_name, email, password, gender, birth_date, zodiac, interests, bio, answers) 
              VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *`,
@@ -118,13 +149,27 @@ app.post('/api/register', async (req, res) => {
 });
 
 app.post('/api/login', async (req, res) => {
-    const { email, password } = req.body;
+    let { email, password } = req.body;
+    
+    // Debug log to see exact input from client
+    console.log(`[LOGIN ATTEMPT] Raw email: "${email}", Raw password: "${password}"`);
+    
+    email = email ? email.trim() : '';
+    password = password ? password.trim() : '';
+    
+    console.log(`[LOGIN ATTEMPT] Trimmed email: "${email}", Trimmed password: "${password}"`);
+
     try {
-        const result = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
-        if (result.rows.length === 0)
+        const result = await pool.query("SELECT * FROM users WHERE email ILIKE $1", [email]);
+        console.log(`[LOGIN ATTEMPT] DB search for "${email}" returned ${result.rows.length} rows.`);
+        
+        if (result.rows.length === 0) {
+            console.log(`[LOGIN FAILED] No user found for ${email}`);
             return res.status(401).json({ success: false, message: "E-posta veya şifre hatalı!" });
+        }
 
         const user = result.rows[0];
+        console.log(`[LOGIN ATTEMPT] User found in DB. DB password starts with: "${user.password.substring(0, 10)}..."`);
         
         // Hem hash'li hem düz metin şifreleri destekle (geçiş dönemi için)
         let valid = false;
@@ -138,12 +183,16 @@ app.post('/api/login', async (req, res) => {
             }
         }
 
-        if (!valid)
+        if (!valid) {
+            console.log(`[LOGIN FAILED] Invalid password for ${email}`);
             return res.status(401).json({ success: false, message: "E-posta veya şifre hatalı!" });
+        }
 
+        console.log(`[LOGIN SUCCESS] ${email} logged in successfully.`);
         const token = jwt.sign({ id: user.id, email }, JWT_SECRET, { expiresIn: '30d' });
         res.json({ success: true, token, user: { ...user, password: undefined } });
     } catch (err) {
+        console.error("[LOGIN ERROR]:", err.message);
         res.status(500).json({ success: false, error: err.message });
     }
 });

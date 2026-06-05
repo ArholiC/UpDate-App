@@ -11,12 +11,11 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-// Emülatörde 10.0.2.2 → bilgisayarının localhost'u
-// Gerçek telefonda: aynı WiFi'de PC'nin IP'si (ipconfig'den bak)
-// Ev WiFi için: http://10.31.161.24:5000/
-const val BASE_URL = "http://10.0.2.2:5000/"
+// Emülatörde 10.0.2.2 → bilgisayarının localhost'u (Docker dışarıya 5005 portundan yayın yapıyor)
+// Gerçek telefonda: aynı WiFi'de PC'nin IP'si (ipconfig'den bak) + port 5005
+const val BASE_URL = "http://10.0.2.2:5005/"
 // ⬆ Gerçek telefon kullanıyorsan bunu yorum yap, altını aç:
-// const val BASE_URL = "http://10.31.161.24:5000/"
+// const val BASE_URL = "http://10.31.161.24:5005/"
 
 val Context.dataStore by preferencesDataStore(name = "update_prefs")
 val TOKEN_KEY = stringPreferencesKey("jwt_token")

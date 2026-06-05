@@ -87,8 +87,8 @@
         try {
             // 1. Verileri Çek
             const [res1, res2] = await Promise.all([
-                fetch(`http://localhost:5000/api/users/${hedefID}`),
-                fetch(`http://localhost:5000/api/users/${benimID}`)
+                fetch(`http://localhost:5005/api/users/${hedefID}`),
+                fetch(`http://localhost:5005/api/users/${benimID}`)
             ]);
             
             const hedefUser = await res1.json();
@@ -97,7 +97,7 @@
             // 2. Temel Bilgileri Yaz
             document.getElementById('userName').innerText = hedefUser.full_name;
             document.getElementById('userFoto').src = hedefUser.profile_pic 
-                ? `http://localhost:5000${hedefUser.profile_pic}` 
+                ? `http://localhost:5005${hedefUser.profile_pic}` 
                 : `https://ui-avatars.com/api/?name=${encodeURIComponent(hedefUser.full_name)}&background=random&color=fff&size=200`;
             document.getElementById('userBio').innerText = hedefUser.bio || "Henüz bir biyografi eklenmemiş.";
 

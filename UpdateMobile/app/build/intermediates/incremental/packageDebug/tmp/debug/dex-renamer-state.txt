@@ -1,4 +1,4 @@
-#Fri Jun 05 05:46:15 TRT 2026
+#Fri Jun 05 14:36:05 TRT 2026
 base.0=C\:\\Users\\yunus\\Documents\\GitHub\\UpDate-App\\UpdateMobile\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
 base.1=C\:\\Users\\yunus\\Documents\\GitHub\\UpDate-App\\UpdateMobile\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex
 base.10=C\:\\Users\\yunus\\Documents\\GitHub\\UpDate-App\\UpdateMobile\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes3.dex
