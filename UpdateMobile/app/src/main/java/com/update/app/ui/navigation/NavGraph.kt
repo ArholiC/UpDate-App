@@ -21,6 +21,11 @@ sealed class Screen(val route: String) {
     object Chat : Screen("chat/{userId}/{userName}") {
         fun createRoute(userId: Int, userName: String) = "chat/$userId/$userName"
     }
+    // isCallee: "1" = callee (gelen arama), "0" = caller (giden arama)
+    object Call : Screen("call/{userId}/{callType}/{userName}/{isCallee}") {
+        fun createRoute(userId: Int, callType: String, userName: String, isCallee: Boolean = false) =
+            "call/$userId/$callType/$userName/${if (isCallee) 1 else 0}"
+    }
 }
 
 @Composable
@@ -79,6 +84,10 @@ fun AppNavGraph(
                 },
                 onOpenChat = { userId, userName ->
                     navController.navigate(Screen.Chat.createRoute(userId, userName))
+                },
+                // Gelen arama → isCallee = true
+                onStartCall = { calleeId, callType, calleeName ->
+                    navController.navigate(Screen.Call.createRoute(calleeId, callType, calleeName, isCallee = true))
                 }
             )
         }
@@ -96,7 +105,34 @@ fun AppNavGraph(
                 myId = currentUserId,
                 userId = userId,
                 userName = userName,
-                onBack = { navController.popBackStack() }
+                onBack = { navController.popBackStack() },
+                // Chat'ten başlatılan arama → isCallee = false
+                onStartCall = { calleeId, callType, name ->
+                    navController.navigate(Screen.Call.createRoute(calleeId, callType, name, isCallee = false))
+                }
+            )
+        }
+
+        composable(
+            route = Screen.Call.route,
+            arguments = listOf(
+                navArgument("userId") { type = NavType.IntType },
+                navArgument("callType") { type = NavType.StringType },
+                navArgument("userName") { type = NavType.StringType },
+                navArgument("isCallee") { type = NavType.IntType; defaultValue = 0 }
+            )
+        ) { backStack ->
+            val userId = backStack.arguments?.getInt("userId") ?: 0
+            val callType = backStack.arguments?.getString("callType") ?: "audio"
+            val userName = backStack.arguments?.getString("userName") ?: ""
+            val isCallee = (backStack.arguments?.getInt("isCallee") ?: 0) == 1
+            CallScreen(
+                myId = currentUserId,
+                calleeId = userId,
+                calleeName = userName,
+                callType = callType,
+                isCallee = isCallee,
+                onEnd = { navController.popBackStack() }
             )
         }
     }

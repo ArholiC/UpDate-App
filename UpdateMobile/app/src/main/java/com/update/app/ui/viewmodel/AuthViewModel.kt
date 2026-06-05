@@ -67,15 +67,27 @@ class AuthViewModel : ViewModel() {
                 val response = RetrofitClient.api.register(request)
                 if (response.isSuccessful && response.body() != null) {
                     val body = response.body()!!
-                    saveToken(context, body.token)
-                    _currentUserId.value = body.user.id
-                    _isLoggedIn.value = true
-                    _authState.value = AuthState.Success(body.user)
+                    if (body.token != null) {
+                        saveToken(context, body.token)
+                        _currentUserId.value = body.user?.id ?: 0
+                        _isLoggedIn.value = true
+                        _authState.value = AuthState.Success(body.user ?: com.update.app.data.model.User())
+                    } else {
+                        _authState.value = AuthState.Error("Sunucudan geçersiz yanıt")
+                    }
                 } else {
-                    _authState.value = AuthState.Error("Kayıt başarısız")
+                    // Gerçek hata mesajını parse et
+                    val errorBody = response.errorBody()?.string() ?: ""
+                    val msg = try {
+                        org.json.JSONObject(errorBody).optString("message",
+                            org.json.JSONObject(errorBody).optString("error", "Kayıt başarısız (${response.code()})"))
+                    } catch (e: Exception) {
+                        "Kayıt başarısız (${response.code()})"
+                    }
+                    _authState.value = AuthState.Error(msg)
                 }
             } catch (e: Exception) {
-                _authState.value = AuthState.Error("Sunucuya bağlanılamadı: ${e.message}")
+                _authState.value = AuthState.Error("Bağlantı hatası: ${e.message}")
             }
         }
     }

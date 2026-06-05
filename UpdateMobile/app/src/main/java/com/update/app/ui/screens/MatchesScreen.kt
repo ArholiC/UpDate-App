@@ -33,7 +33,7 @@ fun MatchesScreen(userId: Int, onOpenChat: (Int, String) -> Unit, vm: MatchesVie
 
     Column(modifier = Modifier.fillMaxSize().background(Bg).statusBarsPadding()) {
         Column(modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp)) {
-            Text("Eşleşmeler 💜", fontSize = 28.sp, fontWeight = FontWeight.Black, color = TextPrimary)
+            Text("Eşleşmeler ❤️", fontSize = 28.sp, fontWeight = FontWeight.Black, color = TextPrimary)
             Text("${matches.size} eşleşme", color = TextMuted, fontSize = 14.sp, modifier = Modifier.padding(top = 4.dp))
         }
 
@@ -63,7 +63,9 @@ fun MatchCard(match: User, onOpenChat: (Int, String) -> Unit) {
         .clickable { onOpenChat(match.id, match.full_name) }
         .padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
         if (!match.profile_pic.isNullOrEmpty()) {
-            AsyncImage(model = "${BASE_URL}uploads/${match.profile_pic}", contentDescription = null,
+            val picUrl = if (match.profile_pic.startsWith("/")) "${BASE_URL.trimEnd('/')}${match.profile_pic}"
+                         else "${BASE_URL}public/uploads/${match.profile_pic}"
+            AsyncImage(model = picUrl, contentDescription = null,
                 contentScale = ContentScale.Crop, modifier = Modifier.size(60.dp).clip(CircleShape))
         } else {
             Box(modifier = Modifier.size(60.dp).clip(CircleShape).background(BgInput)

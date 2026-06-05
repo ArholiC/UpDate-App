@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>UpDate - Arama</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Poppins', sans-serif; background: #050309; color: white; min-height: 100vh; overflow: hidden; }
+
+        .glow { position: fixed; border-radius: 50%; filter: blur(100px); opacity: 0.18; pointer-events: none; z-index: 0; }
+        .glow-1 { width: 700px; height: 700px; background: radial-gradient(#ff416c, transparent 70%); top: -200px; right: -150px; }
+        .glow-2 { width: 500px; height: 500px; background: radial-gradient(#ff4b2b, transparent 70%); bottom: -100px; left: -100px; }
+
+        /* Video elementleri */
+        #remoteVideo { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; display: none; background: #000; }
+        #localVideo  { position: fixed; bottom: 110px; right: 16px; width: 120px; height: 160px; object-fit: cover; border-radius: 16px; z-index: 10; display: none; box-shadow: 0 8px 24px rgba(0,0,0,0.6); border: 2px solid rgba(255,65,108,0.4); }
+        .video-overlay { position: fixed; inset: 0; background: linear-gradient(180deg, rgba(5,3,9,0.75) 0%, transparent 35%, transparent 60%, rgba(5,3,9,0.92) 100%); z-index: 2; pointer-events: none; display: none; }
+
+        /* Ana içerik */
+        .call-wrap { position: fixed; inset: 0; z-index: 5; display: flex; flex-direction: column; align-items: center; padding: 56px 24px 36px; }
+
+        /* Pulse */
+        .pulse-wrap { position: relative; display: flex; align-items: center; justify-content: center; width: 210px; height: 210px; }
+        .pulse-ring { position: absolute; border-radius: 50%; background: rgba(255,65,108,0.10); animation: pulse 1.9s ease-out infinite; }
+        .pulse-ring:nth-child(1) { width: 210px; height: 210px; animation-delay: 0s; }
+        .pulse-ring:nth-child(2) { width: 170px; height: 170px; animation-delay: 0.55s; background: rgba(255,65,108,0.17); }
+        @keyframes pulse { 0%{transform:scale(0.82);opacity:0.85} 100%{transform:scale(1.45);opacity:0} }
+        .pulse-wrap.connected .pulse-ring { animation-play-state: paused; opacity: 0; }
+
+        .avatar-img { width: 124px; height: 124px; border-radius: 50%; object-fit: cover; border: 3px solid rgba(255,65,108,0.7); box-shadow: 0 0 44px rgba(255,65,108,0.25); z-index: 1; }
+        .avatar-ph  { width: 124px; height: 124px; border-radius: 50%; background: rgba(255,65,108,0.13); border: 3px solid rgba(255,65,108,0.5); display: flex; align-items: center; justify-content: center; font-size: 52px; font-weight: 900; color: #ff416c; z-index: 1; }
+
+        .call-type-lbl { font-size: 12px; color: rgba(255,255,255,0.42); font-weight: 600; margin-bottom: 14px; letter-spacing: 0.6px; }
+        .callee-name { font-size: 27px; font-weight: 800; margin: 18px 0 8px; text-shadow: 0 2px 12px rgba(0,0,0,0.5); }
+
+        /* Durum */
+        .status-row { display: flex; align-items: center; gap: 8px; font-size: 13px; color: rgba(255,255,255,0.5); }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; }
+        .status-dot.connecting { background: #ff416c; animation: blink 1.1s infinite; }
+        .status-dot.connected  { background: #4ade80; animation: none; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+        #timerEl { font-size: 24px; font-weight: 700; color: #4ade80; display: none; text-shadow: 0 2px 14px rgba(74,222,128,0.3); margin-top: 6px; }
+
+        /* Gelen arama (callee auto=0) */
+        #incomingView { display: none; flex-direction: column; align-items: center; gap: 14px; margin-top: 18px; }
+        #incomingView .sub { font-size: 13px; color: rgba(255,255,255,0.38); }
+        .inc-btns { display: flex; gap: 44px; }
+        .inc-btn-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .inc-btn { width: 68px; height: 68px; border-radius: 50%; border: none; font-size: 27px; cursor: pointer; transition: transform 0.15s, box-shadow 0.2s; }
+        .inc-btn:hover { transform: scale(1.09); }
+        .inc-accept { background: #22c55e; box-shadow: 0 8px 28px rgba(34,197,94,0.5); }
+        .inc-reject { background: #ef4444; box-shadow: 0 8px 28px rgba(239,68,68,0.5); }
+        .inc-lbl { font-size: 11px; color: rgba(255,255,255,0.45); font-weight: 600; }
+
+        /* Kontroller */
+        #controls { display: none; justify-content: center; gap: 22px; align-items: flex-end; margin-top: auto; padding-top: 32px; }
+        .ctrl-btn { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; }
+        .ctrl-circle { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 19px; transition: transform 0.15s, background 0.2s; background: rgba(255,255,255,0.07); border: 1.5px solid rgba(255,255,255,0.12); }
+        .ctrl-circle:hover { transform: scale(1.09); }
+        .ctrl-circle.active { background: rgba(255,65,108,0.22); border-color: rgba(255,65,108,0.55); }
+        .ctrl-end { width: 68px !important; height: 68px !important; font-size: 23px; background: linear-gradient(45deg, #ff416c, #ff4b2b) !important; border: none !important; box-shadow: 0 8px 24px rgba(255,65,108,0.45); }
+        .ctrl-lbl { font-size: 10px; color: rgba(255,255,255,0.42); font-weight: 600; }
+
+        /* Bağlantı kalitesi */
+        #qualityBadge { position: fixed; top: 16px; right: 16px; z-index: 20; font-size: 11px; padding: 4px 10px; border-radius: 12px; background: rgba(0,0,0,0.5); display: none; }
+    </style>
+</head>
+<body>
+<div class="glow glow-1"></div>
+<div class="glow glow-2"></div>
+
+<video id="remoteVideo" autoplay playsinline></video>
+<video id="localVideo"  autoplay playsinline muted></video>
+<div class="video-overlay" id="videoOverlay"></div>
+<div id="qualityBadge"></div>
+
+<div class="call-wrap">
+    <div class="call-type-lbl" id="callTypeLbl">📞 Sesli Arama</div>
+
+    <div class="pulse-wrap" id="pulseWrap">
+        <div class="pulse-ring"></div>
+        <div class="pulse-ring"></div>
+        <div class="avatar-ph" id="avatarEl">?</div>
+    </div>
+
+    <div class="callee-name" id="calleeName">...</div>
+
+    <div class="status-row">
+        <div class="status-dot connecting" id="statusDot"></div>
+        <span id="statusText">Bağlanıyor...</span>
+    </div>
+    <div id="timerEl">00:00</div>
+
+    <!-- Callee gelen arama (auto=0) -->
+    <div id="incomingView">
+        <div class="sub">seni arıyor</div>
+        <div class="inc-btns">
+            <div class="inc-btn-wrap">
+                <button class="inc-btn inc-accept" id="incAcceptBtn" onclick="acceptCall()">📞</button>
+                <span class="inc-lbl">Kabul Et</span>
+            </div>
+            <div class="inc-btn-wrap">
+                <button class="inc-btn inc-reject" onclick="rejectCall()">📵</button>
+                <span class="inc-lbl">Reddet</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Kontroller -->
+    <div id="controls">
+        <div class="ctrl-btn" onclick="toggleMute()">
+            <div class="ctrl-circle" id="muteBtn">🎤</div>
+            <span class="ctrl-lbl">Sessiz</span>
+        </div>
+        <div class="ctrl-btn" onclick="endCall()">
+            <div class="ctrl-circle ctrl-end">📵</div>
+            <span class="ctrl-lbl" style="color:#ff9999">Kapat</span>
+        </div>
+        <div class="ctrl-btn" onclick="toggleCamera()" id="cameraCtrl" style="display:none">
+            <div class="ctrl-circle" id="cameraBtn">📷</div>
+            <span class="ctrl-lbl">Kamera</span>
+        </div>
+        <div class="ctrl-btn" onclick="toggleSpeaker()">
+            <div class="ctrl-circle" id="speakerBtn">🔊</div>
+            <span class="ctrl-lbl">Hoparlör</span>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script>
+// ══════════════════════════════════════════════════════════
+//  PARAMETRELER
+// ══════════════════════════════════════════════════════════
+const urlP        = new URLSearchParams(window.location.search);
+const otherId     = parseInt(urlP.get('id'));
+const callType    = urlP.get('type') || 'audio';   // 'audio' | 'video'
+const mode        = urlP.get('mode') || 'caller';  // 'caller' | 'callee'
+const autoAccepted = urlP.get('auto') === '1';
+const calleeName  = decodeURIComponent(urlP.get('name') || 'Kullanıcı');
+const myId        = parseInt(localStorage.getItem('loggedInUserId') || '0');
+const token       = localStorage.getItem('token') || '';
+
+if (!myId || !otherId) { window.location.href = 'index.html'; }
+
+// ══════════════════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════════════════
+let isConnected  = false;
+let isMuted      = false;
+let isSpeakerOn  = true;
+let isCamOn      = true;
+let timerInterval = null;
+let timerSecs    = 0;
+let localStream  = null;
+let pc           = null;
+
+const ICE_SERVERS = {
+    iceServers: [
+        { urls: 'stun:stun.l.google.com:19302' },
+        { urls: 'stun:stun1.l.google.com:19302' },
+        { urls: 'stun:stun2.l.google.com:19302' },
+    ]
+};
+
+// ══════════════════════════════════════════════════════════
+//  UI
+// ══════════════════════════════════════════════════════════
+document.getElementById('calleeName').innerText = calleeName;
+document.getElementById('callTypeLbl').innerText = callType === 'video' ? '📹 Görüntülü Arama' : '📞 Sesli Arama';
+if (callType === 'video') {
+    document.getElementById('videoOverlay').style.display = 'block';
+    document.getElementById('cameraCtrl').style.display = 'flex';
+    document.getElementById('incAcceptBtn').textContent = '📹';
+}
+
+// Avatar yükle
+(async () => {
+    try {
+        const r = await fetch(`http://localhost:5000/api/users/${otherId}`, { headers: { Authorization: `Bearer ${token}` } });
+        const u = await r.json();
+        const el = document.getElementById('avatarEl');
+        if (u.profile_pic) {
+            const img = document.createElement('img');
+            img.className = 'avatar-img';
+            img.src = `http://localhost:5000${u.profile_pic}`;
+            el.replaceWith(img);
+        } else {
+            el.innerText = (u.full_name || calleeName)[0]?.toUpperCase() || '?';
+        }
+    } catch(e) {}
+})();
+
+// ══════════════════════════════════════════════════════════
+//  SOCKET.IO
+// ══════════════════════════════════════════════════════════
+const socket = io('http://localhost:5000', { reconnection: true });
+
+socket.on('connect', () => {
+    socket.emit('join', myId);
+    console.log(`[CallScreen] socket bağlandı. mode=${mode} auto=${autoAccepted}`);
+
+    if (mode === 'caller') {
+        startCallerFlow();
+    } else {
+        // callee
+        if (autoAccepted) {
+            startCalleeFlow(); // sessionStorage'dan offer'ı al, answer gönder
+        } else {
+            // Manuel kabul bekle
+            document.getElementById('incomingView').style.display = 'flex';
+        }
+    }
+});
+
+socket.on('call_answer', async ({ fromId, answer }) => {
+    console.log('[CallScreen] call_answer alındı', answer);
+    if (pc && answer && answer.type && answer.sdp) {
+        try {
+            await pc.setRemoteDescription(new RTCSessionDescription(answer));
+            console.log('[CallScreen] setRemoteDescription OK (answer)');
+        } catch(e) { console.warn('[CallScreen] setRemoteDescription hata:', e); }
+    }
+    onConnected();
+});
+
+socket.on('ice_candidate', async ({ candidate }) => {
+    if (pc && candidate) {
+        try { await pc.addIceCandidate(new RTCIceCandidate(candidate)); }
+        catch(e) { /* ignore */ }
+    }
+});
+
+socket.on('call_reject', () => {
+    showStatus('❌ Arama reddedildi');
+    setTimeout(goBack, 1400);
+});
+
+socket.on('call_end', () => {
+    cleanup();
+    goBack();
+});
+
+// ══════════════════════════════════════════════════════════
+//  CALLER TARAFI
+// ══════════════════════════════════════════════════════════
+async function startCallerFlow() {
+    showStatus('Mikrofon hazırlanıyor...');
+    try {
+        // 1. Medya al
+        localStream = await navigator.mediaDevices.getUserMedia({
+            audio: true,
+            video: callType === 'video' ? { facingMode: 'user', width: 640, height: 480 } : false
+        });
+
+        if (callType === 'video') {
+            document.getElementById('localVideo').srcObject = localStream;
+            document.getElementById('localVideo').style.display = 'block';
+        }
+
+        // 2. PeerConnection
+        pc = new RTCPeerConnection(ICE_SERVERS);
+        localStream.getTracks().forEach(t => pc.addTrack(t, localStream));
+
+        pc.ontrack = onRemoteTrack;
+        pc.onicecandidate = e => {
+            if (e.candidate) {
+                socket.emit('ice_candidate', { fromId: myId, toId: otherId, candidate: e.candidate.toJSON() });
+            }
+        };
+        pc.onconnectionstatechange = () => {
+            console.log('[PC] state:', pc.connectionState);
+            if (pc.connectionState === 'connected') onConnected();
+            if (pc.connectionState === 'failed') showStatus('⚠️ Bağlantı hatası');
+        };
+
+        // 3. Offer oluştur
+        const offer = await pc.createOffer({ offerToReceiveAudio: true, offerToReceiveVideo: callType === 'video' });
+        await pc.setLocalDescription(offer);
+
+        // 4. Callee'ye gönder
+        const myName = localStorage.getItem('loggedInUserName') ||
+                       localStorage.getItem('loggedInUserFullName') || 'Kullanıcı';
+        socket.emit('call_offer', {
+            fromId: myId,
+            toId: otherId,
+            callType,
+            callerName: myName,
+            offer: { type: offer.type, sdp: offer.sdp }
+        });
+        showStatus('Bağlanıyor...');
+        console.log('[CallScreen] call_offer gönderildi (gerçek SDP)');
+
+    } catch(e) {
+        console.warn('[CallScreen] medya hatası, sinyal-only devam:', e.message);
+        // İzin verilmedi veya cihaz yok → yine de ara (ses olmaz)
+        const myName = localStorage.getItem('loggedInUserName') || 'Kullanıcı';
+        socket.emit('call_offer', { fromId: myId, toId: otherId, callType, callerName: myName, offer: {} });
+        showStatus('Bağlanıyor... (mikrofon yok)');
+    }
+
+    // 90 sn timeout
+    setTimeout(() => {
+        if (!isConnected) {
+            socket.emit('call_end', { fromId: myId, toId: otherId });
+            alert('Cevap alınamadı.');
+            goBack();
+        }
+    }, 90000);
+}
+
+// ══════════════════════════════════════════════════════════
+//  CALLEE TARAFI
+// ══════════════════════════════════════════════════════════
+async function startCalleeFlow() {
+    console.log('[CallScreen] Callee flow başlatılıyor...');
+
+    // sessionStorage'dan offer'ı al
+    const storedOffer = sessionStorage.getItem('webrtc_offer');
+    sessionStorage.removeItem('webrtc_offer');
+    sessionStorage.removeItem('webrtc_offer_from');
+
+    try {
+        // Medya al
+        localStream = await navigator.mediaDevices.getUserMedia({
+            audio: true,
+            video: callType === 'video' ? { facingMode: 'user', width: 640, height: 480 } : false
+        });
+
+        if (callType === 'video') {
+            document.getElementById('localVideo').srcObject = localStream;
+            document.getElementById('localVideo').style.display = 'block';
+        }
+
+        if (storedOffer) {
+            // Gerçek WebRTC — SDP exchange
+            const offer = JSON.parse(storedOffer);
+            pc = new RTCPeerConnection(ICE_SERVERS);
+            localStream.getTracks().forEach(t => pc.addTrack(t, localStream));
+
+            pc.ontrack = onRemoteTrack;
+            pc.onicecandidate = e => {
+                if (e.candidate) {
+                    socket.emit('ice_candidate', { fromId: myId, toId: otherId, candidate: e.candidate.toJSON() });
+                }
+            };
+            pc.onconnectionstatechange = () => {
+                console.log('[PC callee] state:', pc.connectionState);
+                if (pc.connectionState === 'connected') onConnected();
+            };
+
+            await pc.setRemoteDescription(new RTCSessionDescription(offer));
+            const answer = await pc.createAnswer();
+            await pc.setLocalDescription(answer);
+
+            socket.emit('call_answer', {
+                fromId: myId,
+                toId: otherId,
+                answer: { type: answer.type, sdp: answer.sdp }
+            });
+            console.log('[CallScreen] call_answer gönderildi (gerçek SDP)');
+            onConnected(); // UI güncelle (biz zaten accept ettik)
+        } else {
+            // Sinyal-only (caller mobil ise, SDP yok)
+            socket.emit('call_answer', { fromId: myId, toId: otherId, answer: {} });
+            onConnected();
+        }
+
+    } catch(e) {
+        console.warn('[CallScreen] callee medya hatası:', e.message);
+        // Mikrofon olmasa da sinyal gönder
+        socket.emit('call_answer', { fromId: myId, toId: otherId, answer: {} });
+        onConnected();
+    }
+}
+
+async function acceptCall() {
+    document.getElementById('incomingView').style.display = 'none';
+    await startCalleeFlow();
+}
+
+function rejectCall() {
+    socket.emit('call_reject', { fromId: myId, toId: otherId });
+    goBack();
+}
+
+// ══════════════════════════════════════════════════════════
+//  REMOTE TRACK (ses/video gelince)
+// ══════════════════════════════════════════════════════════
+function onRemoteTrack(event) {
+    console.log('[CallScreen] Remote track alındı!', event.track.kind);
+    const remoteVideo = document.getElementById('remoteVideo');
+    if (event.streams && event.streams[0]) {
+        remoteVideo.srcObject = event.streams[0];
+    } else {
+        // Track bazlı ekleme
+        let stream = remoteVideo.srcObject;
+        if (!stream) { stream = new MediaStream(); remoteVideo.srcObject = stream; }
+        stream.addTrack(event.track);
+    }
+    if (callType === 'video') {
+        remoteVideo.style.display = 'block';
+    }
+}
+
+// ══════════════════════════════════════════════════════════
+//  BAĞLANTI KURULDU
+// ══════════════════════════════════════════════════════════
+function onConnected() {
+    if (isConnected) return;
+    isConnected = true;
+    console.log('[CallScreen] Bağlantı kuruldu!');
+
+    document.getElementById('pulseWrap').classList.add('connected');
+    document.getElementById('statusDot').className = 'status-dot connected';
+    document.getElementById('statusText').style.display = 'none';
+    document.getElementById('statusDot').style.display = 'none';
+    document.getElementById('timerEl').style.display = 'block';
+    document.getElementById('controls').style.display = 'flex';
+    document.getElementById('incomingView').style.display = 'none';
+
+    timerInterval = setInterval(() => {
+        timerSecs++;
+        const m = String(Math.floor(timerSecs / 60)).padStart(2, '0');
+        const s = String(timerSecs % 60).padStart(2, '0');
+        document.getElementById('timerEl').innerText = `${m}:${s}`;
+    }, 1000);
+}
+
+// ══════════════════════════════════════════════════════════
+//  KONTROLLER
+// ══════════════════════════════════════════════════════════
+function toggleMute() {
+    isMuted = !isMuted;
+    if (localStream) localStream.getAudioTracks().forEach(t => { t.enabled = !isMuted; });
+    const btn = document.getElementById('muteBtn');
+    btn.textContent = isMuted ? '🔇' : '🎤';
+    btn.classList.toggle('active', isMuted);
+}
+
+function toggleCamera() {
+    isCamOn = !isCamOn;
+    if (localStream) localStream.getVideoTracks().forEach(t => { t.enabled = isCamOn; });
+    const btn = document.getElementById('cameraBtn');
+    btn.textContent = isCamOn ? '📷' : '🚫';
+    btn.classList.toggle('active', !isCamOn);
+}
+
+function toggleSpeaker() {
+    isSpeakerOn = !isSpeakerOn;
+    const btn = document.getElementById('speakerBtn');
+    btn.textContent = isSpeakerOn ? '🔊' : '🔈';
+    btn.classList.toggle('active', !isSpeakerOn);
+    const rv = document.getElementById('remoteVideo');
+    if (rv) rv.muted = !isSpeakerOn;
+}
+
+function endCall() {
+    socket.emit('call_end', { fromId: myId, toId: otherId });
+    cleanup();
+    goBack();
+}
+
+function showStatus(txt) {
+    document.getElementById('statusText').innerText = txt;
+}
+
+function cleanup() {
+    clearInterval(timerInterval);
+    localStream?.getTracks().forEach(t => t.stop());
+    if (pc) { pc.close(); pc = null; }
+}
+
+function goBack() {
+    cleanup();
+    window.location.href = `chat.html?id=${otherId}`;
+}
+</script>
+</body>
+</html>

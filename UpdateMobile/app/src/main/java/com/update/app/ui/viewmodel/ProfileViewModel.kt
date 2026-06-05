@@ -57,9 +57,23 @@ class ProfileViewModel : ViewModel() {
                 stream.close()
                 val requestBody = bytes.toRequestBody("image/jpeg".toMediaTypeOrNull())
                 val part = MultipartBody.Part.createFormData("profil_resmi", "profile.jpg", requestBody)
-                RetrofitClient.api.uploadProfilePic(part)
+                val response = RetrofitClient.api.uploadProfilePic(part)
+                if (response.isSuccessful) {
+                    // Anında UI'ı güncelle — loadProfile çağrısı gerektirmeden
+                    try {
+                        val body = response.body()
+                        val filename = (body as? Map<*, *>)?.get("filename")?.toString()
+                            ?: org.json.JSONObject(com.google.gson.Gson().toJson(body)).optString("filename")
+                        if (filename.isNotEmpty()) {
+                            _profile.value = _profile.value?.copy(profile_pic = filename)
+                            return@launch
+                        }
+                    } catch (e: Exception) { /* fallback */ }
+                    loadProfile()
+                }
+            } catch (e: Exception) {
                 loadProfile()
-            } catch (e: Exception) { }
+            }
         }
     }
 

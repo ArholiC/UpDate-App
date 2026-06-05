@@ -77,7 +77,11 @@ fun ProfileScreen(userId: Int, onLogout: () -> Unit, vm: ProfileViewModel = view
         Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
             Box(modifier = Modifier.clickable { photoPicker.launch("image/*") }) {
                 if (!profile?.profile_pic.isNullOrEmpty()) {
-                    AsyncImage(model = "${BASE_URL}uploads/${profile?.profile_pic}", contentDescription = null,
+                    val picUrl = profile?.profile_pic?.let {
+                        if (it.startsWith("/")) "${BASE_URL.trimEnd('/')}$it"
+                        else "${BASE_URL}public/uploads/$it"
+                    } ?: ""
+                    AsyncImage(model = picUrl, contentDescription = null,
                         contentScale = ContentScale.Crop, modifier = Modifier.size(100.dp).clip(CircleShape))
                 } else {
                     Box(Modifier.size(100.dp).clip(CircleShape).background(BgInput)

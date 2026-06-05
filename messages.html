@@ -5,150 +5,319 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UpDate - Mesajlar</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
-        
-        body { 
-            font-family: 'Poppins', sans-serif; background: #0b0914; color: white; 
-            margin: 0; display: flex; justify-content: center; align-items: center; 
-            height: 100vh; overflow: hidden; position: relative;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* ARKA PLAN NEBULA */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #0b0914;
+            color: white;
+            min-height: 100vh;
+            padding: 30px 20px 100px;
+            position: relative;
+            overflow-x: hidden;
+        }
         body::before {
-            content: ""; position: absolute; width: 600px; height: 600px;
-            border-radius: 50%; background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            content: ""; position: fixed;
+            width: 700px; height: 700px; top: -200px; right: -200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ff416c 0%, transparent 70%);
+            filter: blur(100px); opacity: 0.12; z-index: -1;
+        }
+        body::after {
+            content: ""; position: fixed;
+            width: 500px; height: 500px; bottom: -100px; left: -100px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ff4b2b 0%, transparent 70%);
             filter: blur(120px); opacity: 0.1; z-index: -1;
         }
 
-        .container { 
-            width: 750px; height: 85vh; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(35px); 
-            border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.1); position: relative;
-            display: flex; flex-direction: column; padding: 40px; box-sizing: border-box;
+        .page-wrapper { max-width: 900px; margin: 0 auto; }
+
+        /* HEADER */
+        .page-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 28px;
+        }
+        .page-title {
+            font-size: 28px; font-weight: 800;
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .match-pill {
+            background: rgba(255,65,108,0.12);
+            border: 1px solid rgba(255,65,108,0.25);
+            color: #ff9999; padding: 6px 18px; border-radius: 50px;
+            font-size: 13px; font-weight: 700;
         }
 
-        .header-area { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .title { font-size: 38px; font-weight: 800; background: linear-gradient(to right, #ff416c, #ff4b2b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
-        .match-badge { background: rgba(255, 75, 75, 0.2); color: #ff4b4b; padding: 8px 20px; border-radius: 50px; font-weight: 600; font-size: 14px; }
+        /* ARAMA KUTUSU */
+        .search-box {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50px; padding: 10px 18px;
+            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 20px; transition: 0.2s;
+        }
+        .search-box:focus-within { border-color: rgba(255,65,108,0.4); }
+        .search-box input {
+            background: transparent; border: none; outline: none;
+            color: white; font-family: inherit; font-size: 14px; flex: 1;
+        }
+        .search-box input::placeholder { color: #555; }
 
-        .chat-list { flex: 1; overflow-y: auto; padding-right: 15px; margin-bottom: 40px; }
-        .chat-list::-webkit-scrollbar { width: 6px; }
-        .chat-list::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+        /* KONUŞMA KARTI */
+        .chat-card {
+            display: flex; align-items: center; gap: 16px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px; padding: 16px 20px;
+            text-decoration: none; color: white;
+            margin-bottom: 10px; transition: all 0.25s ease;
+            position: relative; overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+        .chat-card::before {
+            content: ""; position: absolute;
+            top: 0; left: 0; width: 3px; height: 100%;
+            background: linear-gradient(to bottom, #ff416c, #ff4b2b);
+            opacity: 0; transition: 0.25s;
+        }
+        .chat-card:hover { transform: translateX(4px) scale(1.005); background: rgba(255,255,255,0.055); border-color: rgba(255,65,108,0.2); }
+        .chat-card:hover::before { opacity: 1; }
+        .chat-card.has-unread { border-color: rgba(255,65,108,0.25); background: rgba(255,65,108,0.04); }
+        .chat-card.has-unread::before { opacity: 0.7; }
 
-        .chat-item { 
-            display: flex; align-items: center; gap: 20px; padding: 20px; 
-            background: rgba(255, 255, 255, 0.03); border-radius: 30px; 
-            text-decoration: none; color: white; margin-bottom: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        /* Avatar */
+        .avatar-wrap { position: relative; flex-shrink: 0; }
+        .avatar-img {
+            width: 58px; height: 58px; border-radius: 50%; object-fit: cover;
+            border: 2px solid rgba(255,65,108,0.4);
+            box-shadow: 0 0 14px rgba(255,65,108,0.15);
+        }
+        .avatar-ph {
+            width: 58px; height: 58px; border-radius: 50%;
+            background: rgba(255,65,108,0.15);
+            border: 2px solid rgba(255,65,108,0.35);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px; font-weight: 900; color: #ff416c;
+        }
+        .online-dot {
+            position: absolute; bottom: 2px; right: 2px;
+            width: 12px; height: 12px; background: #4ade80;
+            border: 2px solid #0b0914; border-radius: 50%;
         }
 
-        .chat-item:hover { 
-            transform: scale(1.02); 
-            background: rgba(255, 255, 255, 0.08); 
-            border-color: #ff4b4b; 
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        /* Bilgiler */
+        .chat-info { flex: 1; min-width: 0; }
+        .chat-name-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+        .chat-name { font-size: 15px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
+        .chat-name.unread { color: #ffaaaa; }
+        .chat-time { font-size: 10px; color: #555; flex-shrink: 0; }
+        .chat-preview { font-size: 12px; color: #666; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .chat-preview.unread { color: #ff9999; font-weight: 600; }
+
+        /* Okunmamış badge */
+        .unread-badge {
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            color: white; min-width: 22px; height: 22px; border-radius: 11px;
+            font-size: 11px; font-weight: 800;
+            display: flex; align-items: center; justify-content: center;
+            padding: 0 6px; flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(255,65,108,0.35);
         }
 
-        .avatar-wrapper { position: relative; flex-shrink: 0; }
-        .avatar { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid #ff4b4b; }
-        .status-dot { position: absolute; bottom: 3px; right: 3px; width: 14px; height: 14px; background: #4caf50; border: 2px solid #16142b; border-radius: 50%; }
+        /* Boş durum */
+        .empty-state {
+            text-align: center; padding: 80px 20px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 28px; margin-top: 20px;
+        }
+        .empty-icon { font-size: 56px; margin-bottom: 16px; }
+        .empty-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+        .empty-sub { font-size: 13px; color: #555; margin-bottom: 20px; }
+        .empty-btn {
+            display: inline-block; background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            color: white; padding: 10px 24px; border-radius: 50px;
+            text-decoration: none; font-size: 13px; font-weight: 700;
+            transition: 0.2s;
+        }
+        .empty-btn:hover { transform: scale(1.04); }
 
-        .chat-info { flex: 1; overflow: hidden; }
-        .name-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px; }
-        .name { font-weight: 700; font-size: 19px; letter-spacing: -0.5px; }
-        .time { font-size: 11px; color: #666; }
-        .preview { font-size: 13px; color: #aaa; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        /* Skeleton yükleme */
+        .skeleton-card {
+            display: flex; align-items: center; gap: 16px;
+            padding: 16px 20px; border-radius: 24px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            margin-bottom: 10px;
+        }
+        .skel {
+            background: rgba(255,255,255,0.06);
+            border-radius: 8px;
+            animation: skelShimmer 1.5s ease-in-out infinite;
+        }
+        @keyframes skelShimmer {
+            0%,100% { opacity: 0.4; }
+            50% { opacity: 0.7; }
+        }
 
         /* NAVBAR */
-        .navbar { 
-            position: absolute; bottom: 0; left: 0; width: 100%; 
-            background: rgba(22, 20, 43, 0.9); display: flex; justify-content: space-around; 
-            padding: 15px 0; border-top: 1px solid rgba(255, 255, 255, 0.1); 
-            border-radius: 0 0 50px 50px; backdrop-filter: blur(15px);
+        .navbar {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: rgba(8,6,18,0.97);
+            border-top: 1px solid rgba(255,255,255,0.07);
+            display: flex; justify-content: space-around;
+            padding: 14px 0; backdrop-filter: blur(20px); z-index: 100;
         }
-        .nav-link { color: #555; text-decoration: none; font-size: 12px; font-weight: 600; text-align: center; }
-        .nav-link.active { color: #ff4b4b; }
-        .nav-icon { display: block; font-size: 24px; margin-bottom: 3px; }
+        .nav-link { color: #444; text-decoration: none; font-size: 11px; font-weight: 600; text-align: center; transition: 0.2s; }
+        .nav-link:hover, .nav-link.active { color: #ff4b4b; }
+        .nav-icon { display: block; font-size: 22px; margin-bottom: 3px; }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="header-area">
-        <h1 class="title">Mesajlar</h1>
-        <div class="match-badge" id="matchBadge">0 Eşleşme</div>
+<div class="page-wrapper">
+    <div class="page-header">
+        <h1 class="page-title">💬 Mesajlar</h1>
+        <div class="match-pill" id="matchPill">Yükleniyor...</div>
     </div>
 
-    <div class="chat-list" id="chatList">
-        <div style="text-align:center; color:#444; margin-top:100px;">Eşleşmeler aranıyor...</div>
+    <div class="search-box">
+        <span style="font-size:16px;color:#555;">🔍</span>
+        <input type="text" id="searchInp" placeholder="İsme göre ara..." oninput="filterChats(this.value)">
     </div>
 
-    <nav class="navbar">
-        <a href="index.html" class="nav-link"><span class="nav-icon">🔥</span>Keşfet</a>
-        <a href="messages.html" class="nav-link active"><span class="nav-icon">💬</span>Mesajlar</a>
-        <a href="profile.html" class="nav-link"><span class="nav-icon">👤</span>Profil</a>
-    </nav>
+    <div id="chatList">
+        <!-- Skeleton -->
+        <div class="skeleton-card">
+            <div class="skel" style="width:58px;height:58px;border-radius:50%;flex-shrink:0"></div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+                <div class="skel" style="height:13px;width:45%;border-radius:6px"></div>
+                <div class="skel" style="height:11px;width:80%;border-radius:6px"></div>
+            </div>
+        </div>
+        <div class="skeleton-card">
+            <div class="skel" style="width:58px;height:58px;border-radius:50%;flex-shrink:0"></div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+                <div class="skel" style="height:13px;width:55%;border-radius:6px"></div>
+                <div class="skel" style="height:11px;width:70%;border-radius:6px"></div>
+            </div>
+        </div>
+        <div class="skeleton-card">
+            <div class="skel" style="width:58px;height:58px;border-radius:50%;flex-shrink:0"></div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+                <div class="skel" style="height:13px;width:40%;border-radius:6px"></div>
+                <div class="skel" style="height:11px;width:90%;border-radius:6px"></div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<nav class="navbar">
+    <a href="index.html" class="nav-link"><span class="nav-icon">🔥</span>Keşfet</a>
+    <a href="messages.html" class="nav-link active"><span class="nav-icon">💬</span>Mesajlar</a>
+    <a href="profile.html" class="nav-link"><span class="nav-icon">👤</span>Profil</a>
+</nav>
 
 <script>
     const benimID = localStorage.getItem('loggedInUserId');
-    if(!benimID) window.location.href = 'login.html';
+    if (!benimID) window.location.href = 'login.html';
 
-    async function listeyiYukle() {
+    const BASE = 'http://localhost:5000';
+    let allChats = [];
+
+    async function getConvInfo(kisiId) {
         try {
-            // FIX: /api/matches/${benimID} şeklinde senin ID'ni de gönderiyoruz
-            const res = await fetch(`http://localhost:5000/api/matches/${benimID}`);
-            
-            if(!res.ok) {
-                document.getElementById('chatList').innerHTML = '<p style="text-align:center; color:#666;">Sunucu cevabı alınamadı.</p>';
-                return;
-            }
+            const res = await fetch(`${BASE}/api/messages/${benimID}/${kisiId}`);
+            if (!res.ok) return { preview: 'İlk mesajı sen at! ✨', unread: 0, time: '' };
+            const msgs = await res.json();
+            if (!Array.isArray(msgs) || msgs.length === 0) return { preview: 'İlk mesajı sen at! ✨', unread: 0, time: '' };
+            const last = msgs[msgs.length - 1];
+            const unread = msgs.filter(m => m.sender_id != benimID && !m.is_read).length;
+            const d = new Date(last.created_at);
+            const now = new Date();
+            let time = d.toDateString() === now.toDateString()
+                ? d.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })
+                : d.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit' });
+            let preview = '';
+            if (last.audio_url) preview = '🎙️ Sesli mesaj';
+            else if (last.image_url) preview = '🖼️ Fotoğraf';
+            else preview = (last.message || '').length > 48 ? last.message.slice(0,48) + '…' : last.message || '—';
+            return { preview, unread, time };
+        } catch(e) { return { preview: '—', unread: 0, time: '' }; }
+    }
 
-            const veriler = await res.json();
-            
-            document.getElementById('matchBadge').innerText = `${veriler.length} Eşleşme`;
-            
-            const listContainer = document.getElementById('chatList');
-            if(!veriler || veriler.length === 0) {
-                listContainer.innerHTML = `
-                    <div style="text-align:center; margin-top:80px;">
-                        <div style="font-size:50px; margin-bottom:20px;">🏜️</div>
-                        <p style="color:#666; font-size:16px;">Henüz yeni bir eşleşme yok.<br>Kaydırmaya devam et!</p>
-                        <a href="index.html" style="color:#ff4b4b; text-decoration:none; font-weight:700;">Keşfet'e Dön →</a>
+    function buildCard(kisi) {
+        const picUrl = kisi.profile_pic ? `${BASE}${kisi.profile_pic}` : null;
+        const init = (kisi.full_name || '?')[0].toUpperCase();
+        const avatarHTML = picUrl
+            ? `<img class="avatar-img" src="${picUrl}" alt="${kisi.full_name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+               <div class="avatar-ph" style="display:none">${init}</div>`
+            : `<div class="avatar-ph">${init}</div>`;
+        const unreadBadge = kisi.unread > 0
+            ? `<div class="unread-badge">${kisi.unread > 9 ? '9+' : kisi.unread}</div>` : '';
+        return `
+        <a href="chat.html?id=${kisi.id}" class="chat-card${kisi.unread > 0 ? ' has-unread' : ''}">
+            <div class="avatar-wrap">
+                ${avatarHTML}
+                <div class="online-dot"></div>
+            </div>
+            <div class="chat-info">
+                <div class="chat-name-row">
+                    <div class="chat-name${kisi.unread > 0 ? ' unread' : ''}">${kisi.full_name}</div>
+                    <div class="chat-time">${kisi.time}</div>
+                </div>
+                <div class="chat-preview${kisi.unread > 0 ? ' unread' : ''}">${kisi.preview}</div>
+            </div>
+            ${unreadBadge}
+        </a>`;
+    }
+
+    function filterChats(query) {
+        const q = query.toLowerCase().trim();
+        const filtered = q ? allChats.filter(k => k.full_name.toLowerCase().includes(q)) : allChats;
+        document.getElementById('chatList').innerHTML = filtered.length
+            ? filtered.map(buildCard).join('')
+            : '<p style="text-align:center;color:#555;padding:40px 0;font-size:14px;">Sonuç bulunamadı</p>';
+    }
+
+    async function load() {
+        try {
+            const res = await fetch(`${BASE}/api/matches/${benimID}`);
+            if (!res.ok) throw new Error();
+            const matches = await res.json();
+            document.getElementById('matchPill').textContent = `${matches.length} Eşleşme`;
+
+            if (!matches.length) {
+                document.getElementById('chatList').innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">💌</div>
+                        <div class="empty-title">Henüz mesajın yok</div>
+                        <p class="empty-sub">Keşfette birilerini beğen ve eşleş!</p>
+                        <a href="index.html" class="empty-btn">🔥 Keşfete Git</a>
                     </div>`;
                 return;
             }
 
-            listContainer.innerHTML = veriler.map(kisi => {
-                const pic = kisi.profile_pic 
-                    ? 'http://localhost:5000' + kisi.profile_pic 
-                    : `https://ui-avatars.com/api/?name=${encodeURIComponent(kisi.full_name)}&background=random&color=fff&size=128`;
-
-                return `
-                <a href="chat.html?id=${kisi.id}" class="chat-item">
-                    <div class="avatar-wrapper">
-                        <img src="${pic}" class="avatar" onerror="this.src='https://via.placeholder.com/80'">
-                        <div class="status-dot"></div>
-                    </div>
-                    <div class="chat-info">
-                        <div class="name-row">
-                            <div class="name">${kisi.full_name}</div>
-                            <div class="time">Şimdi</div>
-                        </div>
-                        <div class="preview">${kisi.bio ? (kisi.bio.length > 45 ? kisi.bio.substring(0, 45) + '...' : kisi.bio) : 'Harika bir eşleşme! İlk mesajı sen at. ✨'}</div>
-                    </div>
-                </a>
-                `;
-            }).join('');
-        } catch (err) {
-            console.error("Liste yükleme hatası:", err);
-            document.getElementById('chatList').innerHTML = '<p style="text-align:center; color:red;">Sunucuya bağlanılamadı!</p>';
+            const withInfo = await Promise.all(matches.map(async k => ({ ...k, ...(await getConvInfo(k.id)) })));
+            withInfo.sort((a, b) => (b.unread || 0) - (a.unread || 0));
+            allChats = withInfo;
+            document.getElementById('chatList').innerHTML = allChats.map(buildCard).join('');
+        } catch(e) {
+            document.getElementById('chatList').innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">😵</div>
+                    <div class="empty-title">Bağlantı hatası</div>
+                    <p class="empty-sub">Sunucu çalışıyor mu kontrol et</p>
+                </div>`;
         }
     }
 
-    // İlk yükleme
-    listeyiYukle();
-    
-    // 15 saniyede bir güncelle
-    setInterval(listeyiYukle, 15000);
+    load();
+    setInterval(load, 8000);
 </script>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script src="global-call.js"></script>
 </body>
 </html>

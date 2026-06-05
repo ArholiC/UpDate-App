@@ -3,131 +3,518 @@
 <head>
     <meta charset="UTF-8">
     <title>UpDate - Sohbet</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        * { box-sizing: border-box; }
         body { font-family: 'Poppins', sans-serif; background: #0b0914; color: white; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
         
-        .container { width: 450px; height: 90vh; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(40px); border-radius: 35px; border: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; overflow: hidden; }
+        .container { width: 520px; height: 94vh; background: rgba(255,255,255,0.03); backdrop-filter: blur(40px); border-radius: 35px; border: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; overflow: hidden; }
         
         /* HEADER */
-        .chat-header { padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.02); }
-        .user-trigger { display: flex; align-items: center; gap: 12px; cursor: pointer; flex: 1; transition: 0.3s; }
-        .user-trigger:hover { opacity: 0.8; transform: translateX(5px); }
+        .chat-header { padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.02); }
+        .user-trigger { display: flex; align-items: center; gap: 10px; cursor: pointer; flex: 1; }
+        .user-trigger:hover { opacity: 0.8; }
+        .call-btns { display: flex; gap: 6px; }
+        .call-btn { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,65,108,0.1); border: 1px solid rgba(255,65,108,0.25); color: #ff9999; font-size: 16px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+        .call-btn:hover { background: rgba(255,65,108,0.25); transform: scale(1.05); }
         
-        /* MESAJ ALANI */
-        .chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
-        .chat-messages::-webkit-scrollbar { width: 5px; }
+        /* MESAJLAR */
+        .chat-messages { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+        .chat-messages::-webkit-scrollbar { width: 4px; }
         .chat-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
 
-        .msg { padding: 10px 15px; border-radius: 18px; max-width: 75%; font-size: 14px; line-height: 1.4; display: flex; flex-direction: column; min-width: 80px; }
-        .msg.me { align-self: flex-end; background: linear-gradient(45deg, #ff416c, #ff4b2b); color: white; border-bottom-right-radius: 4px; }
-        .msg.other { align-self: flex-start; background: rgba(255,255,255,0.1); border-bottom-left-radius: 4px; }
-        
-        .msg-time { font-size: 10px; opacity: 0.7; margin-top: 4px; text-align: right; }
+        .msg { max-width: 78%; font-size: 14px; display: flex; flex-direction: column; }
+        .msg.me { align-self: flex-end; }
+        .msg.other { align-self: flex-start; }
+        .msg-bubble { padding: 10px 14px; border-radius: 18px; line-height: 1.4; }
+        .msg.me .msg-bubble { background: linear-gradient(45deg, #ff416c, #ff4b2b); color: white; border-bottom-right-radius: 4px; }
+        .msg.other .msg-bubble { background: rgba(255,255,255,0.1); border-bottom-left-radius: 4px; }
+        .msg-footer { display: flex; align-items: center; gap: 4px; margin-top: 3px; }
+        .msg.me .msg-footer { justify-content: flex-end; }
+        .msg-time { font-size: 10px; opacity: 0.55; }
+        .read-tick { font-size: 11px; color: #888; }
+        .read-tick.read { color: #4ADE80; }
 
-        /* INPUT ALANI */
-        .chat-input { padding: 20px; display: flex; gap: 10px; background: rgba(0,0,0,0.2); }
-        input { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 14px; border-radius: 25px; color: white; outline: none; font-size: 14px; }
-        button { background: #ff416c; border: none; padding: 0 22px; border-radius: 25px; color: white; cursor: pointer; font-weight: 700; transition: 0.3s; }
-        button:hover { background: #ff4b2b; transform: scale(1.05); }
+        /* Resim mesajı */
+        .msg-img { max-width: 220px; border-radius: 14px; cursor: pointer; display: block; transition: 0.2s; }
+        .msg-img:hover { opacity: 0.85; transform: scale(1.02); }
+
+        /* Ses balonu */
+        .audio-bubble {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 14px; border-radius: 18px; min-width: 180px;
+        }
+        .msg.me .audio-bubble { background: linear-gradient(45deg, #ff416c, #ff4b2b); border-bottom-right-radius: 4px; }
+        .msg.other .audio-bubble { background: rgba(255,255,255,0.1); border-bottom-left-radius: 4px; }
+        .audio-play-btn {
+            width: 34px; height: 34px; border-radius: 50%;
+            background: rgba(255,255,255,0.25); border: none;
+            color: white; font-size: 13px; cursor: pointer; flex-shrink: 0; transition: 0.2s;
+        }
+        .audio-play-btn:hover { background: rgba(255,255,255,0.35); }
+        .audio-wave { display: flex; align-items: center; gap: 2px; height: 22px; flex: 1; }
+        .audio-bar { width: 3px; border-radius: 2px; background: rgba(255,255,255,0.55); transition: height 0.15s; }
+        .audio-bar.playing { animation: waveAnim 0.6s ease-in-out infinite alternate; }
+        .audio-bar:nth-child(2).playing { animation-delay: 0.08s; }
+        .audio-bar:nth-child(3).playing { animation-delay: 0.16s; }
+        .audio-bar:nth-child(4).playing { animation-delay: 0.24s; }
+        .audio-bar:nth-child(5).playing { animation-delay: 0.32s; }
+        .audio-bar:nth-child(6).playing { animation-delay: 0.24s; }
+        .audio-bar:nth-child(7).playing { animation-delay: 0.16s; }
+        .audio-bar:nth-child(8).playing { animation-delay: 0.08s; }
+        @keyframes waveAnim { from { height: 4px; } to { height: 18px; } }
+
+        /* TYPING */
+        .typing-indicator { align-self: flex-start; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; border-bottom-left-radius: 4px; padding: 10px 14px; display: none; align-items: center; gap: 5px; }
+        .typing-indicator.show { display: flex; }
+        .typing-dot { width: 7px; height: 7px; border-radius: 50%; background: #ff416c; animation: typingBounce 1.2s ease-in-out infinite; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typingBounce { 0%,60%,100%{transform:translateY(0);opacity:.5;} 30%{transform:translateY(-6px);opacity:1;} }
+
+        /* INPUT */
+        .chat-input { padding: 11px 13px; display: flex; gap: 7px; background: rgba(0,0,0,0.2); align-items: center; }
+        .icon-btn { width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; transition: 0.2s; flex-shrink: 0; user-select: none; }
+        .icon-btn:hover { background: rgba(255,65,108,0.18); border-color: rgba(255,65,108,0.4); }
+        .icon-btn.recording { background: rgba(255,65,108,0.35); border-color: #ff416c; animation: recPulse 0.7s ease-in-out infinite; }
+        @keyframes recPulse { 0%,100%{box-shadow:0 0 0 0 rgba(255,65,108,0.5);} 50%{box-shadow:0 0 0 10px rgba(255,65,108,0);} }
+        #msgInp { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 10px 13px; border-radius: 22px; color: white; outline: none; font-size: 13px; font-family: inherit; }
+        #msgInp:focus { border-color: rgba(255,65,108,0.5); }
+        .send-btn { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(45deg, #ff416c, #ff4b2b); border: none; color: white; cursor: pointer; font-size: 16px; transition: 0.2s; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+        .send-btn:hover { transform: scale(1.1); }
+
+        /* Tam ekran resim */
+        .img-fullscreen { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:9999; justify-content:center; align-items:center; cursor:pointer; }
+        .img-fullscreen.open { display:flex; }
+        .img-fullscreen img { max-width:90vw; max-height:90vh; border-radius:16px; }
+
+        /* Gelen arama */
+        .incoming-call-overlay { display:none; position:fixed; inset:0; z-index:9998; background:rgba(5,3,9,0.97); flex-direction:column; align-items:center; justify-content:center; gap:16px; }
+        .incoming-call-overlay.show { display:flex; }
+        .incoming-call-name { font-size:22px; font-weight:800; }
+        .incoming-call-type { font-size:13px; color:#888; }
+        .incoming-btns { display:flex; gap:40px; margin-top:16px; }
+        .inc-accept { width:64px; height:64px; border-radius:50%; background:#22c55e; border:none; font-size:28px; cursor:pointer; box-shadow:0 8px 24px rgba(34,197,94,0.4); transition:0.2s; }
+        .inc-accept:hover { transform:scale(1.1); }
+        .inc-reject { width:64px; height:64px; border-radius:50%; background:#ff4b4b; border:none; font-size:28px; cursor:pointer; box-shadow:0 8px 24px rgba(255,75,75,0.4); transition:0.2s; }
+        .inc-reject:hover { transform:scale(1.1); }
+
+        /* Ses kaydı göstergesi */
+        .rec-indicator { display:none; align-items:center; gap:6px; padding:6px 12px; background:rgba(255,65,108,0.15); border:1px solid rgba(255,65,108,0.3); border-radius:20px; font-size:12px; color:#ff9999; }
+        .rec-indicator.show { display:flex; }
+        .rec-dot { width:8px; height:8px; border-radius:50%; background:#ff416c; animation:recPulse 0.7s ease-in-out infinite; }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="chat-header">
-        <a href="messages.html" style="color: white; text-decoration: none; font-size: 22px;">←</a>
+        <a href="messages.html" style="color:white;text-decoration:none;font-size:20px;flex-shrink:0;">←</a>
         <div class="user-trigger" onclick="window.location.href=`other_profile.html?id=${otherId}`">
-            <img id="otherPic" src="" style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid #ff416c;">
-            <span id="otherName" style="font-weight: 700; font-size: 17px;">Yükleniyor...</span>
+            <img id="otherPic" src="" style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #ff416c;">
+            <div>
+                <div id="otherName" style="font-weight:700;font-size:15px;">Yükleniyor...</div>
+                <div id="readStatus" style="font-size:10px;color:#4ADE80;display:none;">✓✓ Okundu</div>
+            </div>
+        </div>
+        <div class="call-btns">
+            <button class="call-btn" onclick="startCall('audio')" title="Sesli Arama">📞</button>
+            <button class="call-btn" onclick="startCall('video')" title="Görüntülü Arama">📹</button>
         </div>
     </div>
 
-    <div class="chat-messages" id="chatBox"></div>
+    <div class="chat-messages" id="chatBox">
+        <div class="typing-indicator" id="typingIndicator">
+            <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
+            <span style="font-size:11px;color:#888;margin-left:4px;">yazıyor...</span>
+        </div>
+    </div>
     
     <div class="chat-input">
-        <input type="text" id="msgInp" placeholder="Bir mesaj yaz..." onkeypress="if(event.key==='Enter') sendMsg()">
-        <button onclick="sendMsg()">Gönder</button>
+        <button class="icon-btn" onclick="document.getElementById('imgInput').click()" title="Fotoğraf">🖼️</button>
+        <input type="file" id="imgInput" accept="image/*" style="display:none" onchange="sendImage(this)">
+        <button class="icon-btn" id="micBtn"
+            onmousedown="startRecording(event)" onmouseup="stopRecording()"
+            ontouchstart="startRecording(event)" ontouchend="stopRecording()"
+            oncontextmenu="return false"
+            title="Sesli mesaj (basılı tut)">🎤</button>
+        <div class="rec-indicator" id="recIndicator"><div class="rec-dot"></div> Kayıt yapılıyor...</div>
+        <input type="text" id="msgInp" placeholder="Mesaj yaz..." onkeypress="if(event.key==='Enter')sendMsg()" oninput="handleTyping()">
+        <button class="send-btn" onclick="sendMsg()">➤</button>
     </div>
 </div>
 
+<!-- Tam ekran resim -->
+<div class="img-fullscreen" id="imgFullscreen" onclick="this.classList.remove('open')">
+    <img id="imgFullscreenEl" src="">
+</div>
+
+<!-- Gelen arama -->
+<div class="incoming-call-overlay" id="incomingCallOverlay">
+    <div id="incCallerAvatar"></div>
+    <div class="incoming-call-name" id="incCallerName">...</div>
+    <div class="incoming-call-type" id="incCallType">📞 Sesli Arama</div>
+    <div class="incoming-btns">
+        <div style="text-align:center">
+            <button class="inc-accept" id="incAcceptBtn" onclick="acceptIncomingCall()">📞</button>
+            <div style="font-size:11px;color:#888;margin-top:6px;">Kabul</div>
+        </div>
+        <div style="text-align:center">
+            <button class="inc-reject" onclick="rejectIncomingCall()">📵</button>
+            <div style="font-size:11px;color:#888;margin-top:6px;">Reddet</div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const otherId = urlParams.get('id');
+    const urlP = new URLSearchParams(window.location.search);
+    const otherId = urlP.get('id');
     const myId = localStorage.getItem('loggedInUserId');
+    const token = localStorage.getItem('token') || '';
 
-    if(!otherId || !myId) window.location.href = 'index.html';
+    if (!otherId || !myId) window.location.href = 'index.html';
 
-    async function loadInfo() {
-        try {
-            // FIX: Bilgileri çekerken tam adres kullanımı
-            const res = await fetch(`http://localhost:5000/api/users/${otherId}`);
-            if(!res.ok) throw new Error("Kullanıcı bulunamadı");
-            
-            const user = await res.json();
-            document.getElementById('otherName').innerText = user.full_name;
-            const pic = user.profile_pic 
-                ? 'http://localhost:5000' + user.profile_pic 
-                : `https://ui-avatars.com/api/?name=${encodeURIComponent(user.full_name)}&background=random&color=fff`;
-            document.getElementById('otherPic').src = pic;
-        } catch (err) { console.error("Hata: Bilgiler çekilemedi."); }
+    // ── Ses oynatıcı ──
+    let currentAudio = null;
+    let currentPlayBtn = null;
+    let currentWaveBars = null;
+
+    function playAudio(url, btn) {
+        // Aynı butona tıklandıysa durdur
+        if (currentPlayBtn === btn && currentAudio && !currentAudio.paused) {
+            currentAudio.pause();
+            btn.textContent = '▶';
+            if (currentWaveBars) currentWaveBars.forEach(b => b.classList.remove('playing'));
+            currentAudio = null; currentPlayBtn = null; currentWaveBars = null;
+            return;
+        }
+        // Önceki sesi durdur
+        if (currentAudio) {
+            currentAudio.pause();
+            if (currentPlayBtn) currentPlayBtn.textContent = '▶';
+            if (currentWaveBars) currentWaveBars.forEach(b => b.classList.remove('playing'));
+        }
+        // Yeni ses çal
+        const audio = new Audio();
+        audio.crossOrigin = 'anonymous'; // CORS sorunu için
+        audio.src = url;
+        const wave = btn.closest('.audio-bubble')?.querySelectorAll('.audio-bar');
+        currentAudio = audio;
+        currentPlayBtn = btn;
+        currentWaveBars = wave ? Array.from(wave) : [];
+
+        audio.play().then(() => {
+            btn.textContent = '⏸';
+            currentWaveBars.forEach(b => b.classList.add('playing'));
+        }).catch(e => {
+            console.error('Ses oynatılamadı:', e);
+            // crossOrigin olmadan tekrar dene
+            const audio2 = new Audio(url);
+            audio2.play().then(() => {
+                btn.textContent = '⏸';
+                currentWaveBars.forEach(b => b.classList.add('playing'));
+                currentAudio = audio2;
+                audio2.onended = () => {
+                    btn.textContent = '▶';
+                    currentWaveBars.forEach(b => b.classList.remove('playing'));
+                    currentAudio = null; currentPlayBtn = null; currentWaveBars = null;
+                };
+            }).catch(e2 => {
+                console.error('İkinci deneme başarısız:', e2);
+                btn.textContent = '▶';
+                alert('Ses dosyası oynatılamıyor. Sunucu çalışıyor mu?');
+            });
+        });
+
+        audio.onended = () => {
+            btn.textContent = '▶';
+            currentWaveBars.forEach(b => b.classList.remove('playing'));
+            currentAudio = null; currentPlayBtn = null; currentWaveBars = null;
+        };
+        audio.onerror = (e) => {
+            btn.textContent = '▶';
+            currentWaveBars.forEach(b => b.classList.remove('playing'));
+            console.error('Ses dosyası yüklenemedi:', url, e);
+        };
     }
 
+    // ── Socket.IO ──
+    let incomingCallerId = null, incomingCallType = 'audio';
+    let incomingCallerOffer = null; // WebRTC SDP offer (gerçek ses için)
+    const socket = io('http://localhost:5000');
+    socket.emit('join', parseInt(myId));
+
+    let typingTimeout, isTyping = false;
+    function handleTyping() {
+        if (!isTyping) { isTyping = true; socket.emit('typing', { fromId: parseInt(myId), toId: parseInt(otherId) }); }
+        clearTimeout(typingTimeout);
+        typingTimeout = setTimeout(() => { isTyping = false; socket.emit('stop_typing', { fromId: parseInt(myId), toId: parseInt(otherId) }); }, 2000);
+    }
+
+    socket.on('user_typing', ({ fromId }) => { if (fromId == otherId) { document.getElementById('typingIndicator').classList.add('show'); scrollBottom(); }});
+    socket.on('user_stop_typing', ({ fromId }) => { if (fromId == otherId) document.getElementById('typingIndicator').classList.remove('show'); });
+    socket.on('new_message', (msg) => { if (msg.sender_id == otherId || msg.receiver_id == otherId) loadMsgs(); });
+    socket.on('messages_read', ({ by }) => {
+        if (by == otherId) {
+            document.querySelectorAll('.read-tick').forEach(t => { t.textContent = '✓✓'; t.classList.add('read'); });
+            const rs = document.getElementById('readStatus');
+            rs.style.display = 'block';
+            setTimeout(() => rs.style.display = 'none', 3000);
+        }
+    });
+
+    // ── Gelen arama — SDP offer'ı sakla ──
+    socket.on('call_offer', ({ fromId, callType, callerName, offer }) => {
+        incomingCallerId = fromId;
+        incomingCallType = callType || 'audio';
+        incomingCallerOffer = offer; // WebRTC SDP — gerçek ses için kritik!
+
+        // sessionStorage'a kaydet (call.html için)
+        if (offer && offer.type && offer.sdp) {
+            sessionStorage.setItem('webrtc_offer', JSON.stringify(offer));
+            sessionStorage.setItem('webrtc_offer_from', String(fromId));
+        } else {
+            sessionStorage.removeItem('webrtc_offer');
+        }
+
+        document.getElementById('incCallerName').innerText = callerName || 'Kullanıcı';
+        document.getElementById('incCallType').innerText = callType === 'video' ? '📹 Görüntülü Arama' : '📞 Sesli Arama';
+        document.getElementById('incAcceptBtn').textContent = callType === 'video' ? '📹' : '📞';
+        fetchUserAvatar(fromId, 'incCallerAvatar', callerName, 80);
+        document.getElementById('incomingCallOverlay').classList.add('show');
+    });
+
+    socket.on('call_end', ({ fromId }) => {
+        if (fromId == incomingCallerId) {
+            document.getElementById('incomingCallOverlay').classList.remove('show');
+            incomingCallerId = null;
+        }
+    });
+
+    async function fetchUserAvatar(uid, containerId, name, size) {
+        try {
+            const res = await fetch(`http://localhost:5000/api/users/${uid}`);
+            const user = await res.json();
+            const el = document.getElementById(containerId);
+            if (user.profile_pic) {
+                el.innerHTML = `<img src="http://localhost:5000${user.profile_pic}" style="width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;border:3px solid #ff416c;box-shadow:0 0 20px rgba(255,65,108,0.3)">`;
+            } else {
+                el.innerHTML = `<div style="width:${size}px;height:${size}px;border-radius:50%;background:rgba(255,65,108,0.2);border:3px solid #ff416c;display:flex;align-items:center;justify-content:center;font-size:${size/2.2}px;font-weight:900;color:#ff416c;">${(name||'?')[0].toUpperCase()}</div>`;
+            }
+        } catch(e) {}
+    }
+
+    function acceptIncomingCall() {
+        // SDP offer zaten sessionStorage'a kaydedildi
+        // call.html (callee mode) bunu okuyup gerçek WebRTC answer üretecek
+        document.getElementById('incomingCallOverlay').classList.remove('show');
+        const name = encodeURIComponent(document.getElementById('incCallerName').innerText);
+        // NOT: call_answer burada gönderilmiyor! call.html WebRTC answer'ı gönderecek
+        window.location.href = `call.html?id=${incomingCallerId}&type=${incomingCallType}&mode=callee&name=${name}&auto=1`;
+    }
+
+    function rejectIncomingCall() {
+        socket.emit('call_reject', { fromId: parseInt(myId), toId: incomingCallerId });
+        document.getElementById('incomingCallOverlay').classList.remove('show');
+    }
+
+    function startCall(type) {
+        sessionStorage.removeItem('webrtc_offer'); // Temizle
+        const name = encodeURIComponent(document.getElementById('otherName').innerText);
+        window.location.href = `call.html?id=${otherId}&type=${type}&mode=caller&name=${name}`;
+    }
+
+    // ── Kullanıcı bilgisi ──
+    async function loadInfo() {
+        try {
+            const res = await fetch(`http://localhost:5000/api/users/${otherId}`);
+            const user = await res.json();
+            document.getElementById('otherName').innerText = user.full_name;
+            const pic = user.profile_pic ? 'http://localhost:5000' + user.profile_pic
+                : `https://ui-avatars.com/api/?name=${encodeURIComponent(user.full_name)}&background=ff416c&color=fff`;
+            document.getElementById('otherPic').src = pic;
+        } catch(e) {}
+    }
+
+    async function markAsRead() {
+        try { await fetch(`http://localhost:5000/api/messages/read/${myId}/${otherId}`, { method: 'PUT' }); } catch(e) {}
+    }
+
+    function scrollBottom() {
+        const box = document.getElementById('chatBox');
+        box.scrollTop = box.scrollHeight;
+    }
+
+    // ── Mesajları yükle ──
     async function loadMsgs() {
         try {
-            // FIX: Mesajları çekerken tam adres kullanımı
             const res = await fetch(`http://localhost:5000/api/messages/${myId}/${otherId}`);
             const msgs = await res.json();
             if (!Array.isArray(msgs)) return;
 
             const box = document.getElementById('chatBox');
-            const newContent = msgs.map(m => {
-                const date = new Date(m.created_at);
-                const timeStr = date.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+            const wasAtBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 60;
+            const indicator = document.getElementById('typingIndicator');
+
+            // Ses çalıyorsa DOM'u yenileme
+            if (currentAudio && !currentAudio.paused) return;
+
+            const msgHTML = msgs.map(m => {
+                const isMe = m.sender_id == myId;
+                const timeStr = new Date(m.created_at).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+                const tick = isMe ? `<span class="read-tick${m.is_read ? ' read' : ''}">${m.is_read ? '✓✓' : '✓'}</span>` : '';
+
+                let content = '';
+
+                if (m.audio_url) {
+                    // Ses mesajı — tam URL'yi oluştur
+                    const rawUrl = m.audio_url.startsWith('http') ? m.audio_url : `http://localhost:5000${m.audio_url}`;
+                    const barHeights = [6, 12, 8, 16, 10, 14, 7, 11];
+                    const bars = barHeights.map(h => `<div class="audio-bar" style="height:${h}px"></div>`).join('');
+                    content = `
+                        <div class="audio-bubble">
+                            <button class="audio-play-btn" onclick="playAudio('${rawUrl}', this)">▶</button>
+                            <div class="audio-wave">${bars}</div>
+                            <span style="font-size:11px;opacity:0.7">🎙️</span>
+                        </div>`;
+                } else if (m.image_url) {
+                    // Resim mesajı
+                    const imgUrl = m.image_url.startsWith('http') ? m.image_url : `http://localhost:5000${m.image_url}`;
+                    content = `<img src="${imgUrl}" class="msg-img" onclick="openFullscreen('${imgUrl}')" loading="lazy">`;
+                } else {
+                    // Metin
+                    content = `<div class="msg-bubble">${m.message.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`;
+                }
+
                 return `
-                    <div class="msg ${m.sender_id == myId ? 'me' : 'other'}">
-                        <span>${m.message}</span>
-                        <span class="msg-time">${timeStr}</span>
+                <div class="msg ${isMe ? 'me' : 'other'}">
+                    ${content}
+                    <div class="msg-footer">
+                        <span class="msg-time">${timeStr}</span>${tick}
                     </div>
-                `;
+                </div>`;
             }).join('');
 
-            // Eğer içerik değiştiyse güncelle ve aşağı kaydır
-            if (box.innerHTML !== newContent) {
-                box.innerHTML = newContent;
-                box.scrollTop = box.scrollHeight;
-            }
-        } catch (err) { console.error("Hata: Mesajlar yüklenemedi."); }
+            box.innerHTML = msgHTML;
+            box.appendChild(indicator);
+            if (wasAtBottom) scrollBottom();
+            markAsRead();
+        } catch(e) { console.error('Mesajlar yüklenemedi:', e); }
     }
 
-    async function sendMsg() {
-        const inp = document.getElementById('msgInp');
-        const msg = inp.value.trim();
-        if(!msg) return;
+    function openFullscreen(url) {
+        document.getElementById('imgFullscreenEl').src = url;
+        document.getElementById('imgFullscreen').classList.add('open');
+    }
 
+    // ── Fotoğraf gönder ──
+    async function sendImage(input) {
+        const file = input.files[0]; if (!file) return;
+        const fd = new FormData(); fd.append('image', file);
         try {
-            // FIX: Mesaj gönderirken tam adres kullanımı
-            const res = await fetch('http://localhost:5000/api/messages', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ 
-                    sender_id: parseInt(myId), 
-                    receiver_id: parseInt(otherId), 
-                    message: msg 
-                })
+            const res = await fetch('http://localhost:5000/api/upload-message-image', {
+                method: 'POST', headers: { 'Authorization': `Bearer ${token}` }, body: fd
             });
-            if(res.ok) {
-                inp.value = '';
+            const data = await res.json();
+            if (data.success) {
+                await fetch('http://localhost:5000/api/messages', {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ sender_id: parseInt(myId), receiver_id: parseInt(otherId), message: '', image_url: data.url })
+                });
                 loadMsgs();
             }
-        } catch (err) { alert("Mesaj gitmedi kanka!"); }
+        } catch(e) { alert('Resim gönderilemedi!'); }
+        input.value = '';
     }
 
-    // İlk yüklemeler
+    // ── Ses kaydı ──
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let recordingTimeout = null;
+
+    async function startRecording(e) {
+        if (e) e.preventDefault();
+        if (mediaRecorder && mediaRecorder.state === 'recording') return;
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            audioChunks = [];
+
+            // Tarayıcıya göre format seç
+            const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+                ? 'audio/webm;codecs=opus'
+                : MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mp4';
+
+            mediaRecorder = new MediaRecorder(stream, { mimeType });
+            mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
+            mediaRecorder.onstop = async () => {
+                stream.getTracks().forEach(t => t.stop());
+                if (audioChunks.length === 0) return;
+                const blob = new Blob(audioChunks, { type: mimeType });
+                await uploadAndSendAudio(blob, mimeType);
+            };
+            mediaRecorder.start(100); // 100ms chunk
+
+            document.getElementById('micBtn').classList.add('recording');
+            document.getElementById('micBtn').textContent = '🔴';
+            document.getElementById('recIndicator').classList.add('show');
+            document.getElementById('msgInp').placeholder = 'Kaydediliyor... (bırak = gönder)';
+
+            recordingTimeout = setTimeout(() => stopRecording(), 60000);
+        } catch(e) {
+            alert('Mikrofon izni verilmedi!\nLütfen tarayıcıdan mikrofon iznini açın.');
+        }
+    }
+
+    function stopRecording() {
+        clearTimeout(recordingTimeout);
+        if (mediaRecorder && mediaRecorder.state === 'recording') {
+            mediaRecorder.stop();
+        }
+        document.getElementById('micBtn').classList.remove('recording');
+        document.getElementById('micBtn').textContent = '🎤';
+        document.getElementById('recIndicator').classList.remove('show');
+        document.getElementById('msgInp').placeholder = 'Mesaj yaz...';
+    }
+
+    async function uploadAndSendAudio(blob, mimeType) {
+        const ext = mimeType.includes('webm') ? 'webm' : 'mp4';
+        const fd = new FormData();
+        fd.append('audio', blob, `voice-${Date.now()}.${ext}`);
+        try {
+            const res = await fetch('http://localhost:5000/api/upload-audio', {
+                method: 'POST', headers: { 'Authorization': `Bearer ${token}` }, body: fd
+            });
+            const data = await res.json();
+            if (data.success) {
+                await fetch('http://localhost:5000/api/messages', {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ sender_id: parseInt(myId), receiver_id: parseInt(otherId), message: '', audio_url: data.url })
+                });
+                loadMsgs();
+            } else { console.error('Ses yüklenemedi:', data); }
+        } catch(e) { console.error('Ses gönderilemedi:', e); }
+    }
+
+    // ── Metin mesajı ──
+    async function sendMsg() {
+        const inp = document.getElementById('msgInp');
+        const msg = inp.value.trim(); if (!msg) return;
+        isTyping = false; clearTimeout(typingTimeout);
+        socket.emit('stop_typing', { fromId: parseInt(myId), toId: parseInt(otherId) });
+        inp.value = '';
+        try {
+            await fetch('http://localhost:5000/api/messages', {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ sender_id: parseInt(myId), receiver_id: parseInt(otherId), message: msg })
+            });
+            loadMsgs();
+        } catch(e) { alert('Mesaj gönderilemedi!'); }
+    }
+
     loadInfo();
     loadMsgs();
-    
-    // Sunumda akıcılık için 2 saniyede bir otomatik yenile (Polling)
-    setInterval(loadMsgs, 2000); 
+    setInterval(loadMsgs, 3000);
 </script>
 </body>
 </html>

@@ -20,10 +20,18 @@ const JWT_SECRET = process.env.JWT_SECRET || 'update_secret_key';
 const uploadDir = path.join(__dirname, 'public/uploads/');
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 
-app.use(cors());
+app.use(cors({ origin: '*', methods: ['GET','POST','PUT','DELETE','OPTIONS'] }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/public', express.static(path.join(__dirname, 'public')));
+
+// Ses/video dosyaları için CORS ve Range (streaming) desteği
+app.use('/public', (req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+    next();
+}, express.static(path.join(__dirname, 'public')));
+
 app.use(express.static(path.join(__dirname)));
 
 // --- VERİTABANI ---
@@ -35,9 +43,22 @@ const pool = new Pool({
     port: 5432,
 });
 
-pool.query('SELECT NOW()', (err) => {
+pool.query('SELECT NOW()', async (err) => {
     if (err) console.error("❌ PostgreSQL bağlantısı başarısız!");
-    else console.log("✅ PostgreSQL bağlantısı kuruldu.");
+    else {
+        console.log("✅ PostgreSQL bağlantısı kuruldu.");
+        // Sütunları otomatik ekle (varsa hata vermez)
+        const migrations = [
+            "ALTER TABLE users ADD COLUMN IF NOT EXISTS answers TEXT;",
+            "ALTER TABLE messages ADD COLUMN IF NOT EXISTS image_url TEXT;",
+            "ALTER TABLE messages ADD COLUMN IF NOT EXISTS audio_url TEXT;",
+            "ALTER TABLE messages ADD COLUMN IF NOT EXISTS is_read BOOLEAN DEFAULT FALSE;",
+        ];
+        for (const sql of migrations) {
+            try { await pool.query(sql); } catch(e) { /* zaten var */ }
+        }
+        console.log("✅ Veritabanı sütunları hazır.");
+    }
 });
 
 // --- JWT MIDDLEWARE ---
@@ -57,24 +78,34 @@ const storage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, uploadDir),
     filename: (req, file, cb) => cb(null, 'up-' + Date.now() + path.extname(file.originalname))
 });
-const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } });
+const upload = multer({
+    storage,
+    limits: { fileSize: 20 * 1024 * 1024 }, // 20MB (ses/video için)
+    fileFilter: (req, file, cb) => {
+        // Resim, ses ve video kabul et
+        const allowed = /image|audio|video/;
+        if (allowed.test(file.mimetype)) cb(null, true);
+        else cb(new Error('Desteklenmeyen dosya türü'));
+    }
+});
 
 // ==========================================
 // AUTH
 // ==========================================
 
 app.post('/api/register', async (req, res) => {
-    const { full_name, email, password, gender, birth_date, zodiac, interests, bio } = req.body;
+    const { full_name, email, password, gender, birth_date, zodiac, interests, bio, answers } = req.body;
     try {
         const check = await pool.query("SELECT id FROM users WHERE email = $1", [email]);
         if (check.rows.length > 0)
             return res.status(400).json({ success: false, message: "Bu e-posta zaten kullanımda!" });
 
         const hashed = await bcrypt.hash(password, 10);
-       const result = await pool.query(
-            `INSERT INTO users (full_name, email, password, gender, birth_date, zodiac, interests, bio) 
-             VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *`,
-            [full_name, email, hashed, gender, birth_date, zodiac, interests, bio]
+        const answersStr = answers ? (typeof answers === 'object' ? JSON.stringify(answers) : answers) : null;
+        const result = await pool.query(
+            `INSERT INTO users (full_name, email, password, gender, birth_date, zodiac, interests, bio, answers) 
+             VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *`,
+            [full_name, email, hashed, gender, birth_date, zodiac, interests, bio, answersStr]
         );
         const user = result.rows[0];
         delete user.password;
@@ -102,7 +133,6 @@ app.post('/api/login', async (req, res) => {
         } else {
             valid = password === user.password;
             if (valid) {
-                // Düz metin şifreyi hash'le
                 const hashed = await bcrypt.hash(password, 10);
                 await pool.query("UPDATE users SET password = $1 WHERE id = $2", [hashed, user.id]);
             }
@@ -150,8 +180,18 @@ app.get('/api/users/:id', async (req, res) => {
 app.put('/api/users/:id', authMiddleware, async (req, res) => {
     const { bio, interests, profile_pic } = req.body;
     try {
-        await pool.query("UPDATE users SET bio=$1, interests=$2, profile_pic=$3 WHERE id=$4",
-            [bio, interests, profile_pic, req.params.id]);
+        if (profile_pic !== undefined && profile_pic !== null && profile_pic !== '') {
+            await pool.query(
+                "UPDATE users SET bio=$1, interests=$2, profile_pic=$3 WHERE id=$4",
+                [bio, interests, profile_pic, req.params.id]
+            );
+        } else {
+            // Fotoğrafı KORUYARAK güncelle
+            await pool.query(
+                "UPDATE users SET bio=$1, interests=$2 WHERE id=$3",
+                [bio, interests, req.params.id]
+            );
+        }
         res.json({ success: true });
     } catch (err) { res.status(500).json({ success: false, error: err.message }); }
 });
@@ -164,44 +204,146 @@ app.delete('/api/users/:id', authMiddleware, async (req, res) => {
 });
 
 // ==========================================
+// UYUM DETAYI
+// ==========================================
+
+app.get('/api/compatibility/:myId/:otherId', async (req, res) => {
+    const myId = parseInt(req.params.myId);
+    const otherId = parseInt(req.params.otherId);
+    try {
+        const [meRes, otherRes] = await Promise.all([
+            pool.query("SELECT interests, answers FROM users WHERE id=$1", [myId]),
+            pool.query("SELECT interests, answers FROM users WHERE id=$1", [otherId])
+        ]);
+        const me = meRes.rows[0];
+        const other = otherRes.rows[0];
+
+        const myInterests = me?.interests?.split(',').map(i => i.trim()).filter(Boolean) || [];
+        const otherInterests = other?.interests?.split(',').map(i => i.trim()).filter(Boolean) || [];
+        const commonInterests = myInterests.filter(i => otherInterests.includes(i));
+
+        let myAnswers = {}, otherAnswers = {};
+        try { myAnswers = JSON.parse(me?.answers || '{}'); } catch(e) {}
+        try { otherAnswers = JSON.parse(other?.answers || '{}'); } catch(e) {}
+
+        const commonAnswers = [];
+        for (const key of Object.keys(myAnswers)) {
+            if (otherAnswers[key] && otherAnswers[key] === myAnswers[key]) {
+                commonAnswers.push({ question: key, answer: myAnswers[key] });
+            }
+        }
+
+        // Ağırlıklı uyum: %60 ilgi, %40 cevap
+        const combined = new Set([...myInterests, ...otherInterests]);
+        const interestRate = combined.size > 0 ? (commonInterests.length / combined.size) : 0;
+        const answerTotal = Object.keys(myAnswers).filter(k => otherAnswers[k]).length;
+        const answerRate = answerTotal > 0 ? (commonAnswers.length / answerTotal) : 0;
+        const matchRate = Math.round((interestRate * 0.6 + answerRate * 0.4) * 100);
+
+        res.json({ matchRate, commonInterests, commonAnswers, totalAnswers: answerTotal });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ==========================================
 // KEŞFET
 // ==========================================
 
 app.get('/api/discover/:userId', async (req, res) => {
     const myId = parseInt(req.params.userId);
+    const genderFilter = req.query.gender;
+    const minAge = req.query.minAge ? parseInt(req.query.minAge) : null;
+    const maxAge = req.query.maxAge ? parseInt(req.query.maxAge) : null;
+    const zodiacFilter = req.query.zodiac;
+
     try {
-        const meResult = await pool.query("SELECT interests FROM users WHERE id=$1", [myId]);
+        const meResult = await pool.query("SELECT interests, answers FROM users WHERE id=$1", [myId]);
         const myInterests = meResult.rows[0]?.interests?.split(',').map(i => i.trim()) || [];
+        let myAnswers = {};
+        try { myAnswers = JSON.parse(meResult.rows[0]?.answers || '{}'); } catch(e) {}
 
         const seenResult = await pool.query("SELECT liked_id FROM likes WHERE liker_id=$1", [myId]);
         const seenIds = [...seenResult.rows.map(r => r.liked_id), myId];
 
-        const others = await pool.query("SELECT * FROM users WHERE id <> ALL($1)", [seenIds]);
+        // Süper beğeni — beni superlike yapanlar
+        const superlikersRes = await pool.query(
+            "SELECT liker_id FROM likes WHERE liked_id=$1 AND is_like=2", [myId]
+        );
+        const superlikerIds = new Set(superlikersRes.rows.map(r => r.liker_id));
+
+        let query = "SELECT * FROM users WHERE id <> ALL($1)";
+        let params = [seenIds];
+        let paramIndex = 2;
+
+        if (genderFilter && genderFilter !== 'all') {
+            query += ` AND LOWER(gender) = LOWER($${paramIndex++})`;
+            params.push(genderFilter);
+        }
+        if (minAge !== null) {
+            query += ` AND EXTRACT(YEAR FROM AGE(birth_date)) >= $${paramIndex++}`;
+            params.push(minAge);
+        }
+        if (maxAge !== null) {
+            query += ` AND EXTRACT(YEAR FROM AGE(birth_date)) <= $${paramIndex++}`;
+            params.push(maxAge);
+        }
+        if (zodiacFilter && zodiacFilter !== 'all') {
+            query += ` AND LOWER(zodiac) = LOWER($${paramIndex++})`;
+            params.push(zodiacFilter);
+        }
+
+        const others = await pool.query(query, params);
 
         const scoredUsers = others.rows.map(user => {
             const userInterests = user.interests?.split(',').map(i => i.trim()) || [];
-            const matches = userInterests.filter(h => myInterests.includes(h));
+            const interestMatches = userInterests.filter(h => myInterests.includes(h));
             const combined = new Set([...myInterests, ...userInterests]);
-            const matchRate = combined.size > 0 ? Math.round((matches.length / combined.size) * 100) : 0;
-            return { ...user, password: undefined, match_rate: matchRate };
+            const interestRate = combined.size > 0 ? (interestMatches.length / combined.size) : 0;
+
+            let answerMatches = 0, answerTotal = 0;
+            try {
+                const theirAnswers = JSON.parse(user.answers || '{}');
+                for (const key of Object.keys(myAnswers)) {
+                    if (theirAnswers[key]) {
+                        answerTotal++;
+                        if (theirAnswers[key] === myAnswers[key]) answerMatches++;
+                    }
+                }
+            } catch(e) {}
+            const answerRate = answerTotal > 0 ? (answerMatches / answerTotal) : 0;
+            const matchRate = Math.round((interestRate * 0.6 + answerRate * 0.4) * 100);
+
+            return {
+                ...user,
+                password: undefined,
+                match_rate: matchRate,
+                is_superliked_by_me: superlikerIds.has(user.id) // biz onu superlike yaptık mı? (keşfette gösterme ama)
+            };
         });
 
+        // Superlike yapanları öne çıkar (opsiyonel)
         scoredUsers.sort((a, b) => b.match_rate - a.match_rate);
         res.json(scoredUsers);
-    } catch (err) { res.status(500).json([]); }
+    } catch (err) { console.error(err); res.status(500).json([]); }
 });
 
 app.post('/api/like', async (req, res) => {
     const { liker_id, liked_id, is_like } = req.body;
     try {
+        // is_like: 0=dislike, 1=like, 2=superlike
         await pool.query("INSERT INTO likes (liker_id, liked_id, is_like) VALUES ($1,$2,$3) ON CONFLICT DO NOTHING",
-            [liker_id, liked_id, is_like ? 1 : 0]);
+            [liker_id, liked_id, is_like]);
         let isMatch = false;
-        if (is_like) {
-            const check = await pool.query("SELECT id FROM likes WHERE liker_id=$1 AND liked_id=$2 AND is_like=1", [liked_id, liker_id]);
+        if (is_like >= 1) {
+            const check = await pool.query(
+                "SELECT id FROM likes WHERE liker_id=$1 AND liked_id=$2 AND is_like >= 1",
+                [liked_id, liker_id]
+            );
             isMatch = check.rows.length > 0;
         }
-        res.json({ success: true, isMatch });
+        res.json({ success: true, isMatch, isSuperLike: is_like === 2 });
     } catch (err) { res.status(500).json({ success: false }); }
 });
 
@@ -215,8 +357,8 @@ app.get('/api/matches/:userId', async (req, res) => {
         const result = await pool.query(`
             SELECT u.id, u.full_name, u.profile_pic, u.bio 
             FROM users u
-            JOIN likes l1 ON u.id = l1.liked_id AND l1.liker_id = $1 AND l1.is_like = 1
-            JOIN likes l2 ON u.id = l2.liker_id AND l2.liked_id = $1 AND l2.is_like = 1`, [myId]);
+            JOIN likes l1 ON u.id = l1.liked_id AND l1.liker_id = $1 AND l1.is_like >= 1
+            JOIN likes l2 ON u.id = l2.liker_id AND l2.liked_id = $1 AND l2.is_like >= 1`, [myId]);
         res.json(result.rows);
     } catch (err) { res.status(500).json([]); }
 });
@@ -233,15 +375,29 @@ app.get('/api/messages/:myId/:otherId', async (req, res) => {
 });
 
 app.post('/api/messages', async (req, res) => {
-    const { sender_id, receiver_id, message } = req.body;
+    const { sender_id, receiver_id, message, image_url, audio_url } = req.body;
     try {
         const result = await pool.query(
-            "INSERT INTO messages (sender_id, receiver_id, message) VALUES ($1,$2,$3) RETURNING *",
-            [sender_id, receiver_id, message]);
+            "INSERT INTO messages (sender_id, receiver_id, message, image_url, audio_url) VALUES ($1,$2,$3,$4,$5) RETURNING *",
+            [sender_id, receiver_id, message || '', image_url || null, audio_url || null]);
         const msg = result.rows[0];
         // Socket.io ile karşı tarafa anlık ilet
         io.to(`user_${receiver_id}`).emit('new_message', msg);
         res.json({ success: true, message: msg });
+    } catch (err) { res.status(500).json({ success: false }); }
+});
+
+// Mesajları okundu olarak işaretle
+app.put('/api/messages/read/:myId/:otherId', async (req, res) => {
+    const { myId, otherId } = req.params;
+    try {
+        await pool.query(
+            "UPDATE messages SET is_read=TRUE WHERE receiver_id=$1 AND sender_id=$2 AND is_read=FALSE",
+            [myId, otherId]
+        );
+        // Karşı tarafa "okundu" eventi gönder
+        io.to(`user_${otherId}`).emit('messages_read', { by: parseInt(myId) });
+        res.json({ success: true });
     } catch (err) { res.status(500).json({ success: false }); }
 });
 
@@ -252,8 +408,25 @@ app.post('/api/messages', async (req, res) => {
 app.post('/api/upload', authMiddleware, upload.single('profil_resmi'), async (req, res) => {
     if (!req.file) return res.status(400).json({ success: false, message: "Dosya seçilmedi!" });
     const filename = req.file.filename;
-    await pool.query("UPDATE users SET profile_pic=$1 WHERE id=$2", [filename, req.user.id]);
-    res.json({ success: true, filename, url: `/public/uploads/${filename}` });
+    const picPath = `/public/uploads/${filename}`;
+    await pool.query("UPDATE users SET profile_pic=$1 WHERE id=$2", [picPath, req.user.id]);
+    res.json({ success: true, filename, url: picPath });
+});
+
+// Sohbet için dosya yükleme (fotoğraf veya ses)
+app.post('/api/upload-message-image', authMiddleware, upload.single('image'), async (req, res) => {
+    if (!req.file) return res.status(400).json({ success: false, message: "Dosya seçilmedi!" });
+    const filename = req.file.filename;
+    const filePath = `/public/uploads/${filename}`;
+    res.json({ success: true, filename, url: filePath });
+});
+
+// Ses mesajı yükleme
+app.post('/api/upload-audio', authMiddleware, upload.single('audio'), async (req, res) => {
+    if (!req.file) return res.status(400).json({ success: false, message: "Ses dosyası seçilmedi!" });
+    const filename = req.file.filename;
+    const audioPath = `/public/uploads/${filename}`;
+    res.json({ success: true, filename, url: audioPath });
 });
 
 // ==========================================
@@ -266,6 +439,44 @@ io.on('connection', (socket) => {
     socket.on('join', (userId) => {
         socket.join(`user_${userId}`);
         console.log(`👤 User ${userId} odasına katıldı`);
+    });
+
+    // Typing indicator
+    socket.on('typing', ({ fromId, toId }) => {
+        io.to(`user_${toId}`).emit('user_typing', { fromId });
+    });
+
+    socket.on('stop_typing', ({ fromId, toId }) => {
+        io.to(`user_${toId}`).emit('user_stop_typing', { fromId });
+    });
+
+    // ─── WebRTC Arama Sinyalleri ──────────────────────────────
+    // Arama teklifi
+    socket.on('call_offer', ({ fromId, toId, offer, callType, callerName }) => {
+        console.log(`📞 Arama: ${fromId} → ${toId} (${callType})`);
+        io.to(`user_${toId}`).emit('call_offer', { fromId, offer, callType, callerName });
+    });
+
+    // Arama yanıtı
+    socket.on('call_answer', ({ fromId, toId, answer }) => {
+        io.to(`user_${toId}`).emit('call_answer', { fromId, answer });
+    });
+
+    // ICE candidate exchange
+    socket.on('ice_candidate', ({ fromId, toId, candidate }) => {
+        io.to(`user_${toId}`).emit('ice_candidate', { fromId, candidate });
+    });
+
+    // Aramayı bitir
+    socket.on('call_end', ({ fromId, toId }) => {
+        io.to(`user_${toId}`).emit('call_end', { fromId });
+        console.log(`📵 Arama bitti: ${fromId} → ${toId}`);
+    });
+
+    // Aramayı reddet
+    socket.on('call_reject', ({ fromId, toId }) => {
+        io.to(`user_${toId}`).emit('call_reject', { fromId });
+        console.log(`❌ Arama reddedildi: ${fromId} → ${toId}`);
     });
 
     socket.on('disconnect', () => {

@@ -16,7 +16,13 @@ interface ApiService {
 
     // ─── Discover ──────────────────────────────────────────
     @GET("api/discover/{userId}")
-    suspend fun getDiscover(@Path("userId") userId: Int): Response<List<User>>
+    suspend fun getDiscover(
+        @Path("userId") userId: Int,
+        @Query("gender") gender: String? = null,
+        @Query("minAge") minAge: Int? = null,
+        @Query("maxAge") maxAge: Int? = null,
+        @Query("zodiac") zodiac: String? = null
+    ): Response<List<User>>
 
     // ─── Swipe ─────────────────────────────────────────────
     @POST("api/like")
@@ -39,6 +45,12 @@ interface ApiService {
     @POST("api/messages")
     suspend fun sendMessage(@Body body: SendMessageRequest): Response<Any>
 
+    @PUT("api/messages/read/{myId}/{otherId}")
+    suspend fun markAsRead(
+        @Path("myId") myId: Int,
+        @Path("otherId") otherId: Int
+    ): Response<Any>
+
     // ─── Profile ───────────────────────────────────────────
     @GET("api/me")
     suspend fun getProfile(): Response<User>
@@ -54,4 +66,21 @@ interface ApiService {
     suspend fun uploadProfilePic(
         @Part image: MultipartBody.Part
     ): Response<Any>
+
+    @Multipart
+    @POST("api/upload-message-image")
+    suspend fun uploadMessageImage(
+        @Part image: MultipartBody.Part
+    ): Response<Any>
+
+    // ─── Compatibility ─────────────────────────────────────
+    @GET("api/compatibility/{myId}/{otherId}")
+    suspend fun getCompatibility(
+        @Path("myId") myId: Int,
+        @Path("otherId") otherId: Int
+    ): Response<CompatibilityResponse>
+
+    // ─── Users ─────────────────────────────────────────────
+    @GET("api/users/{id}")
+    suspend fun getUser(@Path("id") id: Int): Response<User>
 }

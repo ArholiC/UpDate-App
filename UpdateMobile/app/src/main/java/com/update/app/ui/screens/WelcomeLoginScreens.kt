@@ -44,7 +44,7 @@ fun WelcomeScreen(onLoginClick: () -> Unit, onRegisterClick: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text("💜", fontSize = 64.sp)
+            Text("🔥", fontSize = 64.sp)
             Spacer(Modifier.height(12.dp))
             Text("UpDate", fontSize = 48.sp, fontWeight = FontWeight.Black, color = TextPrimary, letterSpacing = (-2).sp)
             Text("Hobilerle bağlan. Anlarla buluş.", fontSize = 15.sp, color = TextSecondary,
@@ -98,7 +98,7 @@ fun LoginScreen(authViewModel: AuthViewModel, onSuccess: () -> Unit, onBack: () 
         .padding(24.dp).statusBarsPadding()) {
         TextButton(onClick = onBack) { Text("← Geri", color = PrimaryGlow, fontWeight = FontWeight.SemiBold) }
         Spacer(Modifier.height(16.dp))
-        Text("Tekrar hoş geldin 💜", fontSize = 26.sp, fontWeight = FontWeight.Black, color = TextPrimary)
+        Text("Tekrar hoş geldin ❤️", fontSize = 26.sp, fontWeight = FontWeight.Black, color = TextPrimary)
         Text("Hesabına giriş yap", color = TextSecondary, modifier = Modifier.padding(top = 6.dp, bottom = 32.dp))
         UpDateTextField(value = email, onValueChange = { email = it }, label = "Email",
             placeholder = "ornek@email.com",

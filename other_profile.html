@@ -2,71 +2,196 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>UpDate - Profil</title>
+    <title>UpDate - Kullanıcı Profili</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        * { box-sizing: border-box; }
         body { 
             font-family: 'Poppins', sans-serif; background: #0b0914; color: white; 
             margin: 0; display: flex; justify-content: center; align-items: center; 
-            height: 100vh; overflow: hidden;
+            min-height: 100vh; padding: 20px;
+        }
+        body::before {
+            content: ""; position: fixed; width: 500px; height: 500px; top: -100px; left: -100px;
+            border-radius: 50%; background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            filter: blur(140px); opacity: 0.12; z-index: -1;
         }
         .container { 
-            width: 450px; height: 85vh; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(40px); 
-            border-radius: 40px; border: 1px solid rgba(255, 255, 255, 0.1); padding: 40px;
+            width: 500px; background: rgba(255,255,255,0.03); backdrop-filter: blur(40px); 
+            border-radius: 40px; border: 1px solid rgba(255,255,255,0.1); padding: 35px;
             display: flex; flex-direction: column; align-items: center; text-align: center; position: relative;
         }
-        .back-btn { position: absolute; top: 30px; left: 30px; color: white; text-decoration: none; font-size: 24px; }
-        .profile-pic { width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 4px solid #ff416c; margin-top: 20px; box-shadow: 0 0 30px rgba(255, 65, 108, 0.3); }
-        h2 { margin: 20px 0 5px; font-size: 28px; font-weight: 800; }
-        .zodiac-tag { background: rgba(255, 255, 255, 0.1); padding: 5px 15px; border-radius: 20px; font-size: 13px; color: #ff4b2b; font-weight: 600; }
-        .bio-section { margin-top: 30px; background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 25px; width: 100%; box-sizing: border-box; }
-        .interest-tags { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 20px; }
-        .tag { background: linear-gradient(45deg, #ff416c, #ff4b2b); padding: 6px 14px; border-radius: 15px; font-size: 12px; font-weight: 600; }
-        .chat-btn { margin-top: auto; background: white; color: #0b0914; width: 100%; padding: 15px; border-radius: 25px; text-decoration: none; font-weight: 800; transition: 0.3s; }
-        .chat-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(255,255,255,0.1); }
+        .back-btn { position: absolute; top: 28px; left: 28px; color: #888; text-decoration: none; font-size: 22px; transition: 0.2s; }
+        .back-btn:hover { color: #ff416c; }
+
+        .profile-pic { width: 140px; height: 140px; border-radius: 50%; object-fit: cover; border: 4px solid #ff416c; margin-top: 10px; box-shadow: 0 0 40px rgba(255,65,108,0.35); }
+        .avatar-placeholder { width: 140px; height: 140px; border-radius: 50%; background: linear-gradient(135deg, rgba(255,65,108,0.2), rgba(255,75,43,0.1)); border: 4px solid #ff416c; margin-top: 10px; display: flex; align-items: center; justify-content: center; font-size: 52px; font-weight: 900; color: #ff416c; }
+        
+        h2 { margin: 18px 0 4px; font-size: 26px; font-weight: 800; }
+        .zodiac-tag { background: rgba(255,75,43,0.15); border: 1px solid rgba(255,75,43,0.3); padding: 4px 14px; border-radius: 20px; font-size: 12px; color: #ff9999; font-weight: 700; }
+
+        /* UYUM DETAY KUTUSU */
+        .compat-box {
+            margin-top: 20px; width: 100%; background: rgba(255,65,108,0.08); border: 1px solid rgba(255,65,108,0.2);
+            border-radius: 20px; padding: 18px; cursor: pointer; transition: 0.2s;
+        }
+        .compat-box:hover { background: rgba(255,65,108,0.14); transform: scale(1.01); }
+        .compat-pct { font-size: 32px; font-weight: 900; background: linear-gradient(45deg, #ff416c, #ff4b2b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .compat-sub { font-size: 11px; color: #888; font-weight: 600; }
+
+        .bio-section { margin-top: 16px; background: rgba(255,255,255,0.04); padding: 18px; border-radius: 20px; width: 100%; border: 1px solid rgba(255,255,255,0.06); }
+        .bio-section p { font-size: 13px; color: #ccc; line-height: 1.6; margin: 0; }
+        
+        .section-title { font-size: 11px; color: #888; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; text-align: left; margin-bottom: 10px; }
+        .interest-tags { display: flex; flex-wrap: wrap; gap: 7px; justify-content: center; margin-top: 16px; }
+        .tag { background: rgba(255,65,108,0.12); border: 1px solid rgba(255,65,108,0.25); padding: 5px 13px; border-radius: 15px; font-size: 12px; font-weight: 600; color: #ff9999; }
+        .tag.common { background: rgba(255,65,108,0.25); border-color: #ff416c; color: white; }
+
+        .action-row { display: flex; gap: 12px; margin-top: 24px; width: 100%; }
+        .chat-btn { flex: 1; background: linear-gradient(45deg, #ff416c, #ff4b2b); color: white; padding: 14px; border-radius: 22px; text-decoration: none; font-weight: 800; font-size: 14px; transition: 0.2s; }
+        .chat-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(255,65,108,0.35); }
+        .superlike-btn { background: rgba(255,180,0,0.12); border: 1px solid rgba(255,180,0,0.3); color: gold; padding: 14px 20px; border-radius: 22px; text-decoration: none; font-weight: 800; font-size: 14px; transition: 0.2s; cursor: pointer; border: 1px solid rgba(255,180,0,0.3); font-family: inherit; }
+        .superlike-btn:hover { background: rgba(255,180,0,0.2); transform: translateY(-2px); }
+
+        /* UYUM DETAY SEKSİYONU */
+        .compat-detail { display: none; margin-top: 16px; width: 100%; text-align: left; }
+        .compat-detail.open { display: block; }
+        .common-chip { display: inline-block; background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.3); color: #4ADE80; padding: 3px 10px; border-radius: 50px; font-size: 11px; font-weight: 600; margin: 3px; }
+        .answer-row { display: flex; gap: 8px; padding: 8px 12px; background: rgba(255,255,255,0.03); border-radius: 12px; margin: 5px 0; align-items: flex-start; }
+        .answer-row .q { font-size: 11px; color: #888; flex: 1; }
+        .answer-row .a { font-size: 11px; color: #ff9999; font-weight: 700; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <a href="javascript:history.back()" class="back-btn">←</a>
-    <img id="pPic" src="" class="profile-pic">
+    <div id="picArea"></div>
     <h2 id="pName">Yükleniyor...</h2>
     <div id="pZodiac" class="zodiac-tag">Burç Belirtilmemiş</div>
 
+    <!-- UYUM KUTUSU -->
+    <div class="compat-box" onclick="toggleCompatDetail()" id="compatBox" style="display:none;">
+        <div class="compat-pct" id="compatPct">%0</div>
+        <div class="compat-sub">uyum skoru — detaylar için tıkla 👆</div>
+    </div>
+
+    <!-- UYUM DETAY (açılır) -->
+    <div class="compat-detail" id="compatDetail">
+        <div style="margin-bottom:12px;">
+            <p class="section-title">✨ Ortak İlgi Alanları</p>
+            <div id="commonInterests"></div>
+        </div>
+        <div>
+            <p class="section-title">🎯 Ortak Cevaplar</p>
+            <div id="commonAnswers"></div>
+        </div>
+    </div>
+
     <div class="bio-section">
-        <p id="pBio" style="font-size: 14px; color: #ccc; line-height: 1.6; margin: 0;">Henüz bir biyografi eklememiş.</p>
+        <p class="section-title" style="margin-bottom:8px;">Hakkında</p>
+        <p id="pBio">Henüz bir biyografi eklememiş.</p>
     </div>
 
     <div class="interest-tags" id="pInterests"></div>
+
+    <div class="action-row">
+        <a id="chatLink" href="#" class="chat-btn">💬 Mesaj At</a>
+        <button class="superlike-btn" onclick="sendSuperlike()" id="superlikeBtn">⭐ Süper Beğeni</button>
+    </div>
 </div>
 
 <script>
     const urlParams = new URLSearchParams(window.location.search);
     const userId = urlParams.get('id');
+    const benimID = localStorage.getItem('loggedInUserId');
+
+    document.getElementById('chatLink').href = `chat.html?id=${userId}`;
+
+    let compatOpen = false;
+    function toggleCompatDetail() {
+        compatOpen = !compatOpen;
+        document.getElementById('compatDetail').classList.toggle('open', compatOpen);
+    }
+
+    async function sendSuperlike() {
+        const btn = document.getElementById('superlikeBtn');
+        btn.disabled = true; btn.style.opacity = '0.5';
+        try {
+            const res = await fetch('http://localhost:5000/api/like', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ liker_id: parseInt(benimID), liked_id: parseInt(userId), is_like: 2 })
+            });
+            const data = await res.json();
+            btn.textContent = '✅ Süper Beğenildi!';
+            btn.style.opacity = '1';
+            if (data.isMatch) alert('🎉 Eşleştiniz!');
+        } catch(e) { btn.disabled = false; btn.style.opacity = '1'; }
+    }
 
     async function profilDetayGetir() {
         try {
-            const res = await fetch(`http://localhost:5000/api/users/${userId}`);
-            const user = await res.json();
-
+            const [userRes, compatRes] = await Promise.all([
+                fetch(`http://localhost:5000/api/users/${userId}`),
+                benimID ? fetch(`http://localhost:5000/api/compatibility/${benimID}/${userId}`) : null
+            ]);
+            const user = await userRes.json();
             document.getElementById('pName').innerText = user.full_name;
             document.getElementById('pBio').innerText = user.bio || "Sessizliği seviyor galiba...";
             document.getElementById('pZodiac').innerText = user.zodiac || "Burç Bilgisi Yok";
-            
-            const pic = user.profile_pic 
-                ? 'http://localhost:5000' + user.profile_pic 
-                : `https://ui-avatars.com/api/?name=${encodeURIComponent(user.full_name)}&background=random&color=fff&size=200`;
-            document.getElementById('pPic').src = pic;
+            document.getElementById('chatLink').href = `chat.html?id=${user.id}`;
 
-            if(user.interests) {
-                const hobiBox = document.getElementById('pInterests');
-                hobiBox.innerHTML = user.interests.split(',').map(h => `<span class="tag">${h.trim()}</span>`).join('');
+            // Profil resmi
+            const picArea = document.getElementById('picArea');
+            if (user.profile_pic) {
+                picArea.innerHTML = `<img src="http://localhost:5000${user.profile_pic}" class="profile-pic" onerror="this.parentElement.innerHTML='<div class=\\'avatar-placeholder\\'>${user.full_name[0]?.toUpperCase()}</div>'">`;
+            } else {
+                picArea.innerHTML = `<div class="avatar-placeholder">${user.full_name[0]?.toUpperCase() || '?'}</div>`;
             }
-        } catch (err) { console.error("Profil yüklenirken hata oluştu."); }
+
+            // İlgi alanları
+            const allInterests = user.interests?.split(',').map(i => i.trim()).filter(Boolean) || [];
+            if (allInterests.length) {
+                document.getElementById('pInterests').innerHTML = allInterests.map(h => `<span class="tag">${h}</span>`).join('');
+            }
+
+            // Uyum detayı
+            if (compatRes && benimID) {
+                const compat = await compatRes.json();
+                document.getElementById('compatBox').style.display = 'block';
+                document.getElementById('compatPct').innerText = `%${compat.matchRate}`;
+
+                // Ortak ilgi alanlarını yeşil göster
+                if (compat.commonInterests.length) {
+                    document.getElementById('pInterests').innerHTML = allInterests.map(h => 
+                        `<span class="tag ${compat.commonInterests.includes(h) ? 'common' : ''}">${h}</span>`
+                    ).join('');
+                    document.getElementById('commonInterests').innerHTML = compat.commonInterests.map(i => 
+                        `<span class="common-chip">✓ ${i}</span>`
+                    ).join('') || '<span style="color:#555;font-size:12px;">Ortak ilgi alanı yok</span>';
+                } else {
+                    document.getElementById('commonInterests').innerHTML = '<span style="color:#555;font-size:12px;">Ortak ilgi alanı yok</span>';
+                }
+
+                // Ortak cevaplar
+                if (compat.commonAnswers.length) {
+                    document.getElementById('commonAnswers').innerHTML = compat.commonAnswers.map(a => `
+                        <div class="answer-row">
+                            <span class="q">${a.question}</span>
+                            <span class="a">✓ ${a.answer}</span>
+                        </div>`).join('');
+                } else {
+                    document.getElementById('commonAnswers').innerHTML = '<span style="color:#555;font-size:12px;">Ortak cevap yok</span>';
+                }
+            }
+        } catch(e) { console.error("Profil yüklenirken hata:", e); }
     }
 
     profilDetayGetir();
 </script>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script src="global-call.js"></script>
 </body>
 </html>

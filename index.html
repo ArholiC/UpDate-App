@@ -5,245 +5,653 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UpDate - Keşfet</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        body { 
-            font-family: 'Poppins', sans-serif; background: #0b0914; color: white; 
-            margin: 0; display: flex; justify-content: center; align-items: center; 
-            height: 100vh; overflow: hidden; position: relative;
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #0b0914; color: white;
+            min-height: 100vh; overflow-x: hidden;
+            display: flex; flex-direction: column;
         }
-
-        /* NEBULA ARKA PLAN - SENİN ÖZEL TASARIMIN */
         body::before {
-            content: ""; position: absolute; width: 600px; height: 600px;
-            border-radius: 50%; background: linear-gradient(45deg, #ff416c, #ff4b2b);
-            filter: blur(150px); opacity: 0.15; z-index: -1; animation: float 15s infinite alternate;
+            content: ""; position: fixed;
+            width: 800px; height: 800px; top: -250px; right: -200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ff416c 0%, transparent 70%);
+            filter: blur(110px); opacity: 0.11; z-index: -1;
         }
-        @keyframes float { 100% { transform: translate(50px, 50px) scale(1.05); } }
-
-        .container { 
-            width: 750px; height: 85vh; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(40px); 
-            border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.1); position: relative;
-            display: flex; flex-direction: column; align-items: center; padding: 30px; box-sizing: border-box;
-        }
-
-        /* TOP BAR */
-        .top-bar { 
-            width: 100%; display: flex; justify-content: space-between; 
-            align-items: center; padding: 0 15px; margin-bottom: 5px; z-index: 100;
-        }
-        .logo { font-weight: 800; font-size: 34px; background: linear-gradient(to right, #ff416c, #ff4b2b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -2px; }
-        
-        select { 
-            background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.1); 
-            color: white; padding: 10px 20px; border-radius: 50px; outline: none; cursor: pointer;
-            appearance: none; -webkit-appearance: none; font-weight: 600; font-family: inherit;
-        }
-        select option { background: #1c1c2e; color: white; }
-
-        /* KEŞFET ALANI */
-        .discovery-area {
-            flex: 1; width: 100%; display: flex; align-items: center; justify-content: center; gap: 40px; position: relative;
-            padding-bottom: 60px;
+        body::after {
+            content: ""; position: fixed;
+            width: 600px; height: 600px; bottom: -150px; left: -150px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ff4b2b 0%, transparent 70%);
+            filter: blur(130px); opacity: 0.1; z-index: -1;
         }
 
-        /* KARANLIK KART TASARIMI */
-        .card-wrapper { 
-            position: relative; width: 340px; height: 460px; perspective: 1000px; 
-            margin-top: -30px;
+        /* ── TOP BAR ── */
+        .top-bar {
+            max-width: 1100px; margin: 0 auto; width: 100%;
+            padding: 24px 24px 0;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo-text {
+            font-size: 28px; font-weight: 800;
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .top-actions { display: flex; gap: 10px; align-items: center; }
+        .filter-pill {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: #ccc; padding: 8px 18px; border-radius: 50px;
+            font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit;
+            transition: 0.2s; display: flex; align-items: center; gap: 6px;
+        }
+        .filter-pill:hover, .filter-pill.active-filter { border-color: #ff416c; color: #ff9999; }
+
+        /* ── GENDER TABS ── */
+        .gender-tabs {
+            max-width: 1100px; margin: 14px auto 0; width: 100%; padding: 0 24px;
+            display: flex; gap: 8px;
+        }
+        .g-tab {
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+            color: #777; padding: 7px 20px; border-radius: 50px;
+            font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit;
+            transition: 0.2s;
+        }
+        .g-tab:hover { border-color: rgba(255,65,108,0.4); color: #ccc; }
+        .g-tab.active { background: rgba(255,65,108,0.15); border-color: #ff416c; color: #ff9999; }
+
+        /* ── MAIN LAYOUT ── */
+        .discover-layout {
+            max-width: 1100px; margin: 20px auto; width: 100%;
+            padding: 0 24px 100px;
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 24px; align-items: start;
         }
 
-        .card { 
-            position: absolute; width: 100%; height: 100%; 
-            background: #000; border-radius: 40px; overflow: hidden; 
-            box-shadow: 0 30px 60px rgba(0,0,0,0.6); 
-            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.4s; 
-            border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center;
+        /* ── SOL: KART ── */
+        .card-section {
+            display: flex; flex-direction: column; align-items: center; gap: 16px;
+        }
+        .card-wrap {
+            position: relative; width: 100%; max-width: 400px;
+            height: 520px;
+        }
+        .discover-card {
+            position: absolute; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 32px; overflow: hidden;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+            cursor: grab; user-select: none;
+            display: flex; flex-direction: column;
+            transition: box-shadow 0.3s;
+        }
+        .discover-card.back-card {
+            z-index: 1; transform: scale(0.95) translateY(10px);
+            filter: brightness(0.55); pointer-events: none;
+        }
+        .discover-card.front-card { z-index: 2; }
+
+        /* Kart resim */
+        .card-photo {
+            width: 100%; height: 62%; overflow: hidden; position: relative; flex-shrink: 0;
+            background: rgba(255,65,108,0.08);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .card-photo img { width: 100%; height: 100%; object-fit: cover; }
+        .card-photo-init { font-size: 90px; font-weight: 900; color: rgba(255,65,108,0.5); }
+
+        /* Uyum badge */
+        .compat-pill {
+            position: absolute; top: 12px; left: 12px; z-index: 5;
+            background: rgba(8,6,18,0.88);
+            border: 1px solid rgba(255,65,108,0.45);
+            color: #ff9999; padding: 5px 13px; border-radius: 50px;
+            font-size: 11px; font-weight: 800; cursor: pointer;
+            backdrop-filter: blur(12px); transition: 0.2s;
+        }
+        .compat-pill:hover { background: rgba(255,65,108,0.2); }
+
+        /* Swipe etiketleri */
+        .swipe-lbl {
+            position: absolute; z-index: 10;
+            padding: 6px 14px; border-radius: 10px;
+            font-size: 15px; font-weight: 900;
+            opacity: 0; pointer-events: none; transition: opacity 0.08s;
+        }
+        .lbl-like { top: 16px; right: 16px; color: #22c55e; border: 3px solid #22c55e; background: rgba(34,197,94,0.1); }
+        .lbl-nope { top: 16px; left: 16px; color: #ff4b4b; border: 3px solid #ff4b4b; background: rgba(255,75,75,0.1); }
+        .lbl-super { top: 50%; left: 50%; transform: translate(-50%,-50%); color: gold; border: 3px solid gold; background: rgba(255,180,0,0.1); }
+
+        /* Kart içerik */
+        .card-body {
+            flex: 1; padding: 18px 20px;
+            background: linear-gradient(to bottom, rgba(12,10,24,0.95), #0b0914);
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .card-name { font-size: 20px; font-weight: 800; }
+        .card-zodiac { font-size: 11px; color: #ff9999; font-weight: 600; margin-top: 2px; }
+        .interest-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 8px; }
+        .interest-tag {
+            background: rgba(255,65,108,0.1); border: 1px solid rgba(255,65,108,0.22);
+            color: #ff9999; padding: 3px 10px; border-radius: 30px; font-size: 10px; font-weight: 600;
         }
 
-        .card-bg-blur { position: absolute; width: 100%; height: 100%; object-fit: cover; filter: blur(20px) brightness(0.4); opacity: 0.7; z-index: 1; }
-        .card-img-main { position: relative; z-index: 2; max-width: 100%; max-height: 100%; object-fit: contain; }
-        
-        /* BİLGİ KUTUSU */
-        .card-info { 
-            position: absolute; bottom: 0; left: 0; right: 0; padding: 25px 20px; 
-            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 70%, transparent 100%);
-            z-index: 10; text-align: left;
+        /* Aksiyon butonları (altında) */
+        .action-row {
+            display: flex; justify-content: center; align-items: center; gap: 20px;
         }
-        .card-info h3 { margin: 0; font-size: 24px; font-weight: 800; color: #fff; }
-        .card-tag { display: inline-block; background: rgba(255, 65, 108, 0.25); color: #ff416c; padding: 4px 12px; border-radius: 50px; font-size: 11px; font-weight: 700; margin: 8px 0; text-transform: uppercase; }
-        .card-bio { margin: 0; font-size: 13px; color: #ddd; line-height: 1.4; opacity: 0.9; }
+        .act-btn {
+            border-radius: 50%; border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.25s ease; font-size: 22px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+        }
+        .act-btn:hover { transform: translateY(-4px) scale(1.08); }
+        .act-nope { width: 58px; height: 58px; background: rgba(255,255,255,0.04); border: 2px solid rgba(255,75,75,0.4); color: #ff4b4b; }
+        .act-super { width: 50px; height: 50px; background: rgba(255,180,0,0.07); border: 2px solid rgba(255,180,0,0.35); color: gold; font-size: 18px; }
+        .act-like { width: 68px; height: 68px; background: linear-gradient(45deg, #ff416c, #ff4b2b); color: white; box-shadow: 0 8px 24px rgba(255,65,108,0.4); }
 
-        /* YAN BUTONLAR */
-        .side-btn {
-            width: 65px; height: 65px; border-radius: 50%; border: none; cursor: pointer; 
-            font-size: 28px; transition: 0.3s; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.4); z-index: 50;
+        /* ── SAĞ: BİLGİ PANELİ ── */
+        .info-panel { display: flex; flex-direction: column; gap: 16px; }
+
+        .panel-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 24px; padding: 20px;
+            backdrop-filter: blur(15px);
         }
-        .btn-dislike { background: rgba(255,255,255,0.05); color: #ff4b4b; border: 1px solid rgba(255,75,75,0.2); }
-        .btn-like { background: linear-gradient(45deg, #ff416c, #ff4b2b); color: white; }
-        .side-btn:hover { transform: scale(1.1); filter: brightness(1.1); }
+        .panel-title {
+            font-size: 12px; font-weight: 700; color: #ff416c;
+            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px;
+        }
+
+        /* Profil önizleme (sağ üst) */
+        .profile-preview {
+            display: flex; align-items: center; gap: 14px;
+        }
+        .preview-avatar {
+            width: 54px; height: 54px; border-radius: 50%; object-fit: cover;
+            border: 2px solid rgba(255,65,108,0.4);
+            flex-shrink: 0;
+        }
+        .preview-avatar-ph {
+            width: 54px; height: 54px; border-radius: 50%;
+            background: rgba(255,65,108,0.15); border: 2px solid rgba(255,65,108,0.3);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; font-weight: 900; color: #ff416c; flex-shrink: 0;
+        }
+        .preview-name { font-size: 16px; font-weight: 800; }
+        .preview-zodiac { font-size: 11px; color: #ff9999; margin-top: 2px; }
+        .profile-link {
+            margin-top: 12px; display: block; text-align: center;
+            background: rgba(255,65,108,0.1); border: 1px solid rgba(255,65,108,0.25);
+            color: #ff9999; padding: 8px; border-radius: 14px;
+            text-decoration: none; font-size: 12px; font-weight: 700; transition: 0.2s;
+        }
+        .profile-link:hover { background: rgba(255,65,108,0.2); }
+
+        /* İlgi alanları */
+        .interests-list { display: flex; flex-wrap: wrap; gap: 6px; }
+        .int-chip {
+            background: rgba(255,65,108,0.09); border: 1px solid rgba(255,65,108,0.2);
+            color: #ff9999; padding: 4px 12px; border-radius: 50px; font-size: 11px; font-weight: 600;
+        }
+
+        /* Uyum çubuğu */
+        .compat-bar-wrap { margin-top: 6px; }
+        .compat-label { display: flex; justify-content: space-between; font-size: 11px; color: #666; margin-bottom: 6px; }
+        .compat-bar-bg { height: 6px; background: rgba(255,255,255,0.07); border-radius: 99px; overflow: hidden; }
+        .compat-bar-fill { height: 100%; background: linear-gradient(90deg, #ff416c, #ff4b2b); border-radius: 99px; transition: width 0.7s ease; }
+
+        /* Boş */
+        .empty-discover {
+            text-align: center; padding: 60px 20px;
+            background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 32px; width: 100%; max-width: 400px;
+        }
+        .empty-discover div:first-child { font-size: 60px; margin-bottom: 14px; }
+        .empty-discover p { color: #555; font-size: 14px; }
 
         /* NAVBAR */
-        .navbar { 
-            position: absolute; bottom: 0; width: 100%; background: rgba(22, 20, 43, 0.9); 
-            display: flex; justify-content: space-around; padding: 18px 0; 
-            border-top: 1px solid rgba(255,255,255,0.1); border-radius: 0 0 50px 50px; backdrop-filter: blur(20px);
+        .navbar {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: rgba(8,6,18,0.97);
+            border-top: 1px solid rgba(255,255,255,0.07);
+            display: flex; justify-content: space-around;
+            padding: 14px 0; backdrop-filter: blur(20px); z-index: 100;
         }
-        .nav-link { color: #555; text-decoration: none; font-size: 12px; font-weight: 600; text-align: center; transition: 0.3s; }
-        .nav-link.active { color: #ff4b4b; }
-        .nav-icon { display: block; font-size: 26px; margin-bottom: 4px; }
+        .nav-link { color: #444; text-decoration: none; font-size: 11px; font-weight: 600; text-align: center; transition: 0.2s; }
+        .nav-link:hover, .nav-link.active { color: #ff4b4b; }
+        .nav-icon { display: block; font-size: 22px; margin-bottom: 3px; }
 
-        /* SWIPE ANİMASYONLARI */
-        .swipe-right { transform: translate(150%, -15%) rotate(30deg) !important; opacity: 0; }
-        .swipe-left { transform: translate(-150%, -15%) rotate(-30deg) !important; opacity: 0; }
+        /* EŞLEŞME OVERLAY */
+        .match-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        .match-overlay.show { display: flex; }
+        .match-title { font-size: 48px; font-weight: 900; background: linear-gradient(45deg, #ff416c, #ff4b2b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 12px; }
+        .match-sub { font-size: 16px; color: #ccc; margin-bottom: 30px; }
+        .match-btns { display: flex; gap: 14px; }
+        .match-chat { background: linear-gradient(45deg, #ff416c, #ff4b2b); color: white; border: none; padding: 12px 32px; border-radius: 50px; font-size: 14px; font-weight: 800; cursor: pointer; font-family: inherit; }
+        .match-skip { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #888; padding: 12px 22px; border-radius: 50px; font-size: 14px; cursor: pointer; font-family: inherit; }
+
+        /* UYUM MODAL */
+        .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 9500; justify-content: center; align-items: center; }
+        .modal-bg.open { display: flex; }
+        .modal-box { width: 420px; max-height: 80vh; background: #14112a; border-radius: 28px; border: 1px solid rgba(255,255,255,0.1); padding: 28px; overflow-y: auto; animation: scUp 0.25s ease; }
+        @keyframes scUp { from{transform:scale(0.88);opacity:0;} to{transform:scale(1);opacity:1;} }
+        .modal-box::-webkit-scrollbar { width: 4px; }
+        .modal-box::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        .common-tag { display: inline-block; background: rgba(255,65,108,0.12); border: 1px solid rgba(255,65,108,0.3); color: #ff9999; padding: 3px 10px; border-radius: 50px; font-size: 11px; font-weight: 600; margin: 3px; }
+        .answer-row { padding: 8px 10px; background: rgba(255,255,255,0.03); border-radius: 10px; margin: 4px 0; display: flex; gap: 10px; }
+        .modal-close-btn { width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; color: white; cursor: pointer; font-size: 13px; font-weight: 600; font-family: inherit; margin-top: 12px; }
+
+        /* FİLTRE MODAL */
+        .filter-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 9000; justify-content: center; align-items: flex-end; }
+        .filter-bg.open { display: flex; }
+        .filter-sheet { width: 100%; max-width: 700px; margin: 0 auto; background: #14112a; border-radius: 36px 36px 0 0; border: 1px solid rgba(255,255,255,0.09); padding: 28px 32px 40px; max-height: 78vh; overflow-y: auto; animation: slideUp 0.3s ease; }
+        @keyframes slideUp { from{transform:translateY(100%);} to{transform:translateY(0);} }
+        .f-chip { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: #777; padding: 6px 14px; border-radius: 50px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; transition: 0.2s; }
+        .f-chip.sel { background: rgba(255,65,108,0.15); border-color: #ff416c; color: #ff9999; }
+        .age-range { display: flex; align-items: center; gap: 10px; }
+        .age-range input[type=range] { flex: 1; accent-color: #ff416c; }
+        .apply-btn { width: 100%; padding: 13px; background: linear-gradient(45deg, #ff416c, #ff4b2b); border: none; border-radius: 20px; color: white; font-size: 14px; font-weight: 800; cursor: pointer; font-family: inherit; margin-top: 14px; }
+
+        @media (max-width: 780px) {
+            .discover-layout { grid-template-columns: 1fr; }
+            .info-panel { display: none; }
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="top-bar">
-        <div class="logo">UpDate</div>
-        <select id="genderFilter" onchange="kartlariYukle()">
-            <option value="all">Herkes</option>
-            <option value="kadin">Kadınlar</option>
-            <option value="erkek">Erkekler</option>
-        </select>
+<div class="top-bar">
+    <div class="logo-text">UpDate 🔥</div>
+    <div class="top-actions">
+        <button class="filter-pill" onclick="openFilter()">🎛️ Filtreler</button>
     </div>
-
-    <div class="discovery-area">
-        <button class="side-btn btn-dislike" onclick="swipe('left')">✖</button>
-        <div class="card-wrapper" id="cardContainer">
-             </div>
-        <button class="side-btn btn-like" onclick="swipe('right')">❤</button>
-    </div>
-
-    <nav class="navbar">
-        <a href="index.html" class="nav-link active"><span class="nav-icon">🔥</span>Keşfet</a>
-        <a href="messages.html" class="nav-link"><span class="nav-icon">💬</span>Mesajlar</a>
-        <a href="profile.html" class="nav-link"><span class="nav-icon">👤</span>Profil</a>
-    </nav>
 </div>
 
+<div class="gender-tabs">
+    <button class="g-tab active" onclick="setGender(this, null)">Hepsi</button>
+    <button class="g-tab" onclick="setGender(this, 'kadin')">👩 Kadınlar</button>
+    <button class="g-tab" onclick="setGender(this, 'erkek')">👨 Erkekler</button>
+</div>
+
+<div class="discover-layout">
+    <!-- SOL: Kart + butonlar -->
+    <div class="card-section">
+        <div class="card-wrap" id="cardWrap">
+            <div style="display:flex;align-items:center;justify-content:center;height:100%;color:#444;font-size:14px;">Yükleniyor...</div>
+        </div>
+        <div class="action-row">
+            <button class="act-btn act-nope" onclick="doSwipe(0)" title="Geç">✕</button>
+            <button class="act-btn act-super" onclick="doSwipe(2)" title="Süper Beğeni">⭐</button>
+            <button class="act-btn act-like" onclick="doSwipe(1)" title="Beğen">❤</button>
+        </div>
+    </div>
+
+    <!-- SAĞ: Bilgi paneli -->
+    <div class="info-panel" id="infoPanel">
+        <div class="panel-card">
+            <div class="panel-title">👤 Aktif Kullanıcı</div>
+            <div class="profile-preview" id="previewArea">
+                <div class="preview-avatar-ph">?</div>
+                <div>
+                    <div class="preview-name" id="previewName">Yükleniyor...</div>
+                    <div class="preview-zodiac" id="previewZodiac"></div>
+                </div>
+            </div>
+            <a class="profile-link" id="previewLink" href="#">Profili Görüntüle →</a>
+        </div>
+
+        <div class="panel-card">
+            <div class="panel-title">🔥 Uyum Skoru</div>
+            <div class="compat-bar-wrap">
+                <div class="compat-label">
+                    <span>Sizin uyumunuz</span>
+                    <span id="compatPctLabel">%0</span>
+                </div>
+                <div class="compat-bar-bg"><div class="compat-bar-fill" id="compatBarFill" style="width:0%"></div></div>
+            </div>
+            <button onclick="openCompatModal()" style="margin-top:12px;width:100%;padding:8px;background:rgba(255,65,108,0.1);border:1px solid rgba(255,65,108,0.25);border-radius:14px;color:#ff9999;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:0.2s;" onmouseover="this.style.background='rgba(255,65,108,0.2)'" onmouseout="this.style.background='rgba(255,65,108,0.1)'">💘 Detayları Gör</button>
+        </div>
+
+        <div class="panel-card">
+            <div class="panel-title">✨ İlgi Alanları</div>
+            <div class="interests-list" id="previewInterests">
+                <span style="color:#444;font-size:12px;">—</span>
+            </div>
+        </div>
+
+        <div class="panel-card" id="bioCard" style="display:none">
+            <div class="panel-title">💬 Hakkında</div>
+            <p id="previewBio" style="font-size:13px;color:#aaa;line-height:1.65;"></p>
+        </div>
+    </div>
+</div>
+
+<!-- EŞLEŞME -->
+<div class="match-overlay" id="matchOverlay">
+    <div style="font-size:80px;margin-bottom:10px;">🎉</div>
+    <div class="match-title">EŞLEŞTİNİZ!</div>
+    <p class="match-sub" id="matchMsg">Harika!</p>
+    <div class="match-btns">
+        <button class="match-chat" id="matchChatBtn">Mesaj Gönder 💬</button>
+        <button class="match-skip" onclick="closeMatch()">Devam Et</button>
+    </div>
+</div>
+
+<!-- UYUM MODAL -->
+<div class="modal-bg" id="compatModal">
+    <div class="modal-box">
+        <h3 style="margin:0 0 16px;font-size:17px;text-align:center">💘 Uyum Detayı</h3>
+        <div style="text-align:center;margin-bottom:14px">
+            <div style="font-size:42px;font-weight:900;color:#ff416c" id="compatModalPct">%0</div>
+            <div style="font-size:12px;color:#666" id="compatModalName"></div>
+        </div>
+        <p style="font-size:11px;color:#666;font-weight:700;text-transform:uppercase;margin:0 0 8px">Ortak İlgiler</p>
+        <div id="compatInterests" style="margin-bottom:14px"></div>
+        <p style="font-size:11px;color:#666;font-weight:700;text-transform:uppercase;margin:0 0 8px">Ortak Cevaplar</p>
+        <div id="compatAnswers"></div>
+        <button class="modal-close-btn" onclick="closeCompatModal()">✕ Kapat</button>
+    </div>
+</div>
+
+<!-- FİLTRE -->
+<div class="filter-bg" id="filterBg" onclick="if(event.target===this)closeFilter()">
+    <div class="filter-sheet">
+        <h3 style="margin:0 0 20px;font-size:17px;font-weight:800">🎛️ Filtreler</h3>
+        <div style="margin-bottom:16px">
+            <p style="font-size:11px;color:#666;font-weight:700;text-transform:uppercase;margin:0 0 8px">Cinsiyet</p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <button class="f-chip sel" onclick="fSel(this,'g','all')">Hepsi</button>
+                <button class="f-chip" onclick="fSel(this,'g','kadin')">👩 Kadın</button>
+                <button class="f-chip" onclick="fSel(this,'g','erkek')">👨 Erkek</button>
+            </div>
+        </div>
+        <div style="margin-bottom:16px">
+            <p style="font-size:11px;color:#666;font-weight:700;text-transform:uppercase;margin:0 0 8px">Yaş: <span id="ageLbl">18 – 60</span></p>
+            <div class="age-range">
+                <span style="font-size:11px;color:#555">18</span>
+                <input type="range" id="fMinAge" min="18" max="60" value="18" oninput="updateAge()">
+                <input type="range" id="fMaxAge" min="18" max="60" value="60" oninput="updateAge()">
+                <span style="font-size:11px;color:#555">60</span>
+            </div>
+        </div>
+        <div style="margin-bottom:16px">
+            <p style="font-size:11px;color:#666;font-weight:700;text-transform:uppercase;margin:0 0 8px">Burç</p>
+            <div style="display:flex;flex-wrap:wrap;gap:7px">
+                <button class="f-chip sel" onclick="fSel(this,'z','all')">Hepsi</button>
+                <button class="f-chip" onclick="fSel(this,'z','Koç')">♈ Koç</button>
+                <button class="f-chip" onclick="fSel(this,'z','Boğa')">♉ Boğa</button>
+                <button class="f-chip" onclick="fSel(this,'z','İkizler')">♊ İkizler</button>
+                <button class="f-chip" onclick="fSel(this,'z','Yengeç')">♋ Yengeç</button>
+                <button class="f-chip" onclick="fSel(this,'z','Aslan')">♌ Aslan</button>
+                <button class="f-chip" onclick="fSel(this,'z','Başak')">♍ Başak</button>
+                <button class="f-chip" onclick="fSel(this,'z','Terazi')">♎ Terazi</button>
+                <button class="f-chip" onclick="fSel(this,'z','Akrep')">♏ Akrep</button>
+                <button class="f-chip" onclick="fSel(this,'z','Yay')">♐ Yay</button>
+                <button class="f-chip" onclick="fSel(this,'z','Oğlak')">♑ Oğlak</button>
+                <button class="f-chip" onclick="fSel(this,'z','Kova')">♒ Kova</button>
+                <button class="f-chip" onclick="fSel(this,'z','Balık')">♓ Balık</button>
+            </div>
+        </div>
+        <button class="apply-btn" onclick="applyFilter()">✅ Uygula</button>
+    </div>
+</div>
+
+<nav class="navbar">
+    <a href="index.html" class="nav-link active"><span class="nav-icon">🔥</span>Keşfet</a>
+    <a href="messages.html" class="nav-link"><span class="nav-icon">💬</span>Mesajlar</a>
+    <a href="profile.html" class="nav-link"><span class="nav-icon">👤</span>Profil</a>
+</nav>
+
 <script>
-    // KULLANICI KONTROLÜ
     const benimID = parseInt(localStorage.getItem('loggedInUserId'));
-    if(!benimID) {
-        window.location.href = 'login.html';
+    if (!benimID) window.location.href = 'login.html';
+    const BASE = 'http://localhost:5000';
+
+    let kartlar = [], idx = 0, isSwiping = false;
+    let activeGender = null;
+    let filterState = { g: 'all', z: 'all' };
+    let advFilter = { minAge: null, maxAge: null, zodiac: null };
+
+    // ── Filtre ──
+    function setGender(el, val) {
+        document.querySelectorAll('.g-tab').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+        activeGender = val;
+        idx = 0; load();
     }
 
-    let aktifKartlar = [];
+    function openFilter() { document.getElementById('filterBg').classList.add('open'); }
+    function closeFilter() { document.getElementById('filterBg').classList.remove('open'); }
+    function updateAge() {
+        const mn = parseInt(document.getElementById('fMinAge').value);
+        const mx = parseInt(document.getElementById('fMaxAge').value);
+        document.getElementById('ageLbl').innerText = `${Math.min(mn,mx)} – ${Math.max(mn,mx)}`;
+    }
+    function fSel(el, group, val) {
+        const parent = el.parentElement;
+        parent.querySelectorAll('.f-chip').forEach(b => b.classList.remove('sel'));
+        el.classList.add('sel');
+        filterState[group] = val;
+    }
+    function applyFilter() {
+        const mn = parseInt(document.getElementById('fMinAge').value);
+        const mx = parseInt(document.getElementById('fMaxAge').value);
+        advFilter.minAge = mn > 18 ? Math.min(mn,mx) : null;
+        advFilter.maxAge = mx < 60 ? Math.max(mn,mx) : null;
+        advFilter.zodiac = filterState.z !== 'all' ? filterState.z : null;
+        if (filterState.g !== 'all') {
+            activeGender = filterState.g;
+            document.querySelectorAll('.g-tab').forEach(b => b.classList.remove('active'));
+        }
+        closeFilter();
+        idx = 0; load();
+    }
 
-    async function kartlariYukle() {
+    // ── Yükleme ──
+    async function load() {
+        const params = [];
+        if (activeGender) params.push(`gender=${activeGender}`);
+        if (advFilter.minAge) params.push(`minAge=${advFilter.minAge}`);
+        if (advFilter.maxAge) params.push(`maxAge=${advFilter.maxAge}`);
+        if (advFilter.zodiac) params.push(`zodiac=${encodeURIComponent(advFilter.zodiac)}`);
+        const url = `${BASE}/api/discover/${benimID}` + (params.length ? '?' + params.join('&') : '');
         try {
-            const filter = document.getElementById('genderFilter').value;
-            const container = document.getElementById('cardContainer');
-            
-            // 404 FIX: URL Parametresi ve Tam Adres
-            const res = await fetch(`http://localhost:5000/api/discover/${benimID}`);
-            
-            if(!res.ok) {
-                console.error("Sunucu Hatası:", res.status);
-                container.innerHTML = '<div style="color:red">Sunucuya bağlanılamadı!</div>';
-                return;
-            }
-
-            let veriler = await res.json();
-            
-            if(filter !== 'all') {
-                veriler = veriler.filter(u => u.gender === filter);
-            }
-
-            aktifKartlar = veriler;
-            
-            if(veriler.length === 0) {
-                container.innerHTML = '<div style="color: #666; font-size:18px; margin-top:100px; text-align:center;">Hepsini bitirdin! 😎<br><span style="font-size:12px;">Yeni üyeler gelince haber veririz.</span></div>';
-                return;
-            }
-
-            container.innerHTML = veriler.map((u, i) => {
-                const pic = u.profile_pic 
-                    ? 'http://localhost:5000' + u.profile_pic 
-                    : `https://ui-avatars.com/api/?name=${encodeURIComponent(u.full_name)}&background=random&color=fff&size=400`;
-                
-                return `
-
-                <div class="card" style="z-index: ${veriler.length - i}" id="card-${u.id}">
-        
-        <div style="position:absolute; top:20px; left:20px; background:rgba(255, 65, 108, 0.9); padding:6px 14px; border-radius:50px; z-index:100; font-size:12px; font-weight:800; color:white; box-shadow: 0 4px 15px rgba(255, 65, 108, 0.4); border: 1px solid rgba(255,255,255,0.2);">
-            🔥 %${u.match_rate || 0} UYUM
-        </div>
-
-        <img src="${pic}" class="card-bg-blur">
-        <img src="${pic}" class="card-img-main">
-        <div class="card-info">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h3>${u.full_name}</h3>
-                <a href="other_profile.html?id=${u.id}" style="color: white; font-size: 13px; text-decoration: none; font-weight: bold; background: linear-gradient(45deg, #ff416c, #ff4b2b); padding: 6px 12px; border-radius: 15px; cursor: pointer; z-index: 1000; position: relative; pointer-events: auto;">Profili Gör</a>
-            </div>
-            <div class="card-tag">✨ ${u.zodiac || 'Gizemli'}</div>
-            <p class="card-bio" style="font-size:11px; color:#ccc;">
-                ${u.interests ? '<b>İlgi Alanları:</b> ' + u.interests : 'Sohbet etmek için bekliyor...'}
-            </p>
-        </div>
-    </div>`;
-}).join('');
-
-        } catch (err) { 
-            console.error("Hata:", err);
-            document.getElementById('cardContainer').innerHTML = '<div style="color:red">Bağlantı Hatası!</div>';
+            const res = await fetch(url);
+            if (!res.ok) throw new Error();
+            kartlar = await res.json();
+            idx = 0;
+            renderCards();
+        } catch(e) {
+            document.getElementById('cardWrap').innerHTML = `<div class="empty-discover"><div>😵</div><p>Sunucuya bağlanılamadı</p></div>`;
         }
     }
 
-    async function swipe(yon) {
-        if(aktifKartlar.length === 0) return;
-        
-        const kisi = aktifKartlar.shift(); // Diziden hemen çıkar ki arka arkaya hızlıca basılabilsin
-        const kartElement = document.getElementById(`card-${kisi.id}`);
-        if(!kartElement) return;
-
-        kartElement.classList.add(yon === 'right' ? 'swipe-right' : 'swipe-left');
-
-        // Backend'e beğeniyi gönder
-        try {
-            const likeRes = await fetch('http://localhost:5000/api/like', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    liker_id: benimID,
-                    liked_id: kisi.id,
-                    is_like: yon === 'right'
-                })
-            });
-            const likeData = await likeRes.json();
-            if(likeData.isMatch) {
-                document.getElementById('matchText').innerHTML = `<b>${kisi.full_name}</b> de seni beğendi!`;
-                document.getElementById('matchOverlay').style.display = 'flex';
-                document.getElementById('matchOverlayBtn').onclick = () => { window.location.href = `chat.html?id=${kisi.id}`; };
-            }
-        } catch (e) { console.error("Beğeni gönderilemedi"); }
-
-        setTimeout(() => {
-            kartElement.remove();
-            if(aktifKartlar.length === 0 && document.querySelectorAll('.card').length === 0) {
-                document.getElementById('cardContainer').innerHTML = '<div style="color: #666; font-size:18px; margin-top:100px; text-align:center;">Hepsini bitirdin! 😎<br><span style="font-size:12px;">Yeni üyeler gelince haber veririz.</span></div>';
-            }
-        }, 400);
+    function renderCards() {
+        const wrap = document.getElementById('cardWrap');
+        if (!kartlar.length || idx >= kartlar.length) {
+            wrap.innerHTML = `<div class="empty-discover"><div>🔥</div><p>Herkesi gördün!</p><p style="font-size:12px;margin-top:8px;">Filtreleri değiştir veya yarın tekrar dene</p></div>`;
+            updateSidePanel(null);
+            return;
+        }
+        const kisi = kartlar[idx];
+        const next = kartlar[idx + 1];
+        wrap.innerHTML = (next ? buildCard(next, true) : '') + buildCard(kisi, false);
+        attachDrag(document.getElementById('front-card'), kisi);
+        updateSidePanel(kisi);
     }
 
-    // İlk yükleme
-    kartlariYukle();
+    function buildCard(k, isBack) {
+        const pic = k.profile_pic ? `${BASE}${k.profile_pic}` : null;
+        const init = (k.full_name || '?')[0].toUpperCase();
+        const photo = pic
+            ? `<img src="${pic}" alt="${k.full_name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" style="width:100%;height:100%;object-fit:cover;"><div class="card-photo-init" style="display:none">${init}</div>`
+            : `<div class="card-photo-init">${init}</div>`;
+        const tags = (k.interests || '').split(',').map(s=>s.trim()).filter(Boolean).slice(0,3)
+            .map(t=>`<span class="interest-tag">${t}</span>`).join('');
+        const compat = k.match_rate ?? 0;
+        const cls = isBack ? 'discover-card back-card' : 'discover-card front-card';
+        const id = isBack ? 'back-card' : 'front-card';
+
+        return `<div class="${cls}" id="${id}">
+            <div class="card-photo">
+                ${!isBack ? `<div class="compat-pill" onclick="openCompatModal()">🔥 %${compat} uyum</div>
+                <div class="swipe-lbl lbl-like" id="lbl-like">LIKE 💚</div>
+                <div class="swipe-lbl lbl-nope" id="lbl-nope">NOPE ✕</div>
+                <div class="swipe-lbl lbl-super" id="lbl-super">⭐ SÜPER</div>` : ''}
+                ${photo}
+            </div>
+            <div class="card-body">
+                <div>
+                    <div class="card-name">${k.full_name}</div>
+                    ${k.zodiac ? `<div class="card-zodiac">✨ ${k.zodiac}</div>` : ''}
+                </div>
+                <div class="interest-tags">${tags}</div>
+            </div>
+        </div>`;
+    }
+
+    // ── Sağ panel güncelle ──
+    function updateSidePanel(k) {
+        if (!k) {
+            document.getElementById('previewName').innerText = '—';
+            document.getElementById('previewZodiac').innerText = '';
+            document.getElementById('previewInterests').innerHTML = '<span style="color:#444;font-size:12px;">—</span>';
+            document.getElementById('compatPctLabel').innerText = '%0';
+            document.getElementById('compatBarFill').style.width = '0%';
+            document.getElementById('previewArea').innerHTML = '<div class="preview-avatar-ph">?</div><div><div class="preview-name">—</div></div>';
+            document.getElementById('bioCard').style.display = 'none';
+            document.getElementById('previewLink').href = '#';
+            return;
+        }
+        const pic = k.profile_pic ? `${BASE}${k.profile_pic}` : null;
+        const init = (k.full_name || '?')[0].toUpperCase();
+        const avatarHtml = pic
+            ? `<img class="preview-avatar" src="${pic}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+               <div class="preview-avatar-ph" style="display:none">${init}</div>`
+            : `<div class="preview-avatar-ph">${init}</div>`;
+
+        document.getElementById('previewArea').innerHTML = `${avatarHtml}<div><div class="preview-name">${k.full_name}</div><div class="preview-zodiac">${k.zodiac ? `✨ ${k.zodiac}` : ''}</div></div>`;
+        document.getElementById('previewLink').href = `other_profile.html?id=${k.id}`;
+
+        const compat = k.match_rate ?? 0;
+        document.getElementById('compatPctLabel').innerText = `%${compat}`;
+        document.getElementById('compatBarFill').style.width = `${compat}%`;
+
+        const interests = (k.interests || '').split(',').map(s=>s.trim()).filter(Boolean);
+        document.getElementById('previewInterests').innerHTML = interests.length
+            ? interests.map(i=>`<span class="int-chip">${i}</span>`).join('')
+            : '<span style="color:#444;font-size:12px;">İlgi alanı belirtilmemiş</span>';
+
+        if (k.bio) {
+            document.getElementById('bioCard').style.display = '';
+            document.getElementById('previewBio').innerText = k.bio;
+        } else {
+            document.getElementById('bioCard').style.display = 'none';
+        }
+    }
+
+    // ── Drag sistemi ──
+    function attachDrag(card, kisi) {
+        if (!card) return;
+        let startX=0, startY=0, curX=0, curY=0, dragging=false;
+        const onStart = (x,y) => { startX=x; startY=y; dragging=true; card.style.transition='none'; };
+        const onMove = (x,y) => {
+            if (!dragging) return;
+            curX=x-startX; curY=y-startY;
+            card.style.transform = `translate(${curX}px,${curY}px) rotate(${curX/30}deg)`;
+            const lL=document.getElementById('lbl-like'), lN=document.getElementById('lbl-nope'), lS=document.getElementById('lbl-super');
+            if (lL) lL.style.opacity = Math.min(Math.max(curX/100,0),1);
+            if (lN) lN.style.opacity = Math.min(Math.max(-curX/100,0),1);
+            if (lS) lS.style.opacity = Math.min(Math.max(-curY/100,0),1);
+        };
+        const onEnd = () => {
+            if (!dragging) return; dragging=false;
+            if (curX > 110) doSwipeCard(kisi,1);
+            else if (curX < -110) doSwipeCard(kisi,0);
+            else if (curY < -120) doSwipeCard(kisi,2);
+            else { card.style.transition='transform 0.4s ease'; card.style.transform=''; ['lbl-like','lbl-nope','lbl-super'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.opacity=0;}); }
+            curX=0; curY=0;
+        };
+        card.addEventListener('mousedown', e=>onStart(e.clientX,e.clientY));
+        document.addEventListener('mousemove', e=>{if(dragging)onMove(e.clientX,e.clientY);});
+        document.addEventListener('mouseup', ()=>{if(dragging)onEnd();});
+        card.addEventListener('touchstart', e=>{const t=e.touches[0];onStart(t.clientX,t.clientY);},{passive:true});
+        card.addEventListener('touchmove', e=>{const t=e.touches[0];onMove(t.clientX,t.clientY);},{passive:true});
+        card.addEventListener('touchend', onEnd);
+    }
+
+    function doSwipe(val) { if(!isSwiping&&idx<kartlar.length) doSwipeCard(kartlar[idx],val); }
+
+    async function doSwipeCard(kisi, isLike) {
+        if (isSwiping) return; isSwiping=true;
+        const card = document.getElementById('front-card');
+        if (card) {
+            const dx = isLike===1?1:isLike===0?-1:0;
+            const dy = isLike===2?-200:0;
+            card.style.transition='transform 0.4s ease, opacity 0.35s';
+            card.style.transform=`translate(${dx*160}%,${-20+dy}px) rotate(${dx*25}deg)`;
+            card.style.opacity='0';
+        }
+        idx++;
+        try {
+            const res = await fetch(`${BASE}/api/like`, {
+                method:'POST', headers:{'Content-Type':'application/json'},
+                body: JSON.stringify({liker_id:benimID, liked_id:kisi.id, is_like:isLike})
+            });
+            const d = await res.json();
+            if (d.isMatch) {
+                document.getElementById('matchMsg').innerHTML = `<b>${kisi.full_name}</b> de seni beğendi! 🎉`;
+                document.getElementById('matchChatBtn').onclick = () => { closeMatch(); location.href=`chat.html?id=${kisi.id}`; };
+                document.getElementById('matchOverlay').classList.add('show');
+            } else if (isLike===2) {
+                document.getElementById('matchMsg').innerHTML = `<b>${kisi.full_name}</b>'a ⭐ Süper Beğeni gönderildi!`;
+                document.getElementById('matchChatBtn').style.display='none';
+                document.getElementById('matchOverlay').classList.add('show');
+                setTimeout(()=>{closeMatch();document.getElementById('matchChatBtn').style.display='';},2000);
+            }
+        } catch(e){}
+        setTimeout(()=>{isSwiping=false;renderCards();},360);
+    }
+
+    function closeMatch() { document.getElementById('matchOverlay').classList.remove('show'); }
+
+    // ── Uyum modal ──
+    let currentUserId = null;
+    async function openCompatModal() {
+        if (!kartlar[idx]) return;
+        const k = kartlar[idx];
+        currentUserId = k.id;
+        document.getElementById('compatModal').classList.add('open');
+        document.getElementById('compatModalPct').innerText = `%${k.match_rate??0}`;
+        document.getElementById('compatModalName').innerText = `${k.full_name} ile uyumun`;
+        document.getElementById('compatInterests').innerHTML = '<span style="color:#555;font-size:12px">Yükleniyor...</span>';
+        document.getElementById('compatAnswers').innerHTML = '';
+        try {
+            const res = await fetch(`${BASE}/api/compatibility/${benimID}/${k.id}`);
+            const d = await res.json();
+            document.getElementById('compatInterests').innerHTML = d.commonInterests.length
+                ? d.commonInterests.map(i=>`<span class="common-tag">${i}</span>`).join('')
+                : '<span style="color:#444;font-size:12px">Ortak ilgi yok</span>';
+            document.getElementById('compatAnswers').innerHTML = d.commonAnswers.length
+                ? d.commonAnswers.map(a=>`<div class="answer-row"><span style="font-size:11px;color:#888;flex:1">${a.question}</span><span style="font-size:11px;color:#ff9999;font-weight:700">✓ ${a.answer}</span></div>`).join('')
+                : '<span style="color:#444;font-size:12px">Ortak cevap yok</span>';
+        } catch(e){}
+    }
+    function closeCompatModal() { document.getElementById('compatModal').classList.remove('open'); }
+
+    load();
 </script>
-
-<!-- EŞLEŞME EKRANI -->
-<div id="matchOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:9999; flex-direction:column; align-items:center; justify-content:center; text-align:center;">
-    <h1 style="font-size: 60px; font-weight: 900; background: linear-gradient(45deg, #ff416c, #ff4b2b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; animation: float 3s infinite alternate;">🔥 EŞLEŞTİNİZ! 🔥</h1>
-    <p style="font-size: 18px; color: #ddd; margin-bottom: 40px;" id="matchText">O da seni beğendi!</p>
-    <div style="display:flex; gap: 15px;">
-        <button id="matchOverlayBtn" style="background: linear-gradient(45deg, #ff416c, #ff4b2b); color: white; border: none; padding: 15px 40px; border-radius: 30px; font-size: 16px; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 10px 30px rgba(255, 65, 108, 0.4);">Mesaj At</button>
-        <button onclick="document.getElementById('matchOverlay').style.display='none'" style="background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.3); padding: 15px 30px; border-radius: 30px; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.3s;">Kapat</button>
-    </div>
-</div>
-
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script src="global-call.js"></script>
 </body>
 </html>

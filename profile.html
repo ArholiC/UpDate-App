@@ -3,201 +3,643 @@
 <head>
     <meta charset="UTF-8">
     <title>UpDate - Profilim</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
-        body { font-family: 'Poppins', sans-serif; background: #0b0914; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; position: relative; }
-        body::before { content: ""; position: absolute; width: 600px; height: 600px; border-radius: 50%; background: linear-gradient(45deg, #ff416c, #ff4b2b); filter: blur(150px); opacity: 0.1; z-index: -1; }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        .container { 
-            width: 750px; height: 85vh; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(40px); 
-            border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.1); position: relative;
-            display: flex; flex-direction: column; padding: 40px 60px; box-sizing: border-box;
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #0b0914;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 30px 20px 100px;
+            position: relative;
+            overflow-x: hidden;
         }
 
-        .scroll-content { flex: 1; overflow-y: auto; padding-right: 10px; margin-bottom: 70px; scroll-behavior: smooth; }
-        .scroll-content::-webkit-scrollbar { width: 6px; }
-        .scroll-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-
-        .profile-pic-section { text-align: center; margin-bottom: 20px; position: relative; }
-        .foto-alani { 
-            background: linear-gradient(45deg, #ff416c, #ff4b2b); height: 160px; width: 160px; 
-            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-            font-size: 60px; margin: 0 auto 15px auto; border: 5px solid #0b0914; 
-            cursor: pointer; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.4); transition: 0.4s;
+        /* Nebula arka plan */
+        body::before {
+            content: ""; position: fixed;
+            width: 700px; height: 700px;
+            top: -200px; right: -200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ff416c 0%, transparent 70%);
+            filter: blur(100px); opacity: 0.12; z-index: -1;
         }
-        .foto-alani:hover { transform: scale(1.05); }
-        .foto-alani img { width: 100%; height: 100%; object-fit: cover; }
-        
-        .yukle-btn { background: rgba(255,255,255,0.1); padding: 8px 16px; border-radius: 50px; font-size: 12px; cursor: pointer; transition: 0.3s; }
-        .yukle-btn:hover { background: #ff4b4b; color: white; }
-
-        h2 { font-size: 36px; font-weight: 800; margin: 10px 0 0 0; letter-spacing: -1px; }
-        .mail { color: #666; font-size: 14px; margin-bottom: 20px; }
-
-        .label-text { text-align: left; font-weight: 700; color: #ff4b4b; font-size: 12px; text-transform: uppercase; margin: 20px 0 8px 5px; letter-spacing: 1px; }
-        
-        textarea, select, .kilitli-box { 
-            width: 100%; padding: 15px; background: rgba(255,255,255,0.05); 
-            border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; 
-            color: white; font-family: inherit; font-size: 14px; outline: none; transition: 0.3s;
+        body::after {
+            content: ""; position: fixed;
+            width: 500px; height: 500px;
+            bottom: -100px; left: -100px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ff4b2b 0%, transparent 70%);
+            filter: blur(120px); opacity: 0.1; z-index: -1;
         }
 
-        /* HOBİ TASARIMI DÜZELTME */
-        .hobi-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 5px 0; }
-        .hobi-box { display: none; }
-        .hobi-item { 
-            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); 
-            padding: 8px 16px; border-radius: 50px; font-size: 12px; cursor: pointer; transition: 0.2s;
-            font-weight: 500; color: #888;
-        }
-        .hobi-box:checked + .hobi-item { 
-            background: rgba(255, 65, 108, 0.2); border-color: #ff416c; color: white; 
-            box-shadow: 0 0 15px rgba(255, 65, 108, 0.2);
+        .page-wrapper {
+            width: 100%;
+            max-width: 900px;
         }
 
-        .btn-main { background: linear-gradient(90deg, #ff416c, #ff4b2b); color: white; border: none; padding: 18px; border-radius: 20px; width: 100%; font-weight: 800; font-size: 16px; cursor: pointer; margin-top: 25px; transition: 0.3s; }
-        .btn-main:hover { transform: translateY(-2px); opacity: 0.9; }
+        /* ── HEADER ── */
+        .page-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 32px;
+        }
+        .page-title {
+            font-size: 28px; font-weight: 800;
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
 
-        .navbar { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(22, 20, 43, 0.9); display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid rgba(255,255,255,0.1); border-radius: 0 0 50px 50px; backdrop-filter: blur(10px); }
-        .nav-link { color: #555; text-decoration: none; font-size: 12px; font-weight: 600; text-align: center; }
-        .nav-link.active { color: #ff4b4b; }
+        /* ── LAYOUT: 2 KOLON ── */
+        .profile-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        /* ── SOL PANEL ── */
+        .left-panel {
+            display: flex; flex-direction: column; gap: 16px;
+        }
+
+        .avatar-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 28px;
+            padding: 28px 20px;
+            text-align: center;
+            backdrop-filter: blur(20px);
+        }
+
+        .avatar-wrapper {
+            position: relative; width: 120px; height: 120px;
+            margin: 0 auto 16px;
+        }
+        .avatar-img {
+            width: 120px; height: 120px; border-radius: 50%;
+            object-fit: cover; border: 3px solid #ff416c;
+            box-shadow: 0 0 30px rgba(255,65,108,0.4);
+        }
+        .avatar-placeholder {
+            width: 120px; height: 120px; border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255,65,108,0.25), rgba(255,75,43,0.1));
+            border: 3px solid #ff416c;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 48px; font-weight: 900; color: #ff416c;
+            box-shadow: 0 0 30px rgba(255,65,108,0.3);
+        }
+        .avatar-edit-btn {
+            position: absolute; bottom: 0; right: 0;
+            width: 34px; height: 34px; border-radius: 50%;
+            background: #ff416c; border: 2px solid #0b0914;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 16px; transition: 0.2s;
+        }
+        .avatar-edit-btn:hover { transform: scale(1.1); }
+
+        .user-name { font-size: 20px; font-weight: 800; color: white; margin-bottom: 4px; }
+        .user-email { font-size: 12px; color: #666; margin-bottom: 16px; }
+        .user-zodiac {
+            display: inline-block;
+            background: rgba(255,65,108,0.12);
+            border: 1px solid rgba(255,65,108,0.3);
+            color: #ff9999; padding: 4px 14px; border-radius: 20px;
+            font-size: 12px; font-weight: 700; margin-bottom: 16px;
+        }
+
+        /* Tamamlanma çubuğu */
+        .completion-bar-wrap { margin-bottom: 4px; }
+        .completion-label {
+            display: flex; justify-content: space-between;
+            font-size: 11px; color: #666; margin-bottom: 6px;
+        }
+        .completion-bar-bg {
+            height: 6px; background: rgba(255,255,255,0.08);
+            border-radius: 999px; overflow: hidden;
+        }
+        .completion-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff416c, #ff4b2b);
+            border-radius: 999px;
+            transition: width 0.6s ease;
+        }
+
+        /* İstatistik kartları */
+        .stat-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px; padding: 16px;
+            backdrop-filter: blur(15px);
+        }
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .stat-item { text-align: center; padding: 14px 8px; background: rgba(255,255,255,0.03); border-radius: 14px; border: 1px solid rgba(255,255,255,0.06); }
+        .stat-val { font-size: 22px; font-weight: 800; color: #ff416c; }
+        .stat-lbl { font-size: 10px; color: #666; font-weight: 600; margin-top: 2px; }
+
+        /* Alt butonlar */
+        .danger-zone {
+            background: rgba(255,75,75,0.04);
+            border: 1px solid rgba(255,75,75,0.15);
+            border-radius: 20px; padding: 16px;
+            display: flex; flex-direction: column; gap: 8px;
+        }
+        .btn-outline-danger {
+            background: transparent; border: 1px solid rgba(255,75,75,0.3);
+            color: #ff6666; padding: 10px; border-radius: 12px;
+            font-size: 13px; font-weight: 600; cursor: pointer;
+            font-family: inherit; transition: 0.2s; width: 100%;
+        }
+        .btn-outline-danger:hover { background: rgba(255,75,75,0.1); }
+        .btn-logout {
+            background: transparent; border: 1px solid rgba(255,255,255,0.1);
+            color: #888; padding: 10px; border-radius: 12px;
+            font-size: 13px; font-weight: 600; cursor: pointer;
+            font-family: inherit; transition: 0.2s; width: 100%;
+        }
+        .btn-logout:hover { background: rgba(255,255,255,0.05); color: white; }
+
+        /* ── SAĞ PANEL ── */
+        .right-panel { display: flex; flex-direction: column; gap: 16px; }
+
+        .card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px; padding: 24px;
+            backdrop-filter: blur(20px);
+        }
+        .card-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 16px;
+        }
+        .card-title { font-size: 15px; font-weight: 700; color: white; }
+        .edit-btn {
+            background: rgba(255,65,108,0.1); border: 1px solid rgba(255,65,108,0.25);
+            color: #ff416c; padding: 6px 14px; border-radius: 20px;
+            font-size: 12px; font-weight: 700; cursor: pointer;
+            font-family: inherit; transition: 0.2s;
+        }
+        .edit-btn:hover { background: rgba(255,65,108,0.2); }
+        .save-btn {
+            background: linear-gradient(45deg, #ff416c, #ff4b2b); border: none;
+            color: white; padding: 6px 16px; border-radius: 20px;
+            font-size: 12px; font-weight: 700; cursor: pointer;
+            font-family: inherit; transition: 0.2s;
+        }
+        .save-btn:hover { filter: brightness(1.1); }
+        .cancel-btn {
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            color: #aaa; padding: 6px 12px; border-radius: 20px;
+            font-size: 12px; font-weight: 600; cursor: pointer;
+            font-family: inherit; margin-right: 6px;
+        }
+
+        /* Bio alanı */
+        .bio-text { font-size: 14px; color: #aaa; line-height: 1.7; }
+        .bio-empty { color: #444; font-style: italic; font-size: 14px; }
+        textarea.bio-input {
+            width: 100%; min-height: 90px; background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,65,108,0.3); border-radius: 14px;
+            color: white; font-family: inherit; font-size: 14px;
+            padding: 12px 14px; outline: none; resize: vertical; line-height: 1.6;
+            transition: 0.2s;
+        }
+        textarea.bio-input:focus { border-color: #ff416c; background: rgba(255,65,108,0.05); }
+
+        /* Info satırları */
+        .info-row {
+            display: flex; align-items: center; gap: 12px;
+            padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .info-row:last-child { border-bottom: none; }
+        .info-icon { font-size: 18px; width: 30px; text-align: center; }
+        .info-label { font-size: 11px; color: #555; font-weight: 600; flex: 1; }
+        .info-val { font-size: 14px; color: #ccc; font-weight: 600; }
+
+        /* İlgi alanları */
+        .interests-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+        .interest-chip {
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+            color: #888; padding: 6px 14px; border-radius: 50px;
+            font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.2s;
+            font-family: inherit;
+        }
+        .interest-chip.selected {
+            background: rgba(255,65,108,0.18); border-color: #ff416c; color: #ff9999;
+            box-shadow: 0 0 12px rgba(255,65,108,0.2);
+        }
+        .interest-chip:hover { border-color: rgba(255,65,108,0.5); color: #ccc; }
+
+        /* Onay modal */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 9999;
+            justify-content: center; align-items: center;
+        }
+        .modal-overlay.open { display: flex; }
+        .modal-box {
+            background: #16142b; border-radius: 24px; padding: 36px;
+            border: 1px solid rgba(255,75,75,0.3); width: 380px; text-align: center;
+            animation: scaleIn 0.2s ease;
+        }
+        @keyframes scaleIn { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .modal-box h3 { font-size: 18px; margin-bottom: 10px; }
+        .modal-box p { color: #888; font-size: 13px; margin-bottom: 24px; }
+        .modal-btns { display: flex; gap: 12px; justify-content: center; }
+        .modal-cancel { padding: 10px 24px; border-radius: 14px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #aaa; cursor: pointer; font-family: inherit; font-weight: 600; }
+        .modal-confirm { padding: 10px 24px; border-radius: 14px; background: #ff4b4b; border: none; color: white; cursor: pointer; font-family: inherit; font-weight: 700; }
+
+        /* Toast */
+        .toast {
+            position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
+            background: rgba(22,20,43,0.95); border: 1px solid rgba(255,255,255,0.12);
+            color: white; padding: 12px 24px; border-radius: 30px; font-size: 13px;
+            font-weight: 600; z-index: 9999; opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease; backdrop-filter: blur(20px);
+        }
+        .toast.show { opacity: 1; }
+
+        /* Navbar */
+        .navbar {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: rgba(12,10,25,0.95); border-top: 1px solid rgba(255,255,255,0.08);
+            display: flex; justify-content: space-around; padding: 14px 0;
+            backdrop-filter: blur(20px); z-index: 100;
+        }
+        .nav-link { color: #555; text-decoration: none; font-size: 11px; font-weight: 600; text-align: center; transition: 0.2s; }
+        .nav-link:hover, .nav-link.active { color: #ff4b4b; }
+        .nav-icon { display: block; font-size: 22px; margin-bottom: 3px; }
+
+        @media (max-width: 700px) {
+            .profile-layout { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="scroll-content">
-        <div class="profile-pic-section">
-            <label for="dosyaInput" class="foto-alani">
-                <span id="placeholder">👤</span>
-                <img id="previewImg" src="" style="display:none;">
-            </label>
-            <input type="file" id="dosyaInput" style="display:none;" onchange="handleImage(this)">
-            <span class="yukle-btn" onclick="document.getElementById('dosyaInput').click()">📸 Fotoğrafı Değiştir</span>
-        </div>
 
-        <h2 id="userName">Yükleniyor...</h2>
-        <p class="mail" id="userEmail">...</p>
-        <input type="hidden" id="finalPicPath">
-
-        <div class="label-text">Biyografin</div>
-        <textarea id="bioBox" rows="3" placeholder="Seni diğerlerinden ayıran ne?"></textarea>
-        
-        <div style="display:flex; gap:15px;">
-            <div style="flex:1;"><div class="label-text">Cinsiyet</div><select id="genderBox" disabled><option value="erkek">Erkek</option><option value="kadin">Kadın</option></select></div>
-            <div style="flex:1;"><div class="label-text">Doğum Tarihi</div><div class="kilitli-box" id="birthBox" style="background: rgba(255,255,255,0.02); color: #666;">...</div></div>
-        </div>
-
-        <div class="label-text">İlgi Alanların (Seçtiklerin Parlar 🔥)</div>
-        <div class="hobi-container" id="hobiGrid"></div>
-        
-        <button class="btn-main" onclick="updateProfile()">Değişiklikleri Kaydet 🔥</button>
-        
-        <div style="margin-top:30px; display:flex; justify-content:space-between; align-items:center; padding-bottom: 20px;">
-            <button onclick="deleteProfile()" style="background:rgba(255,75,75,0.1); border:1px solid rgba(255,75,75,0.3); color:#ff4b4b; cursor:pointer; font-size: 13px; padding: 10px 20px; border-radius: 15px; font-weight: 600; transition: 0.3s;" onmouseover="this.style.background='rgba(255,75,75,0.2)'" onmouseout="this.style.background='rgba(255,75,75,0.1)'">🗑️ Hesabımı Sil</button>
-            <button onclick="localStorage.clear(); location.href='login.html'" style="background:none; border:none; color:#888; cursor:pointer; font-size: 13px; padding: 10px; font-weight: 600;">Çıkış Yap</button>
-        </div>
+<div class="page-wrapper">
+    <div class="page-header">
+        <div class="page-title">👤 Profilim</div>
     </div>
 
-    <nav class="navbar">
-        <a href="index.html" class="nav-link">🔥 Keşfet</a>
-        <a href="messages.html" class="nav-link">💬 Mesajlar</a>
-        <a href="profile.html" class="nav-link active">👤 Profil</a>
-    </nav>
+    <div class="profile-layout">
+        <!-- SOL PANEL -->
+        <div class="left-panel">
+            <!-- Avatar Kartı -->
+            <div class="avatar-card">
+                <div class="avatar-wrapper">
+                    <div id="avatarArea"></div>
+                    <label for="dosyaInput" class="avatar-edit-btn" title="Fotoğrafı Değiştir">📷</label>
+                    <input type="file" id="dosyaInput" accept="image/*" style="display:none" onchange="handleImage(this)">
+                    <input type="hidden" id="finalPicPath">
+                </div>
+                <div class="user-name" id="userName">Yükleniyor...</div>
+                <div class="user-email" id="userEmail">...</div>
+                <div class="user-zodiac" id="userZodiac">♈ Burç</div>
+
+                <!-- Profil Tamamlanma -->
+                <div class="completion-bar-wrap">
+                    <div class="completion-label">
+                        <span>Profil Tamamlanma</span>
+                        <span id="completionPct">0%</span>
+                    </div>
+                    <div class="completion-bar-bg">
+                        <div class="completion-bar-fill" id="completionFill" style="width:0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- İstatistikler -->
+            <div class="stat-card">
+                <div class="stat-grid">
+                    <div class="stat-item">
+                        <div class="stat-val" id="matchCount">—</div>
+                        <div class="stat-lbl">EŞLEŞME</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-val" id="interestCount">—</div>
+                        <div class="stat-lbl">İLGİ ALANI</div>
+                    </div>
+                    <div class="stat-item" style="grid-column:span 2">
+                        <div class="stat-val" id="memberSince" style="font-size:13px;">—</div>
+                        <div class="stat-lbl">ÜYELİK TARİHİ</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tehlikeli Bölge -->
+            <div class="danger-zone">
+                <button class="btn-logout" onclick="localStorage.clear(); location.href='login.html'">🚪 Çıkış Yap</button>
+                <button class="btn-outline-danger" onclick="openDeleteModal()">🗑️ Hesabımı Sil</button>
+            </div>
+        </div>
+
+        <!-- SAĞ PANEL -->
+        <div class="right-panel">
+            <!-- Bilgilerim -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">📋 Bilgilerim</div>
+                </div>
+                <div class="info-row">
+                    <span class="info-icon">⚧</span>
+                    <span class="info-label">Cinsiyet</span>
+                    <span class="info-val" id="infoGender">—</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-icon">🎂</span>
+                    <span class="info-label">Doğum Tarihi</span>
+                    <span class="info-val" id="infoBirth">—</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-icon">✨</span>
+                    <span class="info-label">Burç</span>
+                    <span class="info-val" id="infoZodiac">—</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-icon">📧</span>
+                    <span class="info-label">E-posta</span>
+                    <span class="info-val" id="infoEmail">—</span>
+                </div>
+            </div>
+
+            <!-- Hakkımda -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">💬 Hakkımda</div>
+                    <div>
+                        <button class="cancel-btn" id="bioCancelBtn" style="display:none" onclick="cancelBio()">İptal</button>
+                        <button class="edit-btn" id="bioEditBtn" onclick="startBioEdit()">✏️ Düzenle</button>
+                        <button class="save-btn" id="bioSaveBtn" style="display:none" onclick="saveBio()">💾 Kaydet</button>
+                    </div>
+                </div>
+                <div id="bioDisplay" class="bio-empty">Henüz bir şey yazılmamış...</div>
+                <textarea class="bio-input" id="bioInput" style="display:none" placeholder="Kendinden bahset, seni farklı kılan ne?"></textarea>
+            </div>
+
+            <!-- İlgi Alanları -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">🎯 İlgi Alanların</div>
+                    <div>
+                        <button class="cancel-btn" id="intCancelBtn" style="display:none" onclick="cancelInterests()">İptal</button>
+                        <button class="edit-btn" id="intEditBtn" onclick="startIntEdit()">✏️ Düzenle</button>
+                        <button class="save-btn" id="intSaveBtn" style="display:none" onclick="saveInterests()">💾 Kaydet</button>
+                    </div>
+                </div>
+                <div class="interests-grid" id="interestsGrid"></div>
+                <div id="intHint" style="display:none;font-size:11px;color:#555;margin-top:10px;">En az 3 tane seç</div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<!-- Silme Onay Modalı -->
+<div class="modal-overlay" id="deleteModal">
+    <div class="modal-box">
+        <div style="font-size:40px;margin-bottom:12px;">😢</div>
+        <h3>Hesabını Silmek İstiyor musun?</h3>
+        <p>Bu işlem geri alınamaz. Tüm eşleşmelerin ve mesajların kalıcı olarak silinecek.</p>
+        <div class="modal-btns">
+            <button class="modal-cancel" onclick="closeDeleteModal()">Vazgeç</button>
+            <button class="modal-confirm" onclick="deleteProfile()">Evet, Sil</button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<nav class="navbar">
+    <a href="index.html" class="nav-link"><span class="nav-icon">🔥</span>Keşfet</a>
+    <a href="messages.html" class="nav-link"><span class="nav-icon">💬</span>Mesajlar</a>
+    <a href="profile.html" class="nav-link active"><span class="nav-icon">👤</span>Profil</a>
+</nav>
 
 <script>
     const bID = localStorage.getItem('loggedInUserId');
-    const hList = ["💻 Yazılım", "🎮 Oyun", "🎨 Çizim", "🎬 Sinema", "🎵 Müzik", "🏋️ Spor", "📚 Kitap", "✈️ Seyahat", "🐾 Hayvanlar", "📷 Fotoğraf", "🍳 Yemek", "🎸 Enstrüman", "🧘 Yoga"];
+    const token = localStorage.getItem('token') || '';
+    if (!bID) window.location.href = 'login.html';
 
-    function initHobbies(userInterests = "") {
-        const grid = document.getElementById('hobiGrid');
-        const userHobbies = userInterests ? userInterests.split(',').map(i => i.trim()) : [];
-        
-        grid.innerHTML = hList.map(h => {
-            const safeId = h.replace(/[^a-z0-9]/gi,'');
-            const isChecked = userHobbies.includes(h) ? "checked" : "";
-            return `<div>
-                <input type="checkbox" class="hobi-box" id="${safeId}" value="${h}" ${isChecked}>
-                <label class="hobi-item" for="${safeId}">${h}</label>
-            </div>`;
-        }).join('');
+    const ALL_INTERESTS = [
+        "💻 Yazılım", "🎮 Oyun", "🎨 Çizim", "🎬 Sinema", "🎵 Müzik",
+        "🏋️ Spor", "📚 Kitap", "✈️ Seyahat", "🐾 Hayvanlar", "📷 Fotoğraf",
+        "🍳 Yemek", "🎸 Enstrüman", "🧘 Yoga", "🌿 Doğa", "🎲 Masa Oyunları"
+    ];
+
+    let userData = null;
+    let selectedInterests = new Set();
+    let editingMode = false;
+
+    function showToast(msg, color = '#4ADE80') {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.style.borderColor = color === 'red' ? 'rgba(255,75,75,0.3)' : 'rgba(74,222,128,0.3)';
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    function calcCompletion(u) {
+        let score = 0;
+        if (u.full_name) score += 20;
+        if (u.profile_pic) score += 25;
+        if (u.bio) score += 20;
+        if (u.interests) score += 20;
+        if (u.zodiac) score += 15;
+        return score;
     }
 
     async function loadData() {
-        const res = await fetch(`http://localhost:5000/api/users/${bID}`);
-        const u = await res.json();
-        document.getElementById('userName').innerText = u.full_name;
-        document.getElementById('userEmail').innerText = u.email;
-        document.getElementById('bioBox').value = u.bio || '';
-        document.getElementById('genderBox').value = u.gender;
-        if(u.birth_date) document.getElementById('birthBox').innerText = new Date(u.birth_date).toLocaleDateString('tr-TR');
-        
-        initHobbies(u.interests); // Hobileri seçili getir
-        
-        if(u.profile_pic) {
-            const img = document.getElementById('previewImg');
-            img.src = `http://localhost:5000${u.profile_pic}`;
-            img.style.display = 'block';
-            document.getElementById('placeholder').style.display = 'none';
-            document.getElementById('finalPicPath').value = u.profile_pic;
-        }
-    }
+        try {
+            const res = await fetch(`http://localhost:5000/api/users/${bID}`);
+            userData = await res.json();
 
-    async function handleImage(input) {
-        if(!input.files[0]) return;
-        const fd = new FormData(); fd.append("profil_resmi", input.files[0]);
-        const res = await fetch('http://localhost:5000/api/upload', { method: 'POST', body: fd });
-        const d = await res.json();
-        if(d.success) {
-            document.getElementById('finalPicPath').value = d.url;
-            document.getElementById('previewImg').src = `http://localhost:5000${d.url}`;
-            document.getElementById('previewImg').style.display = 'block';
-            document.getElementById('placeholder').style.display = 'none';
-            
-            // Anında veritabanına kaydet
-            const hobs = Array.from(document.querySelectorAll('.hobi-box:checked')).map(b => b.value);
-            await fetch(`http://localhost:5000/api/users/${bID}`, {
-                method: 'PUT',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ 
-                    bio: document.getElementById('bioBox').value, 
-                    interests: hobs.join(', '), 
-                    profile_pic: d.url 
-                })
-            });
-        }
-    }
+            document.getElementById('userName').innerText = userData.full_name;
+            document.getElementById('userEmail').innerText = userData.email;
+            document.getElementById('userZodiac').innerText = userData.zodiac ? `✨ ${userData.zodiac}` : '✨ Burç Belirtilmemiş';
+            document.getElementById('infoGender').innerText = userData.gender === 'erkek' ? '👨 Erkek' : userData.gender === 'kadin' ? '👩 Kadın' : '—';
+            document.getElementById('infoBirth').innerText = userData.birth_date ? new Date(userData.birth_date).toLocaleDateString('tr-TR') : '—';
+            document.getElementById('infoZodiac').innerText = userData.zodiac || '—';
+            document.getElementById('infoEmail').innerText = userData.email;
 
-    async function updateProfile() {
-        const hobs = Array.from(document.querySelectorAll('.hobi-box:checked')).map(b => b.value);
-        if(hobs.length < 3) return alert("Kanka en az 3 hobi seçmen lazım!");
-
-        const res = await fetch(`http://localhost:5000/api/users/${bID}`, {
-            method: 'PUT',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ 
-                bio: document.getElementById('bioBox').value, 
-                interests: hobs.join(', '), 
-                profile_pic: document.getElementById('finalPicPath').value 
-            })
-        });
-        if(res.ok) alert("Profil güncellendi! 🔥");
-    }
-
-    async function deleteProfile() {
-        if(confirm("Hesabını kalıcı olarak silmek istediğine emin misin? Bu işlem geri alınamaz! 😢")) {
-            const res = await fetch(`http://localhost:5000/api/users/${bID}`, { method: 'DELETE' });
-            if(res.ok) {
-                alert("Hesabın başarıyla silindi. Seni özleyeceğiz! 👋");
-                localStorage.clear();
-                location.href = 'login.html';
-            } else {
-                alert("Silme işlemi başarısız oldu.");
+            // Bio
+            const bioEl = document.getElementById('bioDisplay');
+            if (userData.bio) {
+                bioEl.textContent = userData.bio;
+                bioEl.classList.remove('bio-empty');
+                bioEl.classList.add('bio-text');
             }
+            document.getElementById('bioInput').value = userData.bio || '';
+
+            // İlgi alanları
+            const interests = userData.interests?.split(',').map(i => i.trim()).filter(Boolean) || [];
+            selectedInterests = new Set(interests);
+            renderInterests(false);
+            document.getElementById('interestCount').innerText = interests.length;
+
+            // Profil resmi
+            const avatarArea = document.getElementById('avatarArea');
+            if (userData.profile_pic) {
+                avatarArea.innerHTML = `<img src="http://localhost:5000${userData.profile_pic}" class="avatar-img" onerror="this.parentElement.innerHTML='<div class=\\'avatar-placeholder\\'>${userData.full_name[0]?.toUpperCase()}</div>'">`;
+                document.getElementById('finalPicPath').value = userData.profile_pic;
+            } else {
+                avatarArea.innerHTML = `<div class="avatar-placeholder">${userData.full_name[0]?.toUpperCase() || '?'}</div>`;
+            }
+
+            // Tamamlanma yüzdesi
+            const pct = calcCompletion(userData);
+            document.getElementById('completionPct').innerText = `%${pct}`;
+            document.getElementById('completionFill').style.width = `${pct}%`;
+
+            // Eşleşme sayısı
+            const matchRes = await fetch(`http://localhost:5000/api/matches/${bID}`);
+            const matches = await matchRes.json();
+            document.getElementById('matchCount').innerText = Array.isArray(matches) ? matches.length : '—';
+
+            // Üyelik tarihi (id'den tahmin)
+            document.getElementById('memberSince').innerText = `#${userData.id} UpDate Üyesi`;
+
+        } catch(e) { console.error("Profil yüklenemedi:", e); }
+    }
+
+    function renderInterests(editable) {
+        const grid = document.getElementById('interestsGrid');
+        const items = editable ? ALL_INTERESTS : [...selectedInterests];
+        if (!editable && items.length === 0) {
+            grid.innerHTML = '<span style="color:#444;font-size:13px;font-style:italic;">Henüz ilgi alanı seçilmemiş</span>';
+            return;
         }
+        grid.innerHTML = items.map(item => {
+            const isSelected = selectedInterests.has(item);
+            const cls = isSelected ? 'interest-chip selected' : 'interest-chip';
+            const onclick = editable ? `onclick="toggleInterest('${item.replace(/'/g,'\\\'')}')"` : '';
+            return `<button class="${cls}" ${onclick}>${item}</button>`;
+        }).join('');
+    }
+
+    function toggleInterest(item) {
+        if (selectedInterests.has(item)) selectedInterests.delete(item);
+        else selectedInterests.add(item);
+        renderInterests(true);
+    }
+
+    // Bio düzenleme
+    function startBioEdit() {
+        document.getElementById('bioDisplay').style.display = 'none';
+        document.getElementById('bioInput').style.display = 'block';
+        document.getElementById('bioEditBtn').style.display = 'none';
+        document.getElementById('bioSaveBtn').style.display = 'inline-block';
+        document.getElementById('bioCancelBtn').style.display = 'inline-block';
+    }
+    function cancelBio() {
+        document.getElementById('bioInput').value = userData?.bio || '';
+        document.getElementById('bioDisplay').style.display = 'block';
+        document.getElementById('bioInput').style.display = 'none';
+        document.getElementById('bioEditBtn').style.display = 'inline-block';
+        document.getElementById('bioSaveBtn').style.display = 'none';
+        document.getElementById('bioCancelBtn').style.display = 'none';
+    }
+    async function saveBio() {
+        const bio = document.getElementById('bioInput').value.trim();
+        const picPath = document.getElementById('finalPicPath').value;
+        const body = { bio, interests: [...selectedInterests].join(', ') };
+        if (picPath) body.profile_pic = picPath;
+        try {
+            await fetch(`http://localhost:5000/api/users/${bID}`, {
+                method: 'PUT', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(body)
+            });
+            const bioEl = document.getElementById('bioDisplay');
+            bioEl.textContent = bio || 'Henüz bir şey yazılmamış...';
+            bioEl.className = bio ? 'bio-text' : 'bio-empty';
+            cancelBio();
+            showToast('✅ Bio güncellendi!');
+            if (userData) userData.bio = bio;
+            const pct = calcCompletion({ ...userData, bio });
+            document.getElementById('completionPct').innerText = `%${pct}`;
+            document.getElementById('completionFill').style.width = `${pct}%`;
+        } catch(e) { showToast('Hata oluştu!', 'red'); }
+    }
+
+    // İlgi alanları düzenleme
+    function startIntEdit() {
+        renderInterests(true);
+        document.getElementById('intEditBtn').style.display = 'none';
+        document.getElementById('intSaveBtn').style.display = 'inline-block';
+        document.getElementById('intCancelBtn').style.display = 'inline-block';
+        document.getElementById('intHint').style.display = 'block';
+    }
+    function cancelInterests() {
+        renderInterests(false);
+        document.getElementById('intEditBtn').style.display = 'inline-block';
+        document.getElementById('intSaveBtn').style.display = 'none';
+        document.getElementById('intCancelBtn').style.display = 'none';
+        document.getElementById('intHint').style.display = 'none';
+    }
+    async function saveInterests() {
+        if (selectedInterests.size < 3) return showToast('En az 3 ilgi alanı seçmen lazım!', 'red');
+        const bio = document.getElementById('bioInput').value || userData?.bio || '';
+        const picPath = document.getElementById('finalPicPath').value;
+        const body = { bio, interests: [...selectedInterests].join(', ') };
+        if (picPath) body.profile_pic = picPath;
+        try {
+            await fetch(`http://localhost:5000/api/users/${bID}`, {
+                method: 'PUT', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(body)
+            });
+            cancelInterests();
+            document.getElementById('interestCount').innerText = selectedInterests.size;
+            showToast('✅ İlgi alanları güncellendi!');
+            if (userData) userData.interests = [...selectedInterests].join(', ');
+            const pct = calcCompletion(userData);
+            document.getElementById('completionPct').innerText = `%${pct}`;
+            document.getElementById('completionFill').style.width = `${pct}%`;
+        } catch(e) { showToast('Hata oluştu!', 'red'); }
+    }
+
+    // Fotoğraf yükleme
+    async function handleImage(input) {
+        if (!input.files[0]) return;
+        const fd = new FormData(); fd.append("profil_resmi", input.files[0]);
+        try {
+            const res = await fetch('http://localhost:5000/api/upload', {
+                method: 'POST', headers: { 'Authorization': 'Bearer ' + token }, body: fd
+            });
+            const d = await res.json();
+            if (d.success) {
+                document.getElementById('finalPicPath').value = d.url;
+                document.getElementById('avatarArea').innerHTML = `<img src="http://localhost:5000${d.url}?t=${Date.now()}" class="avatar-img">`;
+                showToast('✅ Fotoğraf güncellendi!');
+                if (userData) {
+                    userData.profile_pic = d.url;
+                    const pct = calcCompletion(userData);
+                    document.getElementById('completionPct').innerText = `%${pct}`;
+                    document.getElementById('completionFill').style.width = `${pct}%`;
+                }
+            } else { showToast('Fotoğraf yüklenemedi!', 'red'); }
+        } catch(e) { showToast('Bağlantı hatası!', 'red'); }
+    }
+
+    // Silme işlemi
+    function openDeleteModal() { document.getElementById('deleteModal').classList.add('open'); }
+    function closeDeleteModal() { document.getElementById('deleteModal').classList.remove('open'); }
+    async function deleteProfile() {
+        try {
+            const res = await fetch(`http://localhost:5000/api/users/${bID}`, { method: 'DELETE' });
+            if (res.ok) { localStorage.clear(); location.href = 'login.html'; }
+            else { showToast('Silme işlemi başarısız!', 'red'); closeDeleteModal(); }
+        } catch(e) { showToast('Hata oluştu!', 'red'); }
     }
 
     loadData();
 </script>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script src="global-call.js"></script>
+
 </body>
 </html>
